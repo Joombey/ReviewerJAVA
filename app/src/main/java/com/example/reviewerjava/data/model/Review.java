@@ -1,18 +1,17 @@
 package com.example.reviewerjava.data.model;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public class Review {
     private Map<String, String> paragraph;
-    private LocalDateTime creationTime;
+    private String creationTime;
     private Author author;
     private String picture;
     private Item item;
 
     public Review(
         Map<String, String> paragraph,
-        LocalDateTime creationTime,
+        String creationTime,
         Author author,
         String picture,
         Item item
@@ -32,11 +31,11 @@ public class Review {
         this.paragraph = paragraph;
     }
 
-    public LocalDateTime getCreationTime() {
+    public String getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(LocalDateTime creationTime) {
+    public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
 

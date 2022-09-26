@@ -6,15 +6,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewViewHolder>{
+import com.example.reviewerjava.databinding.ReviewListBinding;
+
+public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder>{
     @NonNull
     @Override
-    public ReviewListAdapter.ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ReviewListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReviewListAdapter.ReviewViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
 
     }
 
@@ -23,9 +25,11 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
         return 0;
     }
 
-    public class ReviewViewHolder extends RecyclerView.ViewHolder{
-        public ReviewViewHolder(@NonNull View itemView) {
+    public class ReviewListViewHolder extends RecyclerView.ViewHolder{
+        private ReviewListBinding binding;
+        public ReviewListViewHolder(@NonNull View itemView, ReviewListBinding binding) {
             super(itemView);
+            this.binding = binding;
         }
     }
 }
