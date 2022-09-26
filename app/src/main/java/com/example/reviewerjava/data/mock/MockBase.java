@@ -18,10 +18,8 @@ public class MockBase implements Repository {
     private MutableLiveData<List<Review>> data;
     private List<Review> list;
 
-    @Override
-    public MutableLiveData<List<Review>> getReviewList() {
+    public MockBase(){
         list = new ArrayList<>();
-        data = new MutableLiveData<>();
 
         List <Shop> shopList = new ArrayList<>();
         List<String> cities = new ArrayList<>();
@@ -29,10 +27,10 @@ public class MockBase implements Repository {
         cities.add("Belgorod");
         cities.add("Vladimir");
         cities.add("Khimki");
-
-
         Shop shop = new Shop("asdasd", cities);
+        shopList.add(shop);
         Map<String, String> map = new HashMap<>();
+
         list.add(new Review(
                 "ARTICLE 1", "OIUASFHDIAUHFOAIUHFOAIUGHFOAIUHOFIUHAOSUFH", "21.08.2012",
                 new Author("Aboba", "New-Mirea"),
@@ -65,12 +63,17 @@ public class MockBase implements Repository {
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));
-        data.setValue(list);
+        data = new MutableLiveData<>(list);
+    }
+
+    @Override
+    public MutableLiveData<List<Review>> getReviewList() {
         return data;
     }
 
     @Override
     public void createNewReview(Review review) {
-
+        list.add(review);
+        data.setValue(list);
     }
 }

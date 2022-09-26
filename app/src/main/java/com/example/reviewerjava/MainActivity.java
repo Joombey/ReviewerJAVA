@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.reviewerjava.databinding.ActivityMainBinding;
+import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 
 import java.util.function.ToDoubleBiFunction;
@@ -38,18 +39,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.addBtn){
+            setFragment(new AddReviewFragment());
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i("onCreate", "destroy");
-    }
-
     public <T extends Fragment> void setFragment(T fragment){
-        Log.i("onCreate", "adding");
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         fragmentManager
                 .setReorderingAllowed(true)
