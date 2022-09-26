@@ -3,32 +3,39 @@ package com.example.reviewerjava.data.model;
 import java.util.Map;
 
 public class Review {
-    private Map<String, String> paragraph;
+    private String title;
+    private String text;
     private String creationTime;
     private Author author;
     private String picture;
     private Item item;
 
     public Review(
-        Map<String, String> paragraph,
-        String creationTime,
-        Author author,
-        String picture,
-        Item item
+            String title,
+            String text,
+            String creationTime,
+            Author author,
+            String picture,
+            Item item
     ){
-        this.paragraph = paragraph;
+        this.title = title;
+        this.text = text;
         this.creationTime = creationTime;
         this.picture = picture;
         this.item = item;
         this.author = author;
     }
 
-    public Map<String, String> getParagraph() {
-        return paragraph;
+    public String getTitle() {
+        return title;
     }
 
-    public void setParagraph(Map<String, String> paragraph) {
-        this.paragraph = paragraph;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String getCreationTime() {

@@ -20,6 +20,8 @@ public class MockBase implements Repository {
 
     @Override
     public MutableLiveData<List<Review>> getReviewList() {
+        list = new ArrayList<>();
+        data = new MutableLiveData<>();
 
         List <Shop> shopList = new ArrayList<>();
         List<String> cities = new ArrayList<>();
@@ -32,38 +34,33 @@ public class MockBase implements Repository {
         Shop shop = new Shop("asdasd", cities);
         Map<String, String> map = new HashMap<>();
         list.add(new Review(
-                map,
-                "21.08.2012",
+                "ARTICLE 1", "OIUASFHDIAUHFOAIUHFOAIUGHFOAIUHOFIUHAOSUFH", "21.08.2012",
                 new Author("Aboba", "New-Mirea"),
                 "asdasd",
                 new Item("mobilka", shopList)
         ));
 
         list.add(new Review(
-                map,
-                "31.08.3012",
+                "ARTICLE 2", "ASJFHNPOAJSFHOHASPFOHIJAOSFIHJAPFHPAISHFPAISHFAF", "31.08.3012",
                 new Author("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));
 
         list.add(new Review(
-                map,
-                "31.08.3012",
+                "ARTICLE 3", "L;VKJKB[XCVB[XPCVJOBCVB", "31.08.3012",
                 new Author("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));
         list.add(new Review(
-                map,
-                "31.08.3012",
+                "ARTICLE 4", "ASJFH6984556435135132132121ISHFAF", "31.08.3012",
                 new Author("asasdfasdgasda", "479okur,jyfsfgnsf"),
                 "xvcbxcvbxcvbasgxvcb",
                 new Item("pgaeruiopghr", shopList)
         ));
         list.add(new Review(
-                map,
-                "31.08.3012",
+                "ARTICLE 5", "1236548941232316518919849878491351351321358498794651231", "31.08.3012",
                 new Author("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)

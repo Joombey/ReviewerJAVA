@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ReviewerJAVA</string>
+    <string name="btnAddTitile">addButton</string>
 </resources>
