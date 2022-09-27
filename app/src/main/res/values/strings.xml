@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ReviewerJAVA</string>
-    <string name="btnAddTitile">addButton</string>
+    <string name="btnAddTitle">addButton</string>
+    <string name="enterText">Введите текст</string>
+    <string name="enterTitle">Введите загаловок</string>
+    <string name="createReview">Создать</string>
+    <string name="profileTitle">profileTitle</string>
 </resources>

@@ -1,22 +1,17 @@
 package com.example.reviewerjava;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
-
-import java.util.function.ToDoubleBiFunction;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -40,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.addBtn){
             setFragment(new AddReviewFragment());
+        } else if(item.getItemId() == android.R.id.home){
+            getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -58,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public <T extends Fragment> void remove(T fragment){
-        Log.i("onCreate", "removing");
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 }

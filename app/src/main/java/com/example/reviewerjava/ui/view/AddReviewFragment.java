@@ -2,14 +2,15 @@ package com.example.reviewerjava.ui.view;
 
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;

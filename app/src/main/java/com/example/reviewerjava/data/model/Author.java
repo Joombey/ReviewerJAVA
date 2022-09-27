@@ -24,4 +24,8 @@ public class Author {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public boolean check(String enterLogin, String enterPassword){
+        return (enterLogin == "admin" && enterPassword == "password");
+    }
 }

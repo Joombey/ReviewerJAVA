@@ -2,20 +2,14 @@ package com.example.reviewerjava.ui.view.adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.databinding.ReviewListBinding;
-import com.example.reviewerjava.databinding.ReviewListFragmentBinding;
-import com.example.reviewerjava.ui.view.ReviewListFragment;
 
 import java.util.List;
 

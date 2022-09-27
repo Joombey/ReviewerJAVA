@@ -1,6 +1,5 @@
 package com.example.reviewerjava.data.model;
 
-import java.util.Map;
 
 public class Review {
     private String title;
