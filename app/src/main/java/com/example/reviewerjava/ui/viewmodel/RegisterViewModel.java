@@ -15,6 +15,5 @@ public class RegisterViewModel extends ViewModel {
     }
     public void logOut(){
         RepositoryController.getRegisterRepository().logOut();
-
     }
 }
