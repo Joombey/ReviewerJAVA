@@ -1,13 +1,10 @@
 package com.example.reviewerjava.ui.view;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,18 +13,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.R;
 import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.databinding.ReviewListBinding;
 import com.example.reviewerjava.databinding.ReviewListFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
+import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
 import java.util.List;
 
 public class ReviewListFragment extends Fragment {
+    private RegisterViewModel mRegisterViewModel;
     private ReviewListFragmentBinding mBinding;
-    private ReviewListViewModel mViewModel;
+    private ReviewListViewModel mReviewListViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -41,14 +38,9 @@ public class ReviewListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding.reviewList.setOnClickListener((View v) -> {((MainActivity) getActivity()).remove(this);});
-        mViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
-        mViewModel.getReviews().observe(getViewLifecycleOwner(), new Observer<List<Review>>() {
-            @Override
-            public void onChanged(List<Review> reviews) {
-                Log.i("onCreate", "HERE");
-                mBinding.reviewList.setAdapter(new ReviewListAdapter(reviews, (MainActivity) getActivity()));
-            }
+        mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
+        mReviewListViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
+            mBinding.reviewList.setAdapter(new ReviewListAdapter(reviews, (MainActivity) getActivity()));
         });
     }
 
@@ -56,6 +48,6 @@ public class ReviewListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mBinding = null;
-        mViewModel = null;
+        mReviewListViewModel = null;
     }
 }

@@ -6,15 +6,15 @@ import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.model.Shop;
+import com.example.reviewerjava.data.repository.RegisterRepository;
 import com.example.reviewerjava.data.repository.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MockBase implements Repository {
+public class MockBase implements Repository, RegisterRepository {
 
+    private MutableLiveData<Boolean> loggedIn;
     private MutableLiveData<List<Review>> data;
     private List<Review> list;
 
@@ -29,7 +29,6 @@ public class MockBase implements Repository {
         cities.add("Khimki");
         Shop shop = new Shop("asdasd", cities);
         shopList.add(shop);
-        Map<String, String> map = new HashMap<>();
 
         list.add(new Review(
                 "ARTICLE 1", "OIUASFHDIAUHFOAIUHFOAIUGHFOAIUHOFIUHAOSUFH", "21.08.2012",
@@ -64,6 +63,7 @@ public class MockBase implements Repository {
                 new Item("mob?L:JKa", shopList)
         ));
         data = new MutableLiveData<>(list);
+        loggedIn = new MutableLiveData<>(false);
     }
 
     @Override
@@ -75,5 +75,23 @@ public class MockBase implements Repository {
     public void createNewReview(Review review) {
         list.add(review);
         data.setValue(list);
+    }
+
+    @Override
+    public MutableLiveData<Boolean> getLoggedIn() {
+        return loggedIn;
+    }
+
+    @Override
+    public boolean login(String login, String password) {
+        if(login.equals("admin") && password.equals("admin")){
+            loggedIn.setValue(true);
+            return true;
+        } else return false;
+    }
+
+    @Override
+    public void logOut() {
+        loggedIn.setValue(false);
     }
 }

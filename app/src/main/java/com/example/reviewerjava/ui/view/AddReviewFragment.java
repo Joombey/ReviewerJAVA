@@ -18,7 +18,6 @@ import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
@@ -40,7 +39,7 @@ public class AddReviewFragment extends Fragment {
             cities.add("Khimki");
             Formatter formatter = new Formatter();
             Calendar calendar = Calendar.getInstance();
-            Shop shop = new Shop("asdasd", cities);
+            Shop shop = new Shop("BBNS", cities);
             shopList.add(shop);
             Review review = new Review(
                     mBinding.titleEdit.getText().toString(),
@@ -49,10 +48,10 @@ public class AddReviewFragment extends Fragment {
                             calendar.get(Calendar.DAY_OF_MONTH),
                             calendar.get(Calendar.MONTH),
                             calendar.get(Calendar.YEAR))).toString(),
-                    new Author("KEKS", "MOSOCW"),
-                    "123",
+                    new Author("ADMIN", "Moscow"),
+                    "AdminPicture",
                     new Item(
-                            "ITEM1",
+                            "SO HARD CPU",
                             shopList
                     ));
             mViewModel.createReview(review);
@@ -64,5 +63,12 @@ public class AddReviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mBinding = null;
+        mViewModel = null;
     }
 }

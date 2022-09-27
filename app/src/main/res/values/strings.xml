@@ -4,5 +4,5 @@
     <string name="enterText">Введите текст</string>
     <string name="enterTitle">Введите загаловок</string>
     <string name="createReview">Создать</string>
-    <string name="profileTitle">profileTitle</string>
+    <string name="logInTitle">logInTitle</string>
 </resources>
