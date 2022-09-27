@@ -1,9 +1,6 @@
 package com.example.reviewerjava.ui.viewmodel;
 
 
-import android.app.Application;
-import android.content.Context;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -18,5 +15,6 @@ public class RegisterViewModel extends ViewModel {
     }
     public void logOut(){
         RepositoryController.getRegisterRepository().logOut();
+
     }
 }
