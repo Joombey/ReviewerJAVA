@@ -49,7 +49,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
         holder.binding.userName.setText(review.getAuthor().getName());
         holder.binding.reviewText.setText(review.getTitle());
         holder.binding.creationTime.setText(review.getCreationTime());
-        Log.i("here", "here");
     }
 
     @Override

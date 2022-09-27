@@ -1,16 +1,15 @@
 package com.example.reviewerjava.ui.view;
 
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.viewmodel.ViewModelFactoryDsl;
-
 import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
@@ -18,7 +17,9 @@ import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
+import java.text.Format;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 public class AddReviewFragment extends Fragment {
@@ -36,12 +37,17 @@ public class AddReviewFragment extends Fragment {
             cities.add("Belgorod");
             cities.add("Vladimir");
             cities.add("Khimki");
+            Formatter formatter = new Formatter();
+            Calendar calendar = Calendar.getInstance();
             Shop shop = new Shop("asdasd", cities);
             shopList.add(shop);
             Review review = new Review(
                     mBinding.titleEdit.getText().toString(),
                     mBinding.textEdit.getText().toString(),
-                    "26.09.2020",
+                    (formatter.format("%d.%d.%d",
+                            calendar.get(Calendar.DAY_OF_MONTH),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.YEAR))).toString(),
                     new Author("KEKS", "MOSOCW"),
                     "123",
                     new Item(
