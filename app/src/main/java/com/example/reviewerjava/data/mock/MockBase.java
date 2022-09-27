@@ -20,7 +20,6 @@ public class MockBase implements Repository, RegisterRepository {
 
     public MockBase(){
         list = new ArrayList<>();
-
         List <Shop> shopList = new ArrayList<>();
         List<String> cities = new ArrayList<>();
         cities.add("Moscow");
