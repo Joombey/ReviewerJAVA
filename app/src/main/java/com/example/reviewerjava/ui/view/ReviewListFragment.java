@@ -8,18 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.databinding.ReviewListFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
-
-import java.util.List;
 
 public class ReviewListFragment extends Fragment {
     private RegisterViewModel mRegisterViewModel;

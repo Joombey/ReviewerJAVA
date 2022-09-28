@@ -1,6 +1,6 @@
 package com.example.reviewerjava.data.authordto;
 
-import com.example.reviewerjava.data.model.Author;
+import com.example.reviewerjava.data.room.model.Author;
 
 public class AuthorDTO {
     private String name;

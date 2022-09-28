@@ -5,13 +5,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.model.Review;
+import com.example.reviewerjava.data.room.model.Review;
 import com.example.reviewerjava.databinding.ReviewListBinding;
-import com.example.reviewerjava.ui.view.RegisterFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.google.gson.Gson;
 
