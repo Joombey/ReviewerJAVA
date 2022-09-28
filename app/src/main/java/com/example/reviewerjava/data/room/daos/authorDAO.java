@@ -12,6 +12,7 @@ public interface authorDAO {
     @Query("SELECT * FROM authors")
     MutableLiveData<Author> getAllAuthors();
 
+
     @Insert
     void insertAuthor(Author author);
 }
