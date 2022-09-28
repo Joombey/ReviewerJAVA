@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
+import com.example.reviewerjava.data.room.reviewDTO.ReviewDTO;
 import com.example.reviewerjava.databinding.ReviewListFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;

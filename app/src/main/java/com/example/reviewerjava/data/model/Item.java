@@ -1,15 +1,10 @@
-package com.example.reviewerjava.data.room.model;
+package com.example.reviewerjava.data.model;
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity(tableName = "items")
 public class Item {
 
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private String itemName;
     private List<Shop> itemShops;

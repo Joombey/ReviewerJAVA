@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.room.model.Review;
+import com.example.reviewerjava.data.model.Review;
+import com.example.reviewerjava.data.room.reviewDTO.ReviewDTO;
 import com.example.reviewerjava.databinding.ReviewListBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.google.gson.Gson;
@@ -19,7 +20,6 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     private List<Review> mData;
     private MainActivity mActivity;
     public ReviewListAdapter(List<Review> mReviewList, MainActivity activity){
-        Log.i("here", "here");
         this.mActivity = activity;
         this.mData = mReviewList;
     }
@@ -34,7 +34,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
         Review review = mData.get(position);
-        holder.binding.userName.setText(review.getAuthor().getName());
+        holder.binding.userName.setText(review.getAuthorInstance().getName());
 
         holder.binding.reviewText.setText(review.getTitle());
         holder.binding.reviewText.setOnClickListener(view -> {
