@@ -1,11 +1,7 @@
-package com.example.reviewerjava.data.room.model;
+package com.example.reviewerjava.data.model;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "authors")
 public class Author {
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private String city;

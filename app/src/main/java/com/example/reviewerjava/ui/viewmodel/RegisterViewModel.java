@@ -8,7 +8,7 @@ import com.example.reviewerjava.data.repository.RepositoryController;
 
 public class RegisterViewModel extends ViewModel {
     public MutableLiveData<Boolean> getRepository(){
-        return RepositoryController.getRegisterRepository().getLoggedIn();
+        return RepositoryController.getRegisterRepository().isLoggedIn();
     }
     public boolean logIn(String login, String password){
         return RepositoryController.getRegisterRepository().login(login, password);

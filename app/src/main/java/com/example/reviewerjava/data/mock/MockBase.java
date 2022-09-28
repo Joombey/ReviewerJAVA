@@ -1,11 +1,12 @@
 package com.example.reviewerjava.data.mock;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.reviewerjava.data.room.model.Author;
-import com.example.reviewerjava.data.room.model.Item;
-import com.example.reviewerjava.data.room.model.Review;
-import com.example.reviewerjava.data.room.model.Shop;
+import com.example.reviewerjava.data.model.Author;
+import com.example.reviewerjava.data.model.Item;
+import com.example.reviewerjava.data.model.Review;
+import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
@@ -67,8 +68,8 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     }
 
     @Override
-    public MutableLiveData<List<Review>> getReviewList() {
-        return data;
+    public LiveData<List<Review>> getReviewList() {
+        return (MutableLiveData) data;
     }
 
     @Override
@@ -78,7 +79,7 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     }
 
     @Override
-    public MutableLiveData<Boolean> getLoggedIn() {
+    public MutableLiveData<Boolean> isLoggedIn() {
         return loggedIn;
     }
 

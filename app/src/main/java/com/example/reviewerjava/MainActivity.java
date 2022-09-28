@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.RegisterFragment;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             if (aBoolean) getSupportActionBar().setTitle("Admin");
             else getSupportActionBar().setTitle("ReviewerJAVA");
         });
+        RepositoryController.init(getApplication());
     }
 
     @Override

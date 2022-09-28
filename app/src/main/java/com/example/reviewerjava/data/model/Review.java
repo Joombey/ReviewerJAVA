@@ -1,8 +1,11 @@
-package com.example.reviewerjava.data.room.model;
+package com.example.reviewerjava.data.model;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.google.gson.Gson;
 
 @Entity(tableName = "reviews")
 public class Review {
@@ -11,10 +14,32 @@ public class Review {
     private String title;
     private String text;
     private String creationTime;
-    private Author author;
-    private String picture;
-    private Item item;
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public String getAuthor(){
+        return this.author;
+    }
+
+    private String author;
+    private String picture;
+    private String item;
+
+    public String getItem(){
+        return this.item;
+    }
+
+    public Review(){};
     public Review(
             String title,
             String text,
@@ -27,8 +52,8 @@ public class Review {
         this.text = text;
         this.creationTime = creationTime;
         this.picture = picture;
-        this.item = item;
-        this.author = author;
+        this.item = new Gson().toJson(item, Item.class);
+        this.author = new Gson().toJson(author, Author.class);
     }
 
     public String getTitle() {
@@ -51,12 +76,12 @@ public class Review {
         this.creationTime = creationTime;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Author getAuthorInstance() {
+        return (new Gson()).fromJson(this.author, Author.class);
     }
 
     public void setAuthor(Author author) {
-        this.author = author;
+        this.author = new Gson().toJson(author, Author.class);
     }
 
     public String getPicture() {
@@ -67,12 +92,12 @@ public class Review {
         this.picture = picture;
     }
 
-    public Item getItem() {
-        return item;
+    public Item getItemInstance() {
+        return new Gson().fromJson(this.item, Item.class);
     }
 
     public void setItem(Item item) {
-        this.item = item;
+        this.item = new Gson().toJson(item, Item.class);
     }
 
     public int getId() {

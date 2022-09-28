@@ -1,13 +1,9 @@
-package com.example.reviewerjava.data.room.model;
+package com.example.reviewerjava.data.model;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity
 public class Shop {
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
     private List<String> cities;

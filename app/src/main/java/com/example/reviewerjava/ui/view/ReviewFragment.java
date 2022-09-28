@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.reviewerjava.data.room.model.Review;
+import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.databinding.ReviewFragmentBinding;
 import com.google.gson.Gson;
 
@@ -24,7 +24,7 @@ public class ReviewFragment extends Fragment {
         Gson gson = new Gson();
         mReview = gson.fromJson(getArguments().getString("key"), Review.class);
 
-        mBinding.author.setText(mReview.getAuthor().getName());
+        mBinding.author.setText(mReview.getAuthorInstance().getName());
         mBinding.reviewTitle.setText(mReview.getTitle());
         mBinding.date.setText(mReview.getCreationTime());
         mBinding.reviewText.setText(mReview.getText());
