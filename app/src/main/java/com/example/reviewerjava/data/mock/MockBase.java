@@ -6,13 +6,14 @@ import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.model.Shop;
-import com.example.reviewerjava.data.repository.RegisterRepository;
-import com.example.reviewerjava.data.repository.Repository;
+import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
+import com.example.reviewerjava.data.repository.repos.RegisterRepository;
+import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MockBase implements Repository, RegisterRepository {
+public class MockBase implements ReviewListRepository, RegisterRepository, AddReviewRepository {
 
     private MutableLiveData<Boolean> loggedIn;
     private MutableLiveData<List<Review>> data;
@@ -71,7 +72,7 @@ public class MockBase implements Repository, RegisterRepository {
     }
 
     @Override
-    public void createNewReview(Review review) {
+    public void addReview(Review review) {
         list.add(review);
         data.setValue(list);
     }

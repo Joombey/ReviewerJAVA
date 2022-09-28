@@ -16,6 +16,7 @@ import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
+import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.List;
 
 public class AddReviewFragment extends Fragment {
     AddReviewFragmentBinding mBinding;
-    ReviewListViewModel mViewModel;
+    AddReviewViewModel mViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class AddReviewFragment extends Fragment {
                             "SO HARD CPU",
                             shopList
                     ));
-            mViewModel.createReview(review);
+            mViewModel.addReview(review);
             getActivity().getSupportFragmentManager().popBackStack();
         });
         return mBinding.getRoot();
@@ -62,7 +63,7 @@ public class AddReviewFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(AddReviewViewModel.class);
     }
 
     @Override

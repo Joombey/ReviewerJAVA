@@ -1,4 +1,4 @@
-package com.example.reviewerjava.data.repository;
+package com.example.reviewerjava.data.repository.repos;
 
 import androidx.lifecycle.MutableLiveData;
 
