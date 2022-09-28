@@ -1,17 +1,20 @@
 package com.example.reviewerjava.data.repository;
 
 import com.example.reviewerjava.data.mock.MockBase;
-import com.example.reviewerjava.data.model.Author;
+import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
+import com.example.reviewerjava.data.repository.repos.RegisterRepository;
+import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 
 public class RepositoryController {
-    static Repository repository;
+    static ReviewListRepository reviewListRepository;
     static RegisterRepository registerRepository;
+    static AddReviewRepository addReviewRepository;
 
-    public static Repository getRepository() {
-        if (repository == null){
-            repository = new MockBase();
+    public static ReviewListRepository getReviewListRepository() {
+        if (reviewListRepository == null){
+            reviewListRepository = new MockBase();
         }
-        return repository;
+        return reviewListRepository;
     }
 
     public static RegisterRepository getRegisterRepository(){
@@ -19,5 +22,12 @@ public class RepositoryController {
             registerRepository = new MockBase();
         }
         return registerRepository;
+    }
+
+    public static AddReviewRepository getAddReviewRepository(){
+        if(addReviewRepository == null){
+            addReviewRepository = new MockBase();
+        }
+        return addReviewRepository;
     }
 }
