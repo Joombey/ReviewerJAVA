@@ -2,6 +2,8 @@ package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
 
+import androidx.room.Room;
+
 import com.example.reviewerjava.data.mock.MockBase;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
@@ -15,6 +17,8 @@ public class RepositoryController {
 
     public static void init(Application application){
         reviewListRepository = new RoomRepository(application);
+        //registerRepository = new RoomRepository(application);
+        addReviewRepository = new RoomRepository(application);
     }
 
     public static ReviewListRepository getReviewListRepository() {

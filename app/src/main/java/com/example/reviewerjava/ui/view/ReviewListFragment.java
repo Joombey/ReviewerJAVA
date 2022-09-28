@@ -1,6 +1,7 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class ReviewListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
+        //Log.i("onCreate", mReviewListViewModel.getReviews().getValue().size() + "");
         mReviewListViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
             mBinding.reviewList.setAdapter(new ReviewListAdapter(reviews, (MainActivity) getActivity()));
         });
