@@ -1,7 +1,13 @@
-package com.example.reviewerjava.data.model;
+package com.example.reviewerjava.data.room.model;
 
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "reviews")
 public class Review {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String title;
     private String text;
     private String creationTime;
@@ -67,5 +73,13 @@ public class Review {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

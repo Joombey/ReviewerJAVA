@@ -11,13 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.reviewerjava.data.model.Author;
-import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.model.Shop;
+import com.example.reviewerjava.data.room.model.Author;
+import com.example.reviewerjava.data.room.model.Item;
+import com.example.reviewerjava.data.room.model.Review;
+import com.example.reviewerjava.data.room.model.Shop;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
-import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
 import java.util.ArrayList;
 import java.util.Formatter;

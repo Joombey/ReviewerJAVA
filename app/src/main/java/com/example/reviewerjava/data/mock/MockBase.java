@@ -2,10 +2,10 @@ package com.example.reviewerjava.data.mock;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.reviewerjava.data.model.Author;
-import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.model.Shop;
+import com.example.reviewerjava.data.room.model.Author;
+import com.example.reviewerjava.data.room.model.Item;
+import com.example.reviewerjava.data.room.model.Review;
+import com.example.reviewerjava.data.room.model.Shop;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
