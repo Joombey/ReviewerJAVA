@@ -8,17 +8,18 @@ import androidx.room.RoomDatabase;
 
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
+import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Review.class}, version = 1, exportSchema = false)
+@Database(entities = {ReviewRoom.class}, version = 3, exportSchema = false)
 
 public abstract class ReviewListRoomDataBase extends RoomDatabase{
     public abstract ReviewDAO reviewDAO();
     private static volatile ReviewListRoomDataBase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static ReviewListRoomDataBase getDatabase(final Context context) {

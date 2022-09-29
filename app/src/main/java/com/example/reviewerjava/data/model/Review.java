@@ -1,45 +1,15 @@
 package com.example.reviewerjava.data.model;
 
-
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-import com.google.gson.Gson;
-
-@Entity(tableName = "reviews")
 public class Review {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    private String title;
-    private String text;
-    private String creationTime;
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setItem(String item) {
-        this.item = item;
-    }
-
-    public String getAuthor(){
-        return this.author;
-    }
-
-    private String author;
-    private String picture;
-    private String item;
-
-    public String getItem(){
-        return this.item;
-    }
+    public String title;
+    public String text;
+    public String creationTime;
+    public String picture;
+    private transient Author author;
+    private transient Item item;
 
     public Review(){};
+
     public Review(
             String title,
             String text,
@@ -52,8 +22,8 @@ public class Review {
         this.text = text;
         this.creationTime = creationTime;
         this.picture = picture;
-        this.item = new Gson().toJson(item, Item.class);
-        this.author = new Gson().toJson(author, Author.class);
+        this.item = item;
+        this.author = author;
     }
 
     public String getTitle() {
@@ -68,20 +38,16 @@ public class Review {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public String getCreationTime() {
         return creationTime;
     }
 
     public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public Author getAuthorInstance() {
-        return (new Gson()).fromJson(this.author, Author.class);
-    }
-
-    public void setAuthor(Author author) {
-        this.author = new Gson().toJson(author, Author.class);
     }
 
     public String getPicture() {
@@ -92,19 +58,19 @@ public class Review {
         this.picture = picture;
     }
 
-    public Item getItemInstance() {
-        return new Gson().fromJson(this.item, Item.class);
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Item getItem() {
+        return item;
     }
 
     public void setItem(Item item) {
-        this.item = new Gson().toJson(item, Item.class);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.item = item;
     }
 }

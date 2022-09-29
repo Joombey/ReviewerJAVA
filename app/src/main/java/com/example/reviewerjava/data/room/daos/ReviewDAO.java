@@ -6,14 +6,15 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.reviewerjava.data.model.Review;
+import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
 
 import java.util.List;
 
 @Dao
 public interface ReviewDAO {
     @Query("SELECT * FROM reviews")
-    LiveData<List<Review>> getAllReviews();
+    LiveData<List<ReviewRoom>> getAllReviews();
 
     @Insert
-    void insertReview(Review review);
+    void insertReview(ReviewRoom review);
 }

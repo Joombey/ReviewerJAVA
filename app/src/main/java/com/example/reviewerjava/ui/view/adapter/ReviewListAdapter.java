@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.room.reviewDTO.ReviewDTO;
+import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
 import com.example.reviewerjava.databinding.ReviewListBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.google.gson.Gson;
@@ -17,9 +18,9 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder>{
-    private List<Review> mData;
+    private List<ReviewRoom> mData;
     private MainActivity mActivity;
-    public ReviewListAdapter(List<Review> mReviewList, MainActivity activity){
+    public ReviewListAdapter(List<ReviewRoom> mReviewList, MainActivity activity){
         this.mActivity = activity;
         this.mData = mReviewList;
     }
@@ -33,14 +34,14 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
-        Review review = mData.get(position);
-        holder.binding.userName.setText(review.getAuthorInstance().getName());
+        ReviewRoom review = mData.get(position);
+        holder.binding.userName.setText(review.getAuthor().getName());
 
         holder.binding.reviewText.setText(review.getTitle());
         holder.binding.reviewText.setOnClickListener(view -> {
             Gson gson = new Gson();
-            String serializedReview = gson.toJson(review, Review.class);
-            mActivity.setFragment(new ReviewFragment(), serializedReview);
+            String serializedReviewRoom = gson.toJson(review, ReviewRoom.class);
+            mActivity.setFragment(new ReviewFragment(), serializedReviewRoom);
         });
         holder.binding.creationTime.setText(review.getCreationTime());
     }
