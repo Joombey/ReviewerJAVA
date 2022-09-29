@@ -21,7 +21,6 @@ import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 
 public class ReviewListFragment extends Fragment {
-    private RegisterViewModel mRegisterViewModel;
     private ReviewListFragmentBinding mBinding;
     private ReviewListViewModel mReviewListViewModel;
     @Nullable

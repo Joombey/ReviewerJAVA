@@ -7,5 +7,5 @@ import com.example.reviewerjava.data.model.Review;
 import java.util.List;
 
 public interface ReviewListRepository {
-    LiveData<List<Review>> getReviewList();
+    <T extends Review> LiveData<List<T>> getReviewList();
 }

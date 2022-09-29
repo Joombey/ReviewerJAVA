@@ -22,7 +22,7 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
 
     public MockBase(){
         list = new ArrayList<>();
-        List <Shop> shopList = new ArrayList<>();
+        /*List <Shop> shopList = new ArrayList<>();
         List<String> cities = new ArrayList<>();
         cities.add("Moscow");
         cities.add("Belgorod");
@@ -62,7 +62,7 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
                 new Author("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
-        ));
+        ));*/
         data = new MutableLiveData<>(list);
         loggedIn = new MutableLiveData<>(false);
     }

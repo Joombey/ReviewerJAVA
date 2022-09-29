@@ -11,12 +11,13 @@ import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.room.ReviewListRoomDataBase;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
+import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
 
 import java.util.List;
 
 public class RoomRepository implements ReviewListRepository, AddReviewRepository, RegisterRepository {
     private MutableLiveData<Boolean> loggedIn;
-    private LiveData<List<Review>> mReviewList;
+    private LiveData<List<ReviewRoom>> mReviewList;
     private ReviewDAO mReviewDAO;
 
     public RoomRepository(Application application){
@@ -27,13 +28,14 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     }
 
     @Override
-    public LiveData<List<Review>> getReviewList() {
-        return mReviewList;
-    };
+    public <T extends Review> void addReview(T review) {
+        ReviewListRoomDataBase.databaseWriteExecutor.execute(() ->{
+            mReviewDAO.insertReview(ReviewRoom.getInstance(review));
+        });
+    }
 
-    @Override
-    public  void addReview(Review review) {
-        mReviewDAO.insertReview(review);
+    public LiveData<List<ReviewRoom>> getReviewList() {
+        return mReviewList;
     }
 
     @Override
