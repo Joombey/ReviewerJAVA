@@ -11,7 +11,7 @@ import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.room.ReviewListRoomDataBase;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
-import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewRoom;
 
 import java.util.List;
 

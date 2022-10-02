@@ -6,14 +6,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
-import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewRoom;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ReviewRoom.class}, version = 3, exportSchema = false)
+@Database(entities = {ReviewRoom.class}, version = 4, exportSchema = false)
 
 public abstract class ReviewListRoomDataBase extends RoomDatabase{
     public abstract ReviewDAO reviewDAO();

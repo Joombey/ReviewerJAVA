@@ -5,10 +5,12 @@ public class Author {
     private int id;
     private String name;
     private String city;
+    private String avatar;
 
-    public Author(String name, String city) {
+    public Author(String name, String city, String avatar) {
         this.name = name;
         this.city = city;
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -33,9 +35,5 @@ public class Author {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public boolean check(String enterLogin, String enterPassword){
-        return (enterLogin == "admin" && enterPassword == "password");
     }
 }
