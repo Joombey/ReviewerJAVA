@@ -3,10 +3,8 @@ package com.example.reviewerjava.ui.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.RepositoryController;
-import com.example.reviewerjava.data.room.reviewDTO.ReviewDTO;
-import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewRoom;
 
 import java.util.List;
 

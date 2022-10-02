@@ -5,8 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.room.roomModels.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewRoom;
 
 import java.util.List;
 

@@ -2,6 +2,7 @@ package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
 
+import androidx.activity.result.ActivityResultRegistry;
 import androidx.room.Room;
 
 import com.example.reviewerjava.data.mock.MockBase;

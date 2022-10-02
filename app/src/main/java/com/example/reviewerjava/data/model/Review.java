@@ -1,45 +1,44 @@
 package com.example.reviewerjava.data.model;
 
+import java.util.List;
+
 public class Review {
-    public String title;
-    public String text;
+    public String reviewTitle;
+    private transient List<Paragraph> paragraphList;
     public String creationTime;
-    public String picture;
     private transient Author author;
     private transient Item item;
 
     public Review(){};
 
     public Review(
-            String title,
-            String text,
+            String reviewTitle,
+            List<Paragraph> paragraphList,
             String creationTime,
             Author author,
-            String picture,
             Item item
     ){
-        this.title = title;
-        this.text = text;
+        this.reviewTitle = reviewTitle;
+        this.paragraphList = paragraphList;
         this.creationTime = creationTime;
-        this.picture = picture;
         this.item = item;
         this.author = author;
     }
 
-    public String getTitle() {
-        return title;
+    public String getReviewTitle() {
+        return reviewTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setReviewTitle(String reviewTitle) {
+        this.reviewTitle = reviewTitle;
     }
 
-    public String getText() {
-        return text;
+    public List<Paragraph> getParagraphList() {
+        return paragraphList;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setParagraphList(List<Paragraph> paragraphList) {
+        this.paragraphList = paragraphList;
     }
 
     public String getCreationTime() {
@@ -48,14 +47,6 @@ public class Review {
 
     public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
     }
 
     public Author getAuthor() {
