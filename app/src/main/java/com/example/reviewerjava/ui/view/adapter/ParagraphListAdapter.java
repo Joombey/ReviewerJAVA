@@ -1,7 +1,6 @@
 package com.example.reviewerjava.ui.view.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,7 @@ import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.databinding.AddParagraphElementBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdapter.ParagraphListViewHolder> {
@@ -18,9 +18,9 @@ public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdap
     private MainActivity activity;
     private List<Paragraph> paragraphList;
 
-    public ParagraphListAdapter(List<Paragraph> paragraphList){
+    public ParagraphListAdapter(List<Paragraph> paragraphList, MainActivity activity){
         this.paragraphList = paragraphList;
-        paragraphList.add(null);
+        this.activity = activity;
     }
 
     @NonNull
@@ -40,6 +40,16 @@ public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdap
                                 paragraphList.get(position).getImages(), true, activity
                         )
                 );
+        holder.binding.nextParagraphBtn.setOnClickListener(v->{
+            paragraphList.get(position).setParagraphTitle(holder.binding.paragraphTitle.getText().toString());
+            paragraphList.get(position).setParagraphText(holder.binding.paragraphText.getText().toString());
+            paragraphList.add(new Paragraph(
+                    "",
+                    "",
+                    new ArrayList<>()
+            ));
+            notifyDataSetChanged();
+        });
     }
 
     @Override

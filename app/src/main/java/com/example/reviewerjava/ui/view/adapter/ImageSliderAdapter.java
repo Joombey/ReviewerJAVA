@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,6 +26,7 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
     public ImageSliderAdapter(List<String> pictureList, boolean writeAccess, MainActivity activity){
         this.pictureList = pictureList;
+        Log.i("content", pictureList.size()+"");
         this.activity = activity;
         if (writeAccess == true){
             pictureList.add(null);
@@ -53,8 +55,6 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
                                     .getApplicationContext()
                                     .getContentResolver()
                                     .takePersistableUriPermission(result, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                            Log.i("content", pictureList.size() - 1 + "");
                             pictureList.add(pictureList.size() - 1, result.toString());
                             notifyDataSetChanged();
                         }
@@ -63,8 +63,7 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             });
         } else {
             holder.binding.addImageBtn.setVisibility(View.GONE);
-            holder.binding.addImageBtn.setVisibility(View.VISIBLE);
-
+            holder.binding.image.setVisibility(View.VISIBLE);
             if (activity != null) {
                 try {
                     holder.binding.image.setImageBitmap(

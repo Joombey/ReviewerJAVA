@@ -7,6 +7,12 @@ public class Paragraph {
     private String title;
     private String text;
 
+    public Paragraph(String title, String text, List <String> images) {
+        this.title = title;
+        this.text = text;
+        this.images = images;
+    }
+
     public List<String> getImages() {
         return images;
     }

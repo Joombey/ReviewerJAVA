@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
@@ -35,22 +36,20 @@ public class AddReviewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        paragraphList.add(new Paragraph("", "", new ArrayList<>()));
         mBinding = AddReviewFragmentBinding.inflate(inflater, container, false);
         mBinding.paragraphContainer.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(paragraphList));
 
         mBinding.confirmBtn.setOnClickListener(view -> {
-            Formatter formatter = new Formatter();
             List<String> cities = new ArrayList<>();
             List<Shop> shops = new ArrayList<>();
             shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
             cities.add("Moscow");
-
             List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
             mAddReviewViewModel.addReview(ReviewRoom.getInstance(new Review(
                     mBinding.titleEdit.getText().toString(),
                     paragraphs,
-                    formatter.format("%.%.%",
+                    new Formatter().format("%.%.%",
                             Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                             Calendar.getInstance().get(Calendar.MONTH),
                             Calendar.getInstance().get(Calendar.YEAR)).toString(),
@@ -65,6 +64,10 @@ public class AddReviewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mAddReviewViewModel = new ViewModelProvider(this).get(AddReviewViewModel.class);
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
+        mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(
+                paragraphList,
+                (MainActivity) getActivity()
+        ));
     }
 
     @Override
