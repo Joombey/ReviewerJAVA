@@ -33,7 +33,6 @@ public class ReviewListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
-        //Log.i("onCreate", mReviewListViewModel.getReviews().getValue().size() + "");
         mReviewListViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
             mBinding.reviewList.setAdapter(new ReviewListAdapter(reviews, (MainActivity) getActivity()));
         });
