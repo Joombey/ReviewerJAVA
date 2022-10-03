@@ -80,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         setFragment(fragment);
     }
+
+    public <T extends Fragment> void setFragment(T fragment, int position){
+        Bundle bundle = new Bundle();
+        bundle.putInt("key", position);
+        fragment.setArguments(bundle);
+        setFragment(fragment);
+    }
+
     public void popBackStack(){
         if(getSupportFragmentManager().getBackStackEntryCount() != 1) getSupportFragmentManager().popBackStack();
         else finish();

@@ -1,7 +1,11 @@
 package com.example.reviewerjava.ui.view.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +18,12 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder>{
-    private List<ReviewRoom> mData;
+public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> implements AdapterView.OnItemSelectedListener {
+    private List<ReviewRoom> data;
     private MainActivity mActivity;
     public ReviewListAdapter(List<ReviewRoom> mReviewList, MainActivity activity){
         this.mActivity = activity;
-        this.mData = mReviewList;
+        this.data = mReviewList;
     }
 
     @NonNull
@@ -32,21 +36,31 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
-        ReviewRoom review = mData.get(position);
-        holder.binding.userName.setText(review.getAuthor().getName());
+        Log.i("content1", position + "");
 
+        ReviewRoom review = data.get(position);
+
+        holder.binding.userName.setText(review.getAuthor().getName());
+        holder.binding.creationTime.setText(review.getCreationTime());
+        holder.binding.itemTitle.setText(review.getItem().getItemName());
         holder.binding.reviewListElementTitle.setText(review.getReviewTitle());
+
         holder.binding.reviewListElementTitle.setOnClickListener(view -> {
             Gson gson = new Gson();
             String serializedReviewRoom = gson.toJson(review, ReviewRoom.class);
             mActivity.setFragment(new ReviewFragment(), serializedReviewRoom);
         });
-        holder.binding.creationTime.setText(review.getCreationTime());
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                mActivity.getApplicationContext(),
+                android.R.layout.simple_spinner_item,
+                review.getParagraphTitleList()
+                );
+        holder.binding.spinner.setAdapter(arrayAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
     public class ReviewListViewHolder extends RecyclerView.ViewHolder{
@@ -55,5 +69,15 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mActivity.setFragment(new ReviewFragment(), i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

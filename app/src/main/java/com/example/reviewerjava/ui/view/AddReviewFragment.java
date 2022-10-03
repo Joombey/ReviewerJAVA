@@ -1,9 +1,11 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,13 +24,14 @@ import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
+import com.example.reviewerjava.utils.Scroller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 
-public class AddReviewFragment extends Fragment {
+public class AddReviewFragment extends Fragment implements Scroller{
     AddReviewFragmentBinding mBinding;
     ReviewListViewModel mReviewListViewModel;
     AddReviewViewModel mAddReviewViewModel;
@@ -46,16 +49,18 @@ public class AddReviewFragment extends Fragment {
             shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
             cities.add("Moscow");
             List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
+            Log.i("content", paragraphs.get(0).getParagraphTitle());
             mAddReviewViewModel.addReview(ReviewRoom.getInstance(new Review(
                     mBinding.titleEdit.getText().toString(),
                     paragraphs,
-                    new Formatter().format("%.%.%",
+                    new Formatter().format("%d.%d.%d",
                             Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                             Calendar.getInstance().get(Calendar.MONTH),
                             Calendar.getInstance().get(Calendar.YEAR)).toString(),
                     new Author("Admin", "Moscow", ""),
                     new Item(mBinding.itemName.getText().toString(), shops)
             )));
+            ((MainActivity)getActivity()).popBackStack();
         });
         return mBinding.getRoot();
     }
@@ -66,8 +71,24 @@ public class AddReviewFragment extends Fragment {
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
         mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(
                 paragraphList,
-                (MainActivity) getActivity()
+                (MainActivity) getActivity(),
+                (Scroller) this
         ));
+    }
+
+    @Override
+    public void scrollTo(int itemPosition) {
+        mBinding.paragraphContainer.scrollToPosition(itemPosition);
+    }
+
+    @Override
+    public void addItem(int position) {
+        paragraphList.add(position, new Paragraph(
+                "",
+                "",
+                new ArrayList<>()
+        ));
+        mBinding.paragraphContainer.getAdapter().notifyItemInserted(position);
     }
 
     @Override
