@@ -34,7 +34,7 @@ public class ParagraphSpinner extends RecyclerView.Adapter<ParagraphSpinner.Para
 
     @Override
     public void onBindViewHolder(@NonNull ParagraphSpinner.ParagrapSpinnerViewHolder holder, int position) {
-        holder.binding.spinnerElement.setText(paragraphTitleList.get(position));
+        holder.binding.spinnerElement.setText((position + 1) + ". " + paragraphTitleList.get(position));
         holder.binding.spinnerElement.setOnClickListener(v->{
             activity.setFragment(new ReviewFragment(), reviewId, position);
         });

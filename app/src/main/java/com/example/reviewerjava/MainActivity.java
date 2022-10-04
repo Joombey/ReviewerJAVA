@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.RegisterFragment;
+import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setFragment(new ReviewListFragment());
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         mViewModel.getRepository().observe(this, aBoolean -> {
@@ -35,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
             if (aBoolean) getSupportActionBar().setTitle("Admin");
             else getSupportActionBar().setTitle("ReviewerJAVA");
         });
+        Uri content = getIntent().getData();
+        if(content != null){
+
+            String[] parts = content.toString().split("/");
+            Integer i = Integer.valueOf(parts[parts.length - 1]);
+            setFragment(new ReviewFragment(), 1);
+
+        } else setFragment(new ReviewListFragment());
+
         RepositoryController.init(getApplication());
     }
 
