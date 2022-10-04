@@ -16,4 +16,7 @@ public interface ReviewDAO {
 
     @Insert
     void insertReview(ReviewRoom review);
+
+    @Query("SELECT * FROM reviews WHERE id == :id")
+    ReviewRoom getReviewById(int id);
 }

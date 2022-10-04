@@ -10,6 +10,7 @@ import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.room.models.ReviewRoom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,5 +95,10 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     @Override
     public void logOut() {
         loggedIn.setValue(false);
+    }
+
+    @Override
+    public ReviewRoom getReviewById(int id) {
+        return null;
     }
 }

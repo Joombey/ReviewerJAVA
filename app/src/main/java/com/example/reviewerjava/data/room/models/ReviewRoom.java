@@ -1,5 +1,7 @@
 package com.example.reviewerjava.data.room.models;
 
+import android.util.Log;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,7 +10,10 @@ import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "reviews")
@@ -41,9 +46,11 @@ public class ReviewRoom extends Review {
         this.item = new Gson().toJson(item, Item.class);
     }
 
-    @Override
-    public List<Paragraph> getParagraphList() {
-        return new Gson().fromJson(this.paragraphs, List.class);
+    public List<Paragraph> getParagraphsList(){
+        Type typeMyType = new TypeToken<ArrayList<Paragraph>>(){}.getType();
+
+        ArrayList<Paragraph> myObject = new Gson().fromJson(paragraphs, typeMyType);
+        return myObject;
     }
 
     @Override
@@ -65,5 +72,13 @@ public class ReviewRoom extends Review {
         return reviewRoom;
     }
 
-
+    public List<String> getParagraphTitleList(){
+        List<String> list = new ArrayList<>();
+        List<Paragraph> paragraphList = getParagraphsList();
+        for(int i = 0; i < paragraphList.size(); i++)  {
+            list.add(paragraphList.get(i).getParagraphTitle());
+            Log.i("content", list.get(i));
+        }
+        return list;
+    }
 }

@@ -12,4 +12,7 @@ public class ReviewListViewModel extends ViewModel {
     public LiveData<List<ReviewRoom>> getReviews(){
         return RepositoryController.getReviewListRepository().getReviewList();
     }
+    public ReviewRoom getReviewById(int id){
+        return RepositoryController.getReviewListRepository().getReviewById(id);
+    }
 }

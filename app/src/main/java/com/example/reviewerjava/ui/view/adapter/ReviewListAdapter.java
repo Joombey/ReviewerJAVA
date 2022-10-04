@@ -1,12 +1,20 @@
 package com.example.reviewerjava.ui.view.adapter;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reviewerjava.MainActivity;
+import com.example.reviewerjava.R;
 import com.example.reviewerjava.data.room.models.ReviewRoom;
 import com.example.reviewerjava.databinding.ReviewListElementBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
@@ -14,12 +22,12 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder>{
-    private List<ReviewRoom> mData;
+public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> {
+    private List<ReviewRoom> data;
     private MainActivity mActivity;
     public ReviewListAdapter(List<ReviewRoom> mReviewList, MainActivity activity){
         this.mActivity = activity;
-        this.mData = mReviewList;
+        this.data = mReviewList;
     }
 
     @NonNull
@@ -32,21 +40,39 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
-        ReviewRoom review = mData.get(position);
-        holder.binding.userName.setText(review.getAuthor().getName());
+        ReviewRoom review = data.get(position);
 
-        holder.binding.reviewListElementTitle.setText(review.getReviewTitle());
-        holder.binding.reviewListElementTitle.setOnClickListener(view -> {
-            Gson gson = new Gson();
-            String serializedReviewRoom = gson.toJson(review, ReviewRoom.class);
-            mActivity.setFragment(new ReviewFragment(), serializedReviewRoom);
-        });
+        holder.binding.userName.setText(review.getAuthor().getName());
         holder.binding.creationTime.setText(review.getCreationTime());
+        holder.binding.itemTitle.setText(review.getItem().getItemName());
+        holder.binding.reviewListElementTitle.setText(review.getReviewTitle());
+
+        holder.binding.reviewContainer.setOnClickListener(view -> {
+            mActivity.setFragment(new ReviewFragment(), review.id);
+        });
+        holder.binding.showParagraphListBtn.setOnClickListener(v->{
+            if(holder.binding.paragraphListContainer.getVisibility() == View.GONE){
+                holder.binding.showParagraphListBtn.setImageResource(R.drawable.ic_down);
+                holder.binding.paragraphListContainer.setVisibility(View.VISIBLE);
+            } else{
+                holder.binding.showParagraphListBtn.setImageResource(R.drawable.ic_up_big);
+                holder.binding.paragraphListContainer.setVisibility(View.GONE);
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
+        holder.binding.paragraphListContainer.setLayoutManager(linearLayoutManager);
+        holder.binding.paragraphListContainer.setAdapter(
+                new ParagraphSpinner(
+                        mActivity,
+                        review.getParagraphTitleList(),
+                        review.id
+                )
+        );
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
     public class ReviewListViewHolder extends RecyclerView.ViewHolder{

@@ -26,10 +26,12 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
     public ImageSliderAdapter(List<String> pictureList, boolean writeAccess, MainActivity activity){
         this.pictureList = pictureList;
-        Log.i("content", pictureList.size()+"");
         this.activity = activity;
+        Log.i("content14", pictureList.size()+"");
         if (writeAccess == true){
             pictureList.add(null);
+        }else{
+            pictureList.remove(pictureList.size() - 1);
         }
     }
 

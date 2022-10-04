@@ -1,9 +1,11 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,15 +22,17 @@ import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.data.room.models.ReviewRoom;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
+import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
+import com.example.reviewerjava.utils.Scroller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 
-public class AddReviewFragment extends Fragment {
+public class AddReviewFragment extends Fragment implements Scroller{
     AddReviewFragmentBinding mBinding;
     ReviewListViewModel mReviewListViewModel;
     AddReviewViewModel mAddReviewViewModel;
@@ -43,19 +47,25 @@ public class AddReviewFragment extends Fragment {
         mBinding.confirmBtn.setOnClickListener(view -> {
             List<String> cities = new ArrayList<>();
             List<Shop> shops = new ArrayList<>();
-            shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
             cities.add("Moscow");
-            List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
-            mAddReviewViewModel.addReview(ReviewRoom.getInstance(new Review(
+            shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
+
+            /*List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
+            for(int i = 0; i < paragraphs.size(); i++){
+                Log.i("content14", paragraphs.get(i).getParagraphTitle() + "\n" + paragraphs.get(i).getParagraphText());
+            }*/
+
+            mAddReviewViewModel.addReview(new Review(
                     mBinding.titleEdit.getText().toString(),
-                    paragraphs,
-                    new Formatter().format("%.%.%",
+                    paragraphList,
+                    new Formatter().format("%d.%d.%d",
                             Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                             Calendar.getInstance().get(Calendar.MONTH),
                             Calendar.getInstance().get(Calendar.YEAR)).toString(),
                     new Author("Admin", "Moscow", ""),
                     new Item(mBinding.itemName.getText().toString(), shops)
-            )));
+            ));
+            ((MainActivity)getActivity()).popBackStack();
         });
         return mBinding.getRoot();
     }
@@ -66,8 +76,25 @@ public class AddReviewFragment extends Fragment {
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
         mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(
                 paragraphList,
-                (MainActivity) getActivity()
+                (MainActivity) getActivity(),
+                this,
+                true
         ));
+    }
+
+    @Override
+    public void scrollTo(int itemPosition) {
+        mBinding.paragraphContainer.scrollToPosition(itemPosition);
+    }
+
+    @Override
+    public void addItem(int position) {
+        paragraphList.add(position, new Paragraph(
+                "",
+                "",
+                new ArrayList<>()
+        ));
+        mBinding.paragraphContainer.getAdapter().notifyItemInserted(position);
     }
 
     @Override
