@@ -74,16 +74,17 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public <T extends Fragment> void setFragment(T fragment, String review){
+    public <T extends Fragment> void setFragment(T fragment, int reviewId){
         Bundle bundle = new Bundle();
-        bundle.putString("key", review);
+        bundle.putInt("reviewId", reviewId);
         fragment.setArguments(bundle);
         setFragment(fragment);
     }
 
-    public <T extends Fragment> void setFragment(T fragment, int position){
+    public <T extends Fragment> void setFragment(T fragment, int reviewId, int position){
         Bundle bundle = new Bundle();
-        bundle.putInt("key", position);
+        bundle.putInt("position", position);
+        bundle.putInt("reviewId", reviewId);
         fragment.setArguments(bundle);
         setFragment(fragment);
     }

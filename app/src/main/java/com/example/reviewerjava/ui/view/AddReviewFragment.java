@@ -22,6 +22,7 @@ import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.data.room.models.ReviewRoom;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
+import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 import com.example.reviewerjava.utils.Scroller;
@@ -46,20 +47,24 @@ public class AddReviewFragment extends Fragment implements Scroller{
         mBinding.confirmBtn.setOnClickListener(view -> {
             List<String> cities = new ArrayList<>();
             List<Shop> shops = new ArrayList<>();
-            shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
             cities.add("Moscow");
-            List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
-            Log.i("content", paragraphs.get(0).getParagraphTitle());
-            mAddReviewViewModel.addReview(ReviewRoom.getInstance(new Review(
+            shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
+
+            /*List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
+            for(int i = 0; i < paragraphs.size(); i++){
+                Log.i("content14", paragraphs.get(i).getParagraphTitle() + "\n" + paragraphs.get(i).getParagraphText());
+            }*/
+
+            mAddReviewViewModel.addReview(new Review(
                     mBinding.titleEdit.getText().toString(),
-                    paragraphs,
+                    paragraphList,
                     new Formatter().format("%d.%d.%d",
                             Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                             Calendar.getInstance().get(Calendar.MONTH),
                             Calendar.getInstance().get(Calendar.YEAR)).toString(),
                     new Author("Admin", "Moscow", ""),
                     new Item(mBinding.itemName.getText().toString(), shops)
-            )));
+            ));
             ((MainActivity)getActivity()).popBackStack();
         });
         return mBinding.getRoot();
@@ -72,7 +77,8 @@ public class AddReviewFragment extends Fragment implements Scroller{
         mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(
                 paragraphList,
                 (MainActivity) getActivity(),
-                (Scroller) this
+                this,
+                true
         ));
     }
 

@@ -55,4 +55,9 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     public void logOut() {
         loggedIn.setValue(false);
     }
+
+    @Override
+    public ReviewRoom getReviewById(int id) {
+        return mReviewDAO.getReviewById(id);
+    }
 }

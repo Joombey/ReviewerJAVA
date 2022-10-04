@@ -85,11 +85,17 @@
                 android:text="TextView" />
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner"
+        <ImageButton
+            android:id="@+id/showParagraphListBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_up_big" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/paragraphListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
