@@ -1,13 +1,9 @@
 package com.example.reviewerjava.ui.view.adapter;
 
-import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +14,6 @@ import com.example.reviewerjava.R;
 import com.example.reviewerjava.data.room.models.ReviewRoom;
 import com.example.reviewerjava.databinding.ReviewListElementBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
-import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -41,6 +36,16 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
         ReviewRoom review = data.get(position);
+
+        holder.binding.shareBtn.setOnClickListener(v-> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://rakhm.f.e_reviewer_java/" + review.id);
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            mActivity.startActivity(shareIntent);
+        });
 
         holder.binding.userName.setText(review.getAuthor().getName());
         holder.binding.creationTime.setText(review.getCreationTime());
