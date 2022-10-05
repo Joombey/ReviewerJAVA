@@ -1,11 +1,9 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +17,8 @@ import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.model.Shop;
-import com.example.reviewerjava.data.room.models.ReviewRoom;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
-import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 import com.example.reviewerjava.utils.Scroller;
@@ -49,11 +45,6 @@ public class AddReviewFragment extends Fragment implements Scroller{
             List<Shop> shops = new ArrayList<>();
             cities.add("Moscow");
             shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
-
-            /*List<Paragraph> paragraphs = ((ParagraphListAdapter) mBinding.paragraphContainer.getAdapter()).getData();
-            for(int i = 0; i < paragraphs.size(); i++){
-                Log.i("content14", paragraphs.get(i).getParagraphTitle() + "\n" + paragraphs.get(i).getParagraphText());
-            }*/
 
             mAddReviewViewModel.addReview(new Review(
                     mBinding.titleEdit.getText().toString(),

@@ -46,11 +46,10 @@ public class ReviewRoom extends Review {
         this.item = new Gson().toJson(item, Item.class);
     }
 
-    public List<Paragraph> getParagraphsList(){
+    public List<Paragraph> getRoomParagraphList(){
         Type typeMyType = new TypeToken<ArrayList<Paragraph>>(){}.getType();
-
-        ArrayList<Paragraph> myObject = new Gson().fromJson(paragraphs, typeMyType);
-        return myObject;
+        ArrayList<Paragraph> paragraphArrayList = new Gson().fromJson(paragraphs, typeMyType);
+        return paragraphArrayList;
     }
 
     @Override
@@ -74,11 +73,7 @@ public class ReviewRoom extends Review {
 
     public List<String> getParagraphTitleList(){
         List<String> list = new ArrayList<>();
-        List<Paragraph> paragraphList = getParagraphsList();
-        for(int i = 0; i < paragraphList.size(); i++)  {
-            list.add(paragraphList.get(i).getParagraphTitle());
-            Log.i("content", list.get(i));
-        }
+        List<Paragraph> paragraphList = getRoomParagraphList();
         return list;
     }
 }

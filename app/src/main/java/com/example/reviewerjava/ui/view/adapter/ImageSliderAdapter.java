@@ -27,7 +27,6 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
     public ImageSliderAdapter(List<String> pictureList, boolean writeAccess, MainActivity activity){
         this.pictureList = pictureList;
         this.activity = activity;
-        Log.i("content14", pictureList.size()+"");
         if (writeAccess == true){
             pictureList.add(null);
         }else{
@@ -50,7 +49,8 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             holder.binding.addImageBtn.setVisibility(View.VISIBLE);
             holder.binding.addImageBtn.setOnClickListener((View v) -> {
                 if (activity != null) {
-                    activity.getActivityResultRegistry().register("key", new ActivityResultContracts.OpenDocument(), new ActivityResultCallback<Uri>() {
+                    activity.getActivityResultRegistry().register("key",
+                            new ActivityResultContracts.OpenDocument(), new ActivityResultCallback<Uri>() {
                         @Override
                         public void onActivityResult(Uri result) {
                             activity
