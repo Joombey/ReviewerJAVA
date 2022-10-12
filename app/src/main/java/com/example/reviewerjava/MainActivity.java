@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        RepositoryController.init(getApplication());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
@@ -42,11 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
             String[] parts = content.toString().split("/");
             Integer i = Integer.valueOf(parts[parts.length - 1]);
-            setFragment(new ReviewFragment(), 1);
+            setFragment(new ReviewFragment(), i);
 
         } else setFragment(new ReviewListFragment());
 
-        RepositoryController.init(getApplication());
     }
 
     @Override

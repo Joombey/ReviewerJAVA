@@ -74,6 +74,9 @@ public class ReviewRoom extends Review {
     public List<String> getParagraphTitleList(){
         List<String> list = new ArrayList<>();
         List<Paragraph> paragraphList = getRoomParagraphList();
+        for(int i = 0; i < paragraphList.size(); i++)  {
+            list.add(paragraphList.get(i).getParagraphTitle());
+        }
         return list;
     }
 }
