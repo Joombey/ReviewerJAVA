@@ -6,7 +6,5 @@
     <string name="createReview">Создать</string>
     <string name="logInTitle">logInTitle</string>
     <string name="nextParagraph">Следующий пункт</string>
-    <string name="shop">Магазин в котором купили</string>
     <string name="paragraphTitle">Введите название пункта</string>
-    <string name="save">Сохранить</string>
 </resources>

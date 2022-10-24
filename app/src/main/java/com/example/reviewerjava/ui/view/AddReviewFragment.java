@@ -42,9 +42,8 @@ public class AddReviewFragment extends Fragment implements Scroller{
 
         mBinding.confirmBtn.setOnClickListener(view -> {
             List<String> cities = new ArrayList<>();
-            List<Shop> shops = new ArrayList<>();
-            cities.add("Moscow");
-            shops.add(new Shop(mBinding.shopTitle.getText().toString(), cities));
+            List<String> shops = new ArrayList<>();
+            shops.add(mBinding.shopTitle.getText().toString());
 
             mAddReviewViewModel.addReview(new Review(
                     mBinding.titleEdit.getText().toString(),

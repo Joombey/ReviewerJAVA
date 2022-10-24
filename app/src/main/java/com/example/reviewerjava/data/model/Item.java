@@ -1,25 +1,20 @@
 package com.example.reviewerjava.data.model;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Item {
 
-    private int id;
     private String itemName;
-    private List<Shop> itemShops;
-    public Item(String itemName, List<Shop> itemShops) {
+    private List<String> itemShops;
+
+    public Item(String itemName, List<String> itemShops) {
         this.itemName = itemName;
         this.itemShops = itemShops;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Item(){};
 
     public String getItemName() {
         return itemName;
@@ -29,11 +24,11 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public List<Shop> getItemShops() {
+    public List<String> getItemShops() {
         return itemShops;
     }
 
-    public void setItemShops(List<Shop> itemShops) {
+    public void setItemShops(List<String> itemShops) {
         this.itemShops = itemShops;
     }
 }
