@@ -27,7 +27,7 @@ import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private RegisterViewModel mViewModel;
-    private boolean loggedIn = false;
+    private boolean loggedIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             setFragment(new ReviewFragment(), i);
 
         } else setFragment(new ReviewListFragment());
-
         Log.i("cacheDir", getCacheDir().toString());
      }
 

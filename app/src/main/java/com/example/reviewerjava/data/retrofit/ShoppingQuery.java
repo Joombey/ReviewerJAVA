@@ -1,17 +1,16 @@
 package com.example.reviewerjava.data.retrofit;
 
+
 import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.model.Shop;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,9 +21,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -34,25 +34,26 @@ public class ShoppingQuery {
 
     public ShoppingQuery(){
         Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(new Converter.Factory() {
-                }).build();
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(null)
+                .build();
         api = retrofit.create(ProductSearchService.class);
     }
 
     public LiveData<List<String>> getItemsByRequest(){
-        MutableLiveData<List<ShoppingResponse.Product>> items;
-        api.getShoppingList("").enqueue(new Callback<ShoppingResponse>() {
+        MutableLiveData<List<String>> items = new MutableLiveData<>();
+        api.getShoppingList().enqueue(new Callback<ShoppingResponse>() {
             @Override
             public void onResponse(Call<ShoppingResponse> call, Response<ShoppingResponse> response) {
-                response.body().shoppingResultList.stream().map(items -> items.title).collect(Collectors.toList());
+                items.setValue(response.body().shoppingResultList.stream().map(items -> items.title).collect(Collectors.toList()));
             }
 
             @Override
             public void onFailure(Call<ShoppingResponse> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
-        return null;
+        return items;
     }
 
     static class ShoppingResponse{
@@ -67,41 +68,50 @@ public class ShoppingQuery {
             @SerializedName("thumbnail")
             public String imageUrl;
 
-            public Product(String title, String productId, String source, String imageUrl) {
+            public Product(String title, String productId, String source, String imageUrl, Context context) {
                 this.title = title;
                 this.productId = productId;
                 this.source = source;
                 this.imageUrl = imageUrl;
-            }
-             public void saveImage(Context context) throws IOException {
-                URL url = new URL("file://some/path/anImage.png");
-                InputStream input = url.openStream();
-                File storagePath = Environment.getExternalStorageDirectory();
                 try {
-                    OutputStream output = new FileOutputStream (new File(storagePath,
-                            "/"
-                            + title
-                            + "-"
-                            + productId
-                            + ".png"));
-                    try {
-                        byte[] buffer = new byte[1024 * 50];
-                        int bytesRead = 0;
-                        while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
-                            output.write(buffer, 0, bytesRead);
-                        }
-                    } finally {
-                        output.close();
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    cache(context);
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
-                    input.close();
-                    imageUrl = Uri.fromFile(new File(storagePath, title + "-" + productId + ".png")).toString();
-
                 }
+            }
+
+            public void cache(Context context) throws IOException {
+                URL url = new URL(imageUrl);
+                InputStream inputStream = url.openStream();
+
+                createFile(context.getCacheDir(), inputStream);
+            }
+
+            public void moveToMedia(Context context) throws IOException {
+                File imageFile = new File(Uri.parse(imageUrl).toString());
+                InputStream inputStream = new FileInputStream(imageFile);
+
+                createFile(context.getExternalMediaDirs()[0], inputStream);
+                context.getCacheDir().delete();
+            }
+
+             private void createFile(File parent, InputStream inputStream) throws IOException {
+                 if(!parent.exists()) parent.mkdir();
+                 OutputStream outputStream = new FileOutputStream(new File(parent, getImageNamePattern()));
+
+                 byte[] buffer = new byte[1024*50];
+                 int bytesRead = 0;
+                 while((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0){
+                     outputStream.write(buffer, 0, bytesRead);
+                 }
+
+                 imageUrl = Uri.fromFile(new File(parent, getImageNamePattern())).toString();
+                 inputStream.close();
+                 outputStream.close();
+             }
+
+            private String getImageNamePattern(){
+                return title + "-" + productId + ".png";
             }
         }
     }
