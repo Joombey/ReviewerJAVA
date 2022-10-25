@@ -47,8 +47,8 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     public boolean login(String login, String password) {
         if(login.equals("admin") && password.equals("admin")){
             loggedIn.setValue(true);
-            return true;
-        } else return false;
+        }
+        return true;
     }
 
     @Override

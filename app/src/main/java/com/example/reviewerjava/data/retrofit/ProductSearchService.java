@@ -9,5 +9,5 @@ import retrofit2.http.Query;
 
 public interface ProductSearchService {
     @GET("search?tbm=shop")
-    Call<ShoppingQuery.ShoppingResponse> getShoppingList();
+    Call<ShoppingQuery.ShoppingResponse> getShoppingList(@Query("q") String q);
 }

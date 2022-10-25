@@ -34,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
+        initLoginLogic();
+        checkForDeppLink();
+    }
 
+    private void initLoginLogic(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         mViewModel.getRepository().observe(this, aBoolean -> {
@@ -42,16 +46,17 @@ public class MainActivity extends AppCompatActivity {
             if (aBoolean) getSupportActionBar().setTitle("Admin");
             else getSupportActionBar().setTitle("ReviewerJAVA");
         });
+    }
+
+    private void checkForDeppLink(){
         Uri content = getIntent().getData();
         if(content != null){
-
             String[] parts = content.toString().split("/");
             Integer i = Integer.valueOf(parts[parts.length - 1]);
             setFragment(new ReviewFragment(), i);
 
         } else setFragment(new ReviewListFragment());
-        Log.i("cacheDir", getCacheDir().toString());
-     }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

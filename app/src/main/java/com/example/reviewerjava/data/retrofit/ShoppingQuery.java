@@ -18,10 +18,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
+import okhttp3.OkHttpClient;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,20 +34,24 @@ public class ShoppingQuery {
 
     private ProductSearchService api;
 
-    public ShoppingQuery(){
+    public ShoppingQuery(OkHttpClient client){
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(null)
+                .client(client)
                 .build();
         api = retrofit.create(ProductSearchService.class);
     }
 
-    public LiveData<List<String>> getItemsByRequest(){
-        MutableLiveData<List<String>> items = new MutableLiveData<>();
-        api.getShoppingList().enqueue(new Callback<ShoppingResponse>() {
+    public List<Item> getItemsByRequest(String q){
+        List<Item> items = new ArrayList<>();
+        api.getShoppingList(q).enqueue(new Callback<ShoppingResponse>() {
             @Override
             public void onResponse(Call<ShoppingResponse> call, Response<ShoppingResponse> response) {
-                items.setValue(response.body().shoppingResultList.stream().map(items -> items.title).collect(Collectors.toList()));
+                items.addAll(response.body().shoppingResultList.stream().map(items -> {
+                    Item item = new Item();
+                    item.setItemName(items.getItemName());
+                    return item;
+                }).collect(Collectors.toList()));
             }
 
             @Override
@@ -53,6 +59,7 @@ public class ShoppingQuery {
                 t.printStackTrace();
             }
         });
+
         return items;
     }
 
@@ -73,6 +80,18 @@ public class ShoppingQuery {
                 this.productId = productId;
                 this.source = source;
                 this.imageUrl = imageUrl;
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            cache(context);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.run();
                 try {
                     cache(context);
                 } catch (IOException e) {

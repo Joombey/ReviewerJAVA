@@ -3,18 +3,24 @@ package com.example.reviewerjava.data.repository;
 import android.app.Application;
 
 import androidx.activity.result.ActivityResultRegistry;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.reviewerjava.data.mock.MockBase;
+import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.retrofit.ShoppingQuery;
+
+import java.util.List;
 
 public class RepositoryController {
     static ReviewListRepository reviewListRepository;
     static RegisterRepository registerRepository;
     static AddReviewRepository addReviewRepository;
+    static ShoppingQuery shoppingQuery;
 
     public static void init(Application application){
         reviewListRepository = new RoomRepository(application);
@@ -41,5 +47,9 @@ public class RepositoryController {
             addReviewRepository = new MockBase();
         }
         return addReviewRepository;
+    }
+
+    public static ShoppingQuery getShoppingQuery() {
+        return shoppingQuery;
     }
 }

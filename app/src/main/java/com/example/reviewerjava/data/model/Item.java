@@ -9,6 +9,8 @@ public class Item {
 
     private String itemName;
     private List<String> itemShops;
+    private String itemImage;
+    private String desctiption;
 
     public Item(String itemName, List<String> itemShops) {
         this.itemName = itemName;
@@ -30,5 +32,21 @@ public class Item {
 
     public void setItemShops(List<String> itemShops) {
         this.itemShops = itemShops;
+    }
+
+    public String getItemImage() {
+        return itemImage;
+    }
+
+    public void setItemImage(String itemImage) {
+        this.itemImage = itemImage;
+    }
+
+    public String getDesctiption() {
+        return desctiption;
+    }
+
+    public void setDesctiption(String desctiption) {
+        this.desctiption = desctiption;
     }
 }
