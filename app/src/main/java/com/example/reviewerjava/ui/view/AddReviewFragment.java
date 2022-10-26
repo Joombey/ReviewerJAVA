@@ -1,6 +1,7 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 import com.example.reviewerjava.utils.Scroller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Formatter;
@@ -48,26 +50,29 @@ public class AddReviewFragment extends Fragment implements Scroller{
         mBinding = AddReviewFragmentBinding.inflate(inflater, container, false);
         mBinding.paragraphContainer.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.confirmBtn.setOnClickListener(view -> {
-            List<String> cities = new ArrayList<>();
             List<String> shops = new ArrayList<>();
             shops.add(mBinding.shopTitle.getText().toString());
-
-            mAddReviewViewModel.addReview(new Review(
-                    mBinding.titleEdit.getText().toString(),
-                    paragraphList,
-                    new Formatter().format("%d.%d.%d",
-                            Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-                            Calendar.getInstance().get(Calendar.MONTH),
-                            Calendar.getInstance().get(Calendar.YEAR)).toString(),
-                    new Author("Admin", "Moscow", ""),
-                    new Item(mBinding.itemName.getText().toString(), shops)
-            ));
+            try {
+                item = mAddReviewViewModel.moveFromCacheChosenItem(getContext().getExternalMediaDirs()[0], item);
+                mAddReviewViewModel.addReview(new Review(
+                        mBinding.titleEdit.getText().toString(),
+                        paragraphList,
+                        new Formatter().format("%d.%d.%d",
+                                Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                                Calendar.getInstance().get(Calendar.MONTH),
+                                Calendar.getInstance().get(Calendar.YEAR)).toString(),
+                        new Author("Admin", "Moscow", ""),
+                        item
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             ((MainActivity)getActivity()).popBackStack();
         });
         mBinding.itemName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mBinding.itemName.getAdapter().getItem(i);
+                item = (Item) mBinding.itemName.getAdapter().getItem(i);
             }
 
             @Override
@@ -77,15 +82,13 @@ public class AddReviewFragment extends Fragment implements Scroller{
         });
 
         mBinding.searchButton.setOnClickListener(view -> {
-            mAddReviewViewModel.getItemsByRequest(mBinding.itemName.getText().toString());
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    getContext(),
-                    android.R.layout.simple_dropdown_item_1line,
-                    new ArrayList<>()
-            );
             String queriedText = mBinding.itemName.getText().toString();
-            List<Item> items = mAddReviewViewModel.getItemsByRequest(queriedText);
-            mBinding.itemName.setAdapter(new ItemArrayAdapter(getContext(), R.layout.item_list_element, items));
+            mAddReviewViewModel.getItemsByRequest(queriedText, getContext().getExternalMediaDirs()[0])
+                    .observe(getViewLifecycleOwner(), list->{
+                        ItemArrayAdapter adapter = new ItemArrayAdapter(getContext(), R.layout.item_list_element, list);
+                        adapter.getFilter().filter(null);
+                        mBinding.itemName.setAdapter(adapter);
+            });
         });
         return mBinding.getRoot();
     }
@@ -107,15 +110,6 @@ public class AddReviewFragment extends Fragment implements Scroller{
         mBinding.paragraphContainer.scrollToPosition(itemPosition);
     }
 
-    @Override
-    public void addItem(int position) {
-        paragraphList.add(position, new Paragraph(
-                "",
-                "",
-                new ArrayList<>()
-        ));
-        mBinding.paragraphContainer.getAdapter().notifyItemInserted(position);
-    }
 
     @Override
     public void onDetach() {

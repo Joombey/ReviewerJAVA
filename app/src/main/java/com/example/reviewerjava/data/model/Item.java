@@ -1,21 +1,24 @@
 package com.example.reviewerjava.data.model;
 
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class Item {
 
+    private String shop;
     private String itemName;
-    private List<String> itemShops;
     private String itemImage;
-    private String desctiption;
+    private String description;
+    private String productId;
 
-    public Item(String itemName, List<String> itemShops) {
+    public Item(String shop, String itemName, String itemImage, String description, String productId) {
+        this.shop = shop;
         this.itemName = itemName;
-        this.itemShops = itemShops;
+        this.itemImage = itemImage;
+        this.description = description;
+        this.productId = productId;
     }
+
     public Item(){};
 
     public String getItemName() {
@@ -26,12 +29,12 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public List<String> getItemShops() {
-        return itemShops;
+    public String getItemShops() {
+        return shop;
     }
 
-    public void setItemShops(List<String> itemShops) {
-        this.itemShops = itemShops;
+    public void setItemShop(String shop) {
+        this.shop = shop;
     }
 
     public String getItemImage() {
@@ -42,11 +45,11 @@ public class Item {
         this.itemImage = itemImage;
     }
 
-    public String getDesctiption() {
-        return desctiption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesctiption(String desctiption) {
-        this.desctiption = desctiption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -12,6 +12,7 @@ import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.databinding.AddParagraphElementBinding;
 import com.example.reviewerjava.utils.Scroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdapter.ParagraphListViewHolder> {
@@ -76,7 +77,15 @@ public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdap
                         holder.binding.paragraphText.getText().toString()
                 );
                 holder.binding.saveButton.setVisibility(View.GONE);
-                scroller.addItem(position + 1);
+                paragraphList.add(
+                        position + 1,
+                        new Paragraph(
+                            "",
+                            "",
+                            new ArrayList<>()
+                    )
+                );
+                notifyItemInserted(position + 1);
             });
 
             holder.binding.saveButton.setOnClickListener(v -> {

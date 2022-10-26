@@ -43,12 +43,14 @@ public class ReviewFragment extends Fragment implements Scroller {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
         mBinding.paragraphList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.paragraphList.setAdapter(new ParagraphListAdapter(
-                reviewRoom.getRoomParagraphList(),
-                (MainActivity) getActivity(),
-                null,
-                false
-        ));
+        mBinding.paragraphList.setAdapter(
+                new ParagraphListAdapter(
+                        reviewRoom.getRoomParagraphList(),
+                        (MainActivity) getActivity(),
+                        null,
+                        false
+                )
+        );
         int position = getArguments().getInt("position", -1);
         if(position != -1) scrollTo(position);
         super.onViewCreated(view, savedInstanceState);
@@ -57,10 +59,5 @@ public class ReviewFragment extends Fragment implements Scroller {
     @Override
     public void scrollTo(int itemPosition) {
         mBinding.paragraphList.scrollToPosition(itemPosition);
-    }
-
-    @Override
-    public void addItem(int position) {
-
     }
 }

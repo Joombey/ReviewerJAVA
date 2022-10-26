@@ -1,7 +1,6 @@
 package com.example.reviewerjava.ui.view.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -33,18 +32,14 @@ public class ItemArrayAdapter extends ArrayAdapter<Item>{
         mBinding = ItemListElementBinding.inflate(LayoutInflater.from(context), parent, false);
         mBinding.itemImage.setImageBitmap(
                 BitmapFactory.decodeFile(
-                        String.valueOf(
-                                Uri
-                                        .parse(items.get(position).getItemImage())
-                                        .getPath()
-                        )
+                        Uri.parse(items.get(position).getItemImage()).getPath()
                 )
         );
         mBinding.itemTitle.setText(
                 items.get(position).getItemName()
         );
         mBinding.itemDescription.setText(
-                items.get(position).getDesctiption()
+                items.get(position).getDescription()
         );
         return mBinding.getRoot();
     }
