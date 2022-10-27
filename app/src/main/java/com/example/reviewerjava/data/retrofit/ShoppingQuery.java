@@ -3,6 +3,7 @@ package com.example.reviewerjava.data.retrofit;
 
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,7 +42,10 @@ public class ShoppingQuery {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request();
+                        HttpUrl newUrl = chain.request().url().newBuilder()
+                                .addQueryParameter("api_key", BuildConfig.API_KEY)
+                                .build();
+                        Request request = chain.request().newBuilder().url(newUrl).build();
                         return chain.proceed(request);
                     }
                 }).build();
@@ -55,7 +60,7 @@ public class ShoppingQuery {
 
     public LiveData<List<Item>> getItemsByRequest(String q, File cacheDir){
         MutableLiveData <List<Item>> shoppingList = new MutableLiveData<>();
-        api.getShoppingList(q, BuildConfig.API_KEY).enqueue(new Callback<ShoppingResponse>() {
+        api.getShoppingList(q).enqueue(new Callback<ShoppingResponse>() {
             @Override
             public void onResponse(Call<ShoppingResponse> call, Response<ShoppingResponse> response) {
                 if (response.isSuccessful()) {
@@ -67,21 +72,15 @@ public class ShoppingQuery {
                                         try {
                                             entryItem.cache(cacheDir);
                                         } catch (IOException e) {
+                                            Log.i("caching", "FALSE");
                                             e.printStackTrace();
                                         }
                                     }
                                 }).start();
-                                Item outItem = new Item(
-                                        entryItem.source,
-                                        entryItem.title,
-                                        entryItem.imageUrl,
-                                        entryItem.description,
-                                        entryItem.productId
-                                );
-                                return outItem;
+                                return entryItem.getItemInstance();
                             }).collect(Collectors.toList())
                     );
-                }
+                } else Log.i("RESPONSE", "NOT SUCCESS");
             }
 
             @Override
@@ -123,12 +122,23 @@ public class ShoppingQuery {
                  }
 
                  imageUrl = Uri.fromFile(new File(parent, getImageNamePattern())).toString();
+                 Log.i("FILEPATH", Uri.parse(imageUrl).getPath());
                  inputStream.close();
                  outputStream.close();
              }
 
             private String getImageNamePattern(){
                 return productId + ".png";
+            }
+
+            public Item getItemInstance(){
+                return new Item(
+                        this.source,
+                        this.title,
+                        this.imageUrl,
+                        this.description,
+                        this.productId
+                );
             }
         }
     }

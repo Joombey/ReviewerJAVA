@@ -113,7 +113,6 @@ public class RepositoryController extends Thread{
                 e.printStackTrace();
             }
             parent.delete();
-
         }).start();
 //        Uri imageUri = Uri.parse(item.getItemImage());
 //        String imageFileName = imageUri.getLastPathSegment();
@@ -137,7 +136,6 @@ public class RepositoryController extends Thread{
 //        inputStream.close();
 //        outputStream.close();
 //        parent.delete();
-
         return item;
     }
 }

@@ -52,4 +52,12 @@ public class Item {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 }

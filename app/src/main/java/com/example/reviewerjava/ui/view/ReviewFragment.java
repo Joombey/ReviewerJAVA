@@ -1,6 +1,9 @@
 package com.example.reviewerjava.ui.view;
 
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,8 @@ public class ReviewFragment extends Fragment implements Scroller {
         mBinding.authorName.setText(reviewRoom.getAuthor().getName());
         mBinding.itemName.setText(reviewRoom.getItem().getItemName());
         mBinding.reviewDate.setText(reviewRoom.getCreationTime());
+        Log.i("CONTENT", reviewRoom.getItem().getItemImage().toString());
+        mBinding.itemImage.setImageBitmap(BitmapFactory.decodeFile(Uri.parse(reviewRoom.getItem().getItemImage()).getPath()));
 
         return mBinding.getRoot();
     }

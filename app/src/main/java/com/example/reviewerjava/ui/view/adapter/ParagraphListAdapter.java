@@ -19,13 +19,11 @@ public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdap
 
     private MainActivity activity;
     private List<Paragraph> paragraphList;
-    private Scroller scroller;
     private boolean writeAccess;
 
     public ParagraphListAdapter(List<Paragraph> paragraphList, MainActivity activity, Scroller scroller, boolean writeAccess){
         this.paragraphList = paragraphList;
         this.activity = activity;
-        this.scroller = scroller;
         this.writeAccess = writeAccess;
     }
 

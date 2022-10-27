@@ -1,7 +1,5 @@
 package com.example.reviewerjava.ui.viewmodel;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -22,7 +20,7 @@ public class AddReviewViewModel extends ViewModel {
         return RepositoryController.getShoppingQuery().getItemsByRequest(query, cacheDir);
     }
 
-    public Item moveFromCacheChosenItem(File parent, Item item) throws IOException {
+    public Item moveImageToMedia(File parent, Item item) throws IOException {
         return RepositoryController.moveToMedia(parent, item);
     }
 }

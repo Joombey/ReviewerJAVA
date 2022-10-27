@@ -1,13 +1,9 @@
 package com.example.reviewerjava.ui.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,18 +12,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.R;
 import com.example.reviewerjava.data.model.Author;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
-import com.example.reviewerjava.databinding.ItemListElementBinding;
-import com.example.reviewerjava.ui.view.adapter.ItemArrayAdapter;
+import com.example.reviewerjava.ui.view.adapter.ItemListAdapter;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
+import com.example.reviewerjava.utils.ItemSetter;
 import com.example.reviewerjava.utils.Scroller;
 
 import java.io.IOException;
@@ -36,7 +30,7 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 
-public class AddReviewFragment extends Fragment implements Scroller{
+public class AddReviewFragment extends Fragment implements Scroller, ItemSetter {
     AddReviewFragmentBinding mBinding;
     ReviewListViewModel mReviewListViewModel;
     AddReviewViewModel mAddReviewViewModel;
@@ -47,13 +41,21 @@ public class AddReviewFragment extends Fragment implements Scroller{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         paragraphList.add(new Paragraph("", "", new ArrayList<>()));
 
+
         mBinding = AddReviewFragmentBinding.inflate(inflater, container, false);
+        mBinding.itemName.setOnFocusChangeListener((view, b)-> {
+            if(!b){
+                mBinding.itemSpinner.setVisibility(View.GONE);
+            } else mBinding.itemSpinner.setVisibility(View.VISIBLE);
+        });
         mBinding.paragraphContainer.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.itemSpinner.setLayoutManager(new LinearLayoutManager(getContext()));
+
         mBinding.confirmBtn.setOnClickListener(view -> {
             List<String> shops = new ArrayList<>();
             shops.add(mBinding.shopTitle.getText().toString());
             try {
-                item = mAddReviewViewModel.moveFromCacheChosenItem(getContext().getExternalMediaDirs()[0], item);
+                item = mAddReviewViewModel.moveImageToMedia(getContext().getExternalMediaDirs()[0], item);
                 mAddReviewViewModel.addReview(new Review(
                         mBinding.titleEdit.getText().toString(),
                         paragraphList,
@@ -69,26 +71,18 @@ public class AddReviewFragment extends Fragment implements Scroller{
             }
             ((MainActivity)getActivity()).popBackStack();
         });
-        mBinding.itemName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                item = (Item) mBinding.itemName.getAdapter().getItem(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         mBinding.searchButton.setOnClickListener(view -> {
             String queriedText = mBinding.itemName.getText().toString();
-            mAddReviewViewModel.getItemsByRequest(queriedText, getContext().getExternalMediaDirs()[0])
-                    .observe(getViewLifecycleOwner(), list->{
-                        ItemArrayAdapter adapter = new ItemArrayAdapter(getContext(), R.layout.item_list_element, list);
-                        adapter.getFilter().filter(null);
-                        mBinding.itemName.setAdapter(adapter);
-            });
+            if (!queriedText.equals("")) {
+                mAddReviewViewModel.getItemsByRequest(queriedText, getContext().getCacheDir())
+                        .observe(getViewLifecycleOwner(), list -> {
+                            mBinding.itemSpinner.setVisibility(View.VISIBLE);
+                            mBinding.itemSpinner.setAdapter(
+                                    new ItemListAdapter(this, list, getContext())
+                            );
+                        });
+            }else if(mBinding.itemSpinner.getVisibility() != View.GONE) mBinding.itemSpinner.setVisibility(View.GONE);
         });
         return mBinding.getRoot();
     }
@@ -116,5 +110,12 @@ public class AddReviewFragment extends Fragment implements Scroller{
         super.onDetach();
         mBinding = null;
         mAddReviewViewModel = null;
+    }
+
+    @Override
+    public void setItem(Item newItem) {
+        item = newItem;
+        mBinding.itemName.setText(item.getItemName());
+        mBinding.itemSpinner.setVisibility(View.GONE);
     }
 }

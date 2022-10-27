@@ -14,6 +14,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ProductSearchService {
-    @GET("search.json?tbm=shop&engine=google&q=iphone&api_key=50afda93196d3860db7a3e5e94a7b444762e86b075ce569a60054bbeaff209f5")
-    Call<ShoppingQuery.ShoppingResponse> getShoppingList(@Query("q") String q, @Query("api_key") String api_key);
+    @GET("search.json?tbm=shop&engine=google")
+    Call<ShoppingQuery.ShoppingResponse> getShoppingList(@Query("q") String q);
 }
