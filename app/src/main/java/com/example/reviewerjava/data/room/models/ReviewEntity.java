@@ -1,11 +1,9 @@
 package com.example.reviewerjava.data.room.models;
 
-import android.util.Log;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.reviewerjava.data.model.Author;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "reviews")
-public class ReviewRoom extends Review {
+public class ReviewEntity extends Review {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public String author;
@@ -25,14 +23,14 @@ public class ReviewRoom extends Review {
     public String paragraphs;
 
     @Override
-    public Author getAuthor() {
-        return new Gson().fromJson(this.author, Author.class);
+    public User getAuthor() {
+        return new Gson().fromJson(this.author, User.class);
     }
 
     @Override
-    public void setAuthor(Author author) {
-        super.setAuthor(author);
-        this.author = new Gson().toJson(author, Author.class);
+    public void setAuthor(User user) {
+        super.setAuthor(user);
+        this.author = new Gson().toJson(user, User.class);
     }
 
     @Override
@@ -58,17 +56,17 @@ public class ReviewRoom extends Review {
         this.paragraphs = new Gson().toJson(paragraphList);
     }
 
-    public static ReviewRoom getInstance(Review review){
-        ReviewRoom reviewRoom = new ReviewRoom();
+    public static ReviewEntity getInstance(Review review){
+        ReviewEntity reviewEntity = new ReviewEntity();
 
-        reviewRoom.setAuthor(review.getAuthor());
-        reviewRoom.setItem(review.getItem());
-        reviewRoom.setItem(review.getItem());
-        reviewRoom.setParagraphList(review.getParagraphList());
-        reviewRoom.setReviewTitle(review.getReviewTitle());
-        reviewRoom.setCreationTime(review.getCreationTime());
+        reviewEntity.setAuthor(review.getAuthor());
+        reviewEntity.setItem(review.getItem());
+        reviewEntity.setItem(review.getItem());
+        reviewEntity.setParagraphList(review.getParagraphList());
+        reviewEntity.setReviewTitle(review.getReviewTitle());
+        reviewEntity.setCreationTime(review.getCreationTime());
 
-        return reviewRoom;
+        return reviewEntity;
     }
 
     public List<String> getParagraphTitleList(){

@@ -1,5 +1,6 @@
 package com.example.reviewerjava.data.retrofit;
 
+import com.example.reviewerjava.data.model.Item;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -16,4 +17,7 @@ import retrofit2.http.Query;
 public interface ProductSearchService {
     @GET("search.json?tbm=shop&engine=google")
     Call<ShoppingQuery.ShoppingResponse> getShoppingList(@Query("q") String q);
+
+    @GET("asdsad")
+    Call<Item> getItemData(@Query("productId") String productId);
 }

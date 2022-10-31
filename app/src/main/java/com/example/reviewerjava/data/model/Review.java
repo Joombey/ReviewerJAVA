@@ -6,7 +6,7 @@ public class Review {
     public String reviewTitle;
     private transient List<Paragraph> paragraphList;
     public String creationTime;
-    private transient Author author;
+    private transient User user;
     private transient Item item;
 
     public Review(){};
@@ -15,14 +15,14 @@ public class Review {
             String reviewTitle,
             List<Paragraph> paragraphList,
             String creationTime,
-            Author author,
+            User user,
             Item item
     ){
         this.reviewTitle = reviewTitle;
         this.paragraphList = paragraphList;
         this.creationTime = creationTime;
         this.item = item;
-        this.author = author;
+        this.user = user;
     }
 
     public String getReviewTitle() {
@@ -49,12 +49,12 @@ public class Review {
         this.creationTime = creationTime;
     }
 
-    public Author getAuthor() {
-        return author;
+    public User getAuthor() {
+        return user;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthor(User user) {
+        this.user = user;
     }
 
     public Item getItem() {

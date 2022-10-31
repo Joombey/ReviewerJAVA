@@ -1,8 +1,6 @@
 package com.example.reviewerjava.data.model;
 
 
-import java.util.List;
-
 public class Item {
 
     private String shop;

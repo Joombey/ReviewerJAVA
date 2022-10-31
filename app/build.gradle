@@ -14,7 +14,6 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "API_KEY", "\"${properties.getProperty("API_KEY")}\""
-        buildConfigField "String", "DADATA_KEY", "\"${properties.getProperty("DADATA_KEY")}\""
 
         applicationId "com.example.reviewerjava"
         minSdk 29

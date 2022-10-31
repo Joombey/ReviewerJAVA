@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.databinding.AddParagraphElementBinding;
-import com.example.reviewerjava.utils.Scroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class ParagraphListAdapter extends RecyclerView.Adapter<ParagraphListAdap
     private List<Paragraph> paragraphList;
     private boolean writeAccess;
 
-    public ParagraphListAdapter(List<Paragraph> paragraphList, MainActivity activity, Scroller scroller, boolean writeAccess){
+    public ParagraphListAdapter(List<Paragraph> paragraphList, MainActivity activity, boolean writeAccess){
         this.paragraphList = paragraphList;
         this.activity = activity;
         this.writeAccess = writeAccess;

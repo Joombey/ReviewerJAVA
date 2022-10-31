@@ -1,13 +1,13 @@
 package com.example.reviewerjava.data.model;
 
 
-public class Author {
+public class User {
     private int id;
     private String name;
     private String city;
     private String avatar;
 
-    public Author(String name, String city, String avatar) {
+    public User(String name, String city, String avatar) {
         this.name = name;
         this.city = city;
         this.avatar = avatar;

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.RepositoryController;
-import com.example.reviewerjava.data.room.models.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AddReviewViewModel extends ViewModel {
     public void addReview(Review review){
-        RepositoryController.getAddReviewRepository().addReview(ReviewRoom.getInstance(review));
+        RepositoryController.getAddReviewRepository().addReview(ReviewEntity.getInstance(review));
     }
     public LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
         return RepositoryController.getShoppingQuery().getItemsByRequest(query, cacheDir);

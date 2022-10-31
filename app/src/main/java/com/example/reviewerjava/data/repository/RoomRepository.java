@@ -11,13 +11,13 @@ import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.room.ReviewListRoomDataBase;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
-import com.example.reviewerjava.data.room.models.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
 
 import java.util.List;
 
 public class RoomRepository implements ReviewListRepository, AddReviewRepository, RegisterRepository {
     private MutableLiveData<Boolean> loggedIn;
-    private LiveData<List<ReviewRoom>> mReviewList;
+    private LiveData<List<ReviewEntity>> mReviewList;
     private ReviewDAO mReviewDAO;
 
     public RoomRepository(Application application){
@@ -30,11 +30,11 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     @Override
     public <T extends Review> void addReview(T review) {
         ReviewListRoomDataBase.databaseWriteExecutor.execute(() ->{
-            mReviewDAO.insertReview(ReviewRoom.getInstance(review));
+            mReviewDAO.insertReview(ReviewEntity.getInstance(review));
         });
     }
 
-    public LiveData<List<ReviewRoom>> getReviewList() {
+    public LiveData<List<ReviewEntity>> getReviewList() {
         return mReviewList;
     }
 
@@ -57,7 +57,7 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     }
 
     @Override
-    public ReviewRoom getReviewById(int id) {
+    public ReviewEntity getReviewById(int id) {
         return mReviewDAO.getReviewById(id);
     }
 }

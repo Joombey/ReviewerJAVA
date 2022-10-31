@@ -2,6 +2,7 @@ package com.example.reviewerjava;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         RepositoryController.init(getApplication());
         initLoginLogic();
         checkForDeppLink();
+
+
+        binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
+
     }
 
     private void initLoginLogic(){
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

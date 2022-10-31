@@ -3,14 +3,11 @@ package com.example.reviewerjava.data.mock;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.reviewerjava.data.model.Author;
-import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.model.Shop;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
-import com.example.reviewerjava.data.room.models.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,33 +31,33 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
 
         list.add(new Review(
                 "ARTICLE 1", "OIUASFHDIAUHFOAIUHFOAIUGHFOAIUHOFIUHAOSUFH", "21.08.2012",
-                new Author("Aboba", "New-Mirea"),
+                new User("Aboba", "New-Mirea"),
                 "asdasd",
                 new Item("mobilka", shopList)
         ));
 
         list.add(new Review(
                 "ARTICLE 2", "ASJFHNPOAJSFHOHASPFOHIJAOSFIHJAPFHPAISHFPAISHFAF", "31.08.3012",
-                new Author("asdasdasda", "Ndasdasdasdasda"),
+                new User("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));
 
         list.add(new Review(
                 "ARTICLE 3", "L;VKJKB[XCVB[XPCVJOBCVB", "31.08.3012",
-                new Author("asdasdasda", "Ndasdasdasdasda"),
+                new User("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));
         list.add(new Review(
                 "ARTICLE 4", "ASJFH6984556435135132132121ISHFAF", "31.08.3012",
-                new Author("asasdfasdgasda", "479okur,jyfsfgnsf"),
+                new User("asasdfasdgasda", "479okur,jyfsfgnsf"),
                 "xvcbxcvbxcvbasgxvcb",
                 new Item("pgaeruiopghr", shopList)
         ));
         list.add(new Review(
                 "ARTICLE 5", "1236548941232316518919849878491351351321358498794651231", "31.08.3012",
-                new Author("asdasdasda", "Ndasdasdasdasda"),
+                new User("asdasdasda", "Ndasdasdasdasda"),
                 "xvcbxcvbxcvbxvcb",
                 new Item("mob?L:JKa", shopList)
         ));*/
@@ -98,7 +95,7 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     }
 
     @Override
-    public ReviewRoom getReviewById(int id) {
+    public ReviewEntity getReviewById(int id) {
         return null;
     }
 }

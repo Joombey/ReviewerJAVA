@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.R;
-import com.example.reviewerjava.data.room.models.ReviewRoom;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.databinding.ReviewListElementBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> {
-    private List<ReviewRoom> data;
+    private List<ReviewEntity> data;
     private MainActivity mActivity;
-    public ReviewListAdapter(List<ReviewRoom> mReviewList, MainActivity activity){
+    public ReviewListAdapter(List<ReviewEntity> mReviewList, MainActivity activity){
         this.mActivity = activity;
         this.data = mReviewList;
     }
@@ -35,7 +35,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull ReviewListViewHolder holder, int position) {
-        ReviewRoom review = data.get(position);
+        ReviewEntity review = data.get(position);
 
         holder.binding.shareBtn.setOnClickListener(v-> {
             Intent sendIntent = new Intent();

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.model.Author;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
@@ -20,9 +20,7 @@ import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ItemListAdapter;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
 import com.example.reviewerjava.ui.viewmodel.AddReviewViewModel;
-import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
 import com.example.reviewerjava.utils.ItemSetter;
-import com.example.reviewerjava.utils.Scroller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,9 +28,8 @@ import java.util.Calendar;
 import java.util.Formatter;
 import java.util.List;
 
-public class AddReviewFragment extends Fragment implements Scroller, ItemSetter {
+public class AddReviewFragment extends Fragment implements ItemSetter {
     AddReviewFragmentBinding mBinding;
-    ReviewListViewModel mReviewListViewModel;
     AddReviewViewModel mAddReviewViewModel;
     Item item;
     List<Paragraph> paragraphList = new ArrayList<>();
@@ -63,7 +60,7 @@ public class AddReviewFragment extends Fragment implements Scroller, ItemSetter 
                                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                                 Calendar.getInstance().get(Calendar.MONTH),
                                 Calendar.getInstance().get(Calendar.YEAR)).toString(),
-                        new Author("Admin", "Moscow", ""),
+                        new User("Admin", "Moscow", ""),
                         item
                 ));
             } catch (IOException e) {
@@ -90,20 +87,12 @@ public class AddReviewFragment extends Fragment implements Scroller, ItemSetter 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mAddReviewViewModel = new ViewModelProvider(this).get(AddReviewViewModel.class);
-        mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
         mBinding.paragraphContainer.setAdapter(new ParagraphListAdapter(
                 paragraphList,
                 (MainActivity) getActivity(),
-                this,
                 true
         ));
     }
-
-    @Override
-    public void scrollTo(int itemPosition) {
-        mBinding.paragraphContainer.scrollToPosition(itemPosition);
-    }
-
 
     @Override
     public void onDetach() {
