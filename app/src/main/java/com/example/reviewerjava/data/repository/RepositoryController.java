@@ -114,28 +114,6 @@ public class RepositoryController extends Thread{
             }
             parent.delete();
         }).start();
-//        Uri imageUri = Uri.parse(item.getItemImage());
-//        String imageFileName = imageUri.getLastPathSegment();
-//        File imageFile = new File(imageUri.getPath());
-//        InputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream(imageFile);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        if(!parent.exists()) parent.mkdir();
-//        OutputStream outputStream = new FileOutputStream(new File(parent, imageFileName));
-//
-//        byte[] buffer = new byte[1024*50];
-//        int bytesRead = 0;
-//        while((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0){
-//            outputStream.write(buffer, 0, bytesRead);
-//        }
-//
-//        item.setItemImage(Uri.fromFile(new File(parent, imageFileName)).toString());
-//        inputStream.close();
-//        outputStream.close();
-//        parent.delete();
         return item;
     }
 }

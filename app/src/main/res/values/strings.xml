@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">ReviewerJAVA</string>
-    <string name="btnAddTitle">addButton</string>
+    <string name="reviewMaker"></string>
     <string name="enterText">Введите текст</string>
     <string name="enterTitle">Введите загаловок отзыва</string>
     <string name="createReview">Создать</string>
-    <string name="logInTitle">logInTitle</string>
+    <string name="logInTitle"></string>
     <string name="nextParagraph">Следующий пункт</string>
     <string name="paragraphTitle">Введите название пункта</string>
+    <string name="reviewBlock"></string>
+    <string name="profile"></string>
+    <string name="userBanRequestView"></string>
+    <string name="roleChangerView"></string>
+    <string name="makeModer">Сделать модератором</string>
+    <string name="makeRegular">Сделать обычным</string>
 </resources>

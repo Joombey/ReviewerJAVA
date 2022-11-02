@@ -8,8 +8,27 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_login"/>
     <item
-        android:id="@+id/addBtn"
-        android:title="@string/btnAddTitle"
+        android:id="@+id/reviewMaker"
+        android:title="@string/reviewMaker"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add"/>
+        android:icon="@drawable/ic_add"
+        android:visible="false"/>
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_person"
+        android:visible="false"/>
+    <item
+        android:id="@+id/reviewBlockView"
+        android:title="@string/reviewBlock"
+        android:icon="@drawable/ic_review_block"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+    <item
+        android:id="@+id/userBanView"
+        android:title="@string/userBanRequestView"
+        android:icon="@drawable/ic_user_block"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 </menu>

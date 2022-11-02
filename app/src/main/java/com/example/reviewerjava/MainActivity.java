@@ -17,13 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.RegisterFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -38,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
         initLoginLogic();
         checkForDeppLink();
 
-
+        CurrentUser.getInstance().setUserAndPermission(CurrentUser.UNAUTHORIZED_USER);
         binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
-
+        CurrentUser.getInstance().getUserAndPermission().observe(this, user->{
+            changeUI(user);
+        });
     }
 
     private void initLoginLogic(){
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             if (aBoolean) getSupportActionBar().setTitle("Admin");
             else getSupportActionBar().setTitle("ReviewerJAVA");
         });
+
+        //TODO: change login logic
     }
 
     private void checkForDeppLink(){
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
-            case R.id.addBtn:
+            case R.id.reviewMaker:
                 if(loggedIn){
                     setFragment(new AddReviewFragment());
                 } else Toast.makeText(this, "Log In first", Toast.LENGTH_SHORT).show();
@@ -118,5 +125,20 @@ public class MainActivity extends AppCompatActivity {
     public void popBackStack(){
         if(getSupportFragmentManager().getBackStackEntryCount() != 1) getSupportFragmentManager().popBackStack();
         else finish();
+    }
+
+    public void changeUI(UserAndPermission user){
+        binding.bottomNavigationView.getMenu()
+                .findItem(R.id.reviewMaker)
+                .setVisible(user.permission.reviewMakerAccess);
+        binding.bottomNavigationView.getMenu()
+                .findItem(R.id.profile)
+                .setVisible(user.permission.profileAccess);
+        binding.bottomNavigationView.getMenu()
+                .findItem(R.id.reviewBlockView)
+                .setVisible(user.permission.reviewBlockAccess);
+        binding.bottomNavigationView.getMenu()
+                .findItem(R.id.userBanView)
+                .setVisible(user.permission.userBanAccess);
     }
 }
