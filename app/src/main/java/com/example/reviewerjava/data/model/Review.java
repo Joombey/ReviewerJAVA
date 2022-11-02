@@ -49,7 +49,7 @@ public class Review {
         this.creationTime = creationTime;
     }
 
-    public User getAuthor() {
+    public int getAuthor() {
         return user;
     }
 

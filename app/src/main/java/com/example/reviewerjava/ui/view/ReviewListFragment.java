@@ -12,9 +12,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.databinding.ReviewListFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
+import com.example.reviewerjava.utils.UserCaller;
 
 public class ReviewListFragment extends Fragment {
     private ReviewListFragmentBinding mBinding;
@@ -34,7 +36,11 @@ public class ReviewListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mReviewListViewModel = new ViewModelProvider(this).get(ReviewListViewModel.class);
         mReviewListViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
-            mBinding.reviewList.setAdapter(new ReviewListAdapter(reviews, (MainActivity) getActivity()));
+            mBinding.reviewList.setAdapter(new ReviewListAdapter(
+                    reviews,
+                    (MainActivity) getActivity(),
+                    mReviewListViewModel::getUserById)
+            );
         });
     }
 

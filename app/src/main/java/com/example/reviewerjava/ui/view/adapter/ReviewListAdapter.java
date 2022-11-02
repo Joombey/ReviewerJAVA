@@ -12,17 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.R;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import com.example.reviewerjava.databinding.ReviewListElementBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
+import com.example.reviewerjava.utils.UserCaller;
 
 import java.util.List;
 
 public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.ReviewListViewHolder> {
     private List<ReviewEntity> data;
     private MainActivity mActivity;
-    public ReviewListAdapter(List<ReviewEntity> mReviewList, MainActivity activity){
+    private UserCaller userCaller;
+    public ReviewListAdapter(List<ReviewEntity> mReviewList, MainActivity activity, UserCaller userCaller){
         this.mActivity = activity;
         this.data = mReviewList;
+        this.userCaller = userCaller;
     }
 
     @NonNull
@@ -47,7 +51,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
             mActivity.startActivity(shareIntent);
         });
 
-        holder.binding.userName.setText(review.getAuthor().getName());
+        holder.binding.userName.setText(userCaller.getUserById(review.authorId).getName());
         holder.binding.creationTime.setText(review.getCreationTime());
         holder.binding.itemTitle.setText(review.getItem().getItemName());
         holder.binding.reviewListElementTitle.setText(review.getReviewTitle());

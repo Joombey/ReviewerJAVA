@@ -14,6 +14,7 @@ import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.ShoppingQuery;
 
 import java.io.File;
@@ -29,12 +30,15 @@ public class RepositoryController extends Thread{
     static ReviewListRepository reviewListRepository;
     static RegisterRepository registerRepository;
     static AddReviewRepository addReviewRepository;
+    static UserRepository userRepository;
     static ShoppingQuery shoppingQuery;
 
     public static void init(Application application){
-        reviewListRepository = new RoomRepository(application);
+        RoomRepository repo = new RoomRepository(application);
+        reviewListRepository = repo;
         //registerRepository = new RoomRepository(application);
-        addReviewRepository = new RoomRepository(application);
+        addReviewRepository = repo;
+        userRepository = repo;
     }
 
     public static ReviewListRepository getReviewListRepository() {
@@ -63,6 +67,10 @@ public class RepositoryController extends Thread{
             shoppingQuery = new ShoppingQuery();
         }
         return shoppingQuery;
+    }
+
+    public static UserRepository getUserRepository(){
+        return userRepository;
     }
 
     public static Item moveToMedia(File parent, Item item) {

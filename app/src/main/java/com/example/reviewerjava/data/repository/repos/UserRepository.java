@@ -1,7 +1,8 @@
 package com.example.reviewerjava.data.repository.repos;
 
-import com.example.reviewerjava.data.model.User;
+import com.example.reviewerjava.data.room.models.UserEntity;
 
 public interface UserRepository {
-    User getUser();
+    void updateUser(UserEntity user);
+    UserEntity getUserById(int userId);
 }

@@ -1,6 +1,7 @@
 package com.example.reviewerjava.data.room.models;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.example.reviewerjava.data.model.User;
@@ -14,23 +15,28 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "reviews")
+@Entity(
+        tableName = "reviews",
+        foreignKeys = @ForeignKey(
+                entity = UserEntity.class,
+                parentColumns = "id",
+                childColumns = "authorId"
+        )
+)
 public class ReviewEntity extends Review {
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public String author;
+    public int authorId;
     public String item;
     public String paragraphs;
 
-    @Override
-    public User getAuthor() {
-        return new Gson().fromJson(this.author, User.class);
+    public int getAuthor() {
+        return authorId;
     }
 
-    @Override
-    public void setAuthor(User user) {
-        super.setAuthor(user);
-        this.author = new Gson().toJson(user, User.class);
+
+    public void setAuthor(int authorId) {
+        this.authorId = authorId;
     }
 
     @Override

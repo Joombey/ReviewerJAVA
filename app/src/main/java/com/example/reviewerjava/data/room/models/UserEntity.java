@@ -21,10 +21,9 @@ import com.example.reviewerjava.data.model.User;
 )
 public class UserEntity extends User {
 
-    public final String ADMIN = "admin";
-    public final String MODERATOR = "moder";
-    public final String USER = "user";
-    public final String UNAUTHORIZED = "null";
+    public static final String ADMIN = "admin";
+    public static final String MODERATOR = "moder";
+    public static final String USER = "user";
 
     @PrimaryKey(autoGenerate = true)
     private int id;

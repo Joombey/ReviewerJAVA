@@ -10,4 +10,5 @@ import java.util.List;
 public interface ReviewListRepository {
     <T extends Review> LiveData<List<T>> getReviewList();
     ReviewEntity getReviewById(int id);
+    LiveData<List<ReviewEntity>> getReviewsByUserId(int userId);
 }

@@ -5,11 +5,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 
 import java.util.List;
 
 public class ReviewListViewModel extends ViewModel {
     public LiveData<List<ReviewEntity>> getReviews(){
         return RepositoryController.getReviewListRepository().getReviewList();
+    }
+    public UserEntity getUserById(int id){
+        return RepositoryController.getUserRepository().getUserById(id);
     }
 }

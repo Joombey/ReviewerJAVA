@@ -10,13 +10,15 @@ import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.room.ReviewListRoomDataBase;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 
 import java.util.List;
 
-public class RoomRepository implements ReviewListRepository, AddReviewRepository, RegisterRepository {
+public class RoomRepository implements ReviewListRepository, AddReviewRepository, RegisterRepository, UserRepository {
     private MutableLiveData<Boolean> loggedIn;
     private LiveData<List<ReviewEntity>> mReviewList;
     private ReviewDAO mReviewDAO;
@@ -60,5 +62,20 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     @Override
     public ReviewEntity getReviewById(int id) {
         return mReviewDAO.getReviewById(id);
+    }
+
+    @Override
+    public LiveData<List<ReviewEntity>> getReviewsByUserId(int userId) {
+        return mReviewDAO.getReviewByUserId(userId);
+    }
+
+    @Override
+    public void updateUser(UserEntity user) {
+        mReviewDAO.updateUserState(user);
+    }
+
+    @Override
+    public UserEntity getUserById(int userId) {
+        return mReviewDAO.getUserById(userId);
     }
 }

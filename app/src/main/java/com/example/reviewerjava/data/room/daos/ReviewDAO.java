@@ -3,8 +3,10 @@ package com.example.reviewerjava.data.room.daos;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -29,4 +31,13 @@ public interface ReviewDAO {
 
     @Insert
     void insertUser(UserEntity user);
+
+    @Query("SELECT * FROM reviews WHERE authorId = :userId")
+    LiveData<List<ReviewEntity>> getReviewByUserId(int userId);
+
+    @Update(onConflict = OnConflictStrategy.ABORT)
+    void updateUserState(UserEntity user);
+
+    @Query("SELECT * FROM users WHERE id = :userId")
+    UserEntity getUserById(int userId);
 }

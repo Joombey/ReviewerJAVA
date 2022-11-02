@@ -98,4 +98,9 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     public ReviewEntity getReviewById(int id) {
         return null;
     }
+
+    @Override
+    public LiveData<List<ReviewEntity>> getReviewsByUserId(int userId) {
+        return null;
+    }
 }
