@@ -7,6 +7,7 @@ import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 
 import java.util.ArrayList;
@@ -66,12 +67,12 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     }
 
     @Override
-    public LiveData<List<Review>> getReviewList() {
+    public LiveData<List<ReviewEntity>> getReviewList() {
         return (MutableLiveData) data;
     }
 
     @Override
-    public void addReview(Review review) {
+    public void addReview(ReviewEntity review) {
         list.add(review);
         data.setValue(list);
     }
@@ -92,6 +93,11 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
     @Override
     public void logOut() {
         loggedIn.setValue(false);
+    }
+
+    @Override
+    public PermissionEntity getPermission(String role) {
+        return null;
     }
 
     @Override

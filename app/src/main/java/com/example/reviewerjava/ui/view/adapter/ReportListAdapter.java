@@ -12,6 +12,7 @@ import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.room.relation.ReportAndReview;
 import com.example.reviewerjava.databinding.BlockListElementBinding;
 import com.example.reviewerjava.ui.view.ReviewFragment;
+import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
 
 import java.util.List;
 
@@ -33,7 +34,9 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull ReportListViewHolder holder, int position) {
         holder.binding.blockBtn.setOnClickListener(v->{
-
+            ((MainActivity)holder.binding.getRoot().getContext()).setFragment(
+                    new ReviewFragment(), reportAndReviewList.get(position).report.getReviewId()
+            );
         });
 
         holder.binding.notBlockBtn.setOnClickListener(v->{

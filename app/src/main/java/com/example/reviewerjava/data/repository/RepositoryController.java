@@ -1,21 +1,22 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
-import android.content.Context;
 import android.net.Uri;
 
-import androidx.activity.result.ActivityResultRegistry;
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.mock.MockBase;
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.ShoppingQuery;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
+import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +28,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class RepositoryController extends Thread{
+    static RoomRepository repo;
     static ReviewListRepository reviewListRepository;
     static RegisterRepository registerRepository;
     static AddReviewRepository addReviewRepository;
@@ -34,11 +36,16 @@ public class RepositoryController extends Thread{
     static ShoppingQuery shoppingQuery;
 
     public static void init(Application application){
-        RoomRepository repo = new RoomRepository(application);
+        repo = new RoomRepository(application);
+        shoppingQuery = new ShoppingQuery();
         reviewListRepository = repo;
         //registerRepository = new RoomRepository(application);
         addReviewRepository = repo;
         userRepository = repo;
+    }
+
+    public static LiveData<List<ReviewEntity>> getReviewList(){
+        return reviewListRepository.getReviewList();
     }
 
     public static ReviewListRepository getReviewListRepository() {
@@ -55,11 +62,8 @@ public class RepositoryController extends Thread{
         return registerRepository;
     }
 
-    public static AddReviewRepository getAddReviewRepository(){
-        if(addReviewRepository == null){
-            addReviewRepository = new MockBase();
-        }
-        return addReviewRepository;
+    public static void addReview(ReviewEntity review){
+        addReviewRepository.addReview(review);
     }
 
     public static ShoppingQuery getShoppingQuery() {
@@ -67,6 +71,34 @@ public class RepositoryController extends Thread{
             shoppingQuery = new ShoppingQuery();
         }
         return shoppingQuery;
+    }
+
+    public static UserEntity getUserById(int userId){
+        return userRepository.getUserById(userId);
+    }
+
+    public static LiveData<UserAndPermission> getCurrentUserData() {
+        return CurrentUser.getInstance().getUserAndPermission();
+    }
+
+    public static int getCurrentUserId(){
+        return CurrentUser.getInstance().getUserAndPermission().getValue().user.getId();
+    }
+
+    public static void updateUser(UserEntity user){
+        userRepository.updateUser(user);
+    }
+
+    public static ReviewEntity getReviewById(int id){
+        return reviewListRepository.getReviewById(id);
+    }
+
+    public static LiveData<List<ReviewEntity>> getReviewsByUserId(int userId){
+        return reviewListRepository.getReviewsByUserId(userId);
+    }
+
+    public static LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
+        return shoppingQuery.getItemsByRequest(query, cacheDir);
     }
 
     public static UserRepository getUserRepository(){
@@ -124,4 +156,36 @@ public class RepositoryController extends Thread{
         }).start();
         return item;
     }
+
+    public static boolean login(String login, String password) {
+        UserEntity user;
+        if (login == "admin" && password == "admin"){
+            user = new UserEntity(UserEntity.ADMIN, "NT", "");
+        } else if(login == "moder" && password == "moder"){
+            user = new UserEntity(UserEntity.MODERATOR, "NT", "");
+        } else if(login == "user" && password == "user"){
+            user = new UserEntity(UserEntity.USER, "NT", "");
+        } else return false;
+
+        UserAndPermission userAndPermission = new UserAndPermission(
+                user,
+                repo.getPermission(
+                        user.getRole()
+                )
+        );
+        CurrentUser.getInstance().setUserAndPermission(userAndPermission);
+        return true;
+    }
+
+    public static LiveData<Boolean> isLogged() {
+        return new MutableLiveData<>(
+                CurrentUser.UNAUTHORIZED_USER == CurrentUser.getInstance().getUserAndPermission().getValue()
+        );
+    }
+
+    public static void logOut() {
+        CurrentUser.getInstance().setUserAndPermission(
+                CurrentUser.UNAUTHORIZED_USER
+        );
+    };
 }

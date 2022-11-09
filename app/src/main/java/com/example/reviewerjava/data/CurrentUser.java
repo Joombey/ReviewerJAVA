@@ -25,6 +25,7 @@ public class CurrentUser {
     }
 
     public LiveData<UserAndPermission> getUserAndPermission(){
+        if(userAndPermission == null) return new MutableLiveData<>(UNAUTHORIZED_USER);
         return new MutableLiveData<>(userAndPermission);
     }
 

@@ -24,4 +24,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="block">Заблокировать</string>
     <string name="reject">Отклонить</string>
+    <string name="signIn">Регистрация</string>
+    <string name="RoleChanger">Назначить роли</string>
 </resources>

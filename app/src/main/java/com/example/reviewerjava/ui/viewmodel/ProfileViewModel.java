@@ -13,18 +13,22 @@ import java.util.List;
 
 public class ProfileViewModel extends ViewModel {
     public LiveData<UserAndPermission> getUserAndPermission(){
-        return CurrentUser.getInstance().getUserAndPermission();
+        return RepositoryController.getCurrentUserData();
     }
 
     public LiveData<List<ReviewEntity>> getUserReviews(int userId){
-        return RepositoryController.getReviewListRepository().getReviewsByUserId(userId);
+        return RepositoryController.getReviewsByUserId(userId);
     }
 
     public void updateUser(UserEntity user){
-        RepositoryController.getUserRepository().updateUser(user);
+        RepositoryController.updateUser(user);
     }
 
     public UserEntity getUserById(int id){
-        return RepositoryController.getUserRepository().getUserById(id);
+        return RepositoryController.getUserById(id);
+    }
+
+    public int getCurrentUserId() {
+        return RepositoryController.getCurrentUserId();
     }
 }

@@ -16,8 +16,7 @@ import com.example.reviewerjava.data.model.User;
                 entity = PermissionEntity.class,
                 parentColumns = "role",
                 childColumns = "role"
-        ),
-        ignoredColumns = {"ADMIN", "MODERATOR", "USER", "UNAUTHORIZED"}
+        )
 )
 public class UserEntity extends User {
 

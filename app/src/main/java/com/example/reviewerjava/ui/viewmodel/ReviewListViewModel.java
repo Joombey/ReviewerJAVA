@@ -11,9 +11,9 @@ import java.util.List;
 
 public class ReviewListViewModel extends ViewModel {
     public LiveData<List<ReviewEntity>> getReviews(){
-        return RepositoryController.getReviewListRepository().getReviewList();
+        return RepositoryController.getReviewList();
     }
     public UserEntity getUserById(int id){
-        return RepositoryController.getUserRepository().getUserById(id);
+        return RepositoryController.getUserById(id);
     }
 }

@@ -49,7 +49,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        if(userAndPermission.user.getRole().equals(UserEntity.ADMIN)) {
+        if(userAndPermission.user.getRole().equals(UserEntity.ADMIN) && mViewModel.getCurrentUserId() != userAndPermission.user.getId()) {
             mBinding.makeModeratorButton.setVisibility(userAndPermission.permission.roleChangerAccess);
             mBinding.makeModeratorButton.setVisibility(userAndPermission.permission.roleChangerAccess);
         }

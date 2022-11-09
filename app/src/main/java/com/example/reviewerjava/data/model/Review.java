@@ -50,7 +50,7 @@ public class Review {
     }
 
     public int getAuthor() {
-        return user;
+        return user.getId();
     }
 
     public void setAuthor(User user) {

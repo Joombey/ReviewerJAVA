@@ -3,21 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/signIn"
-        android:title="@string/logInTitle"
+        android:id="@+id/roleChanger"
+        android:title="@string/RoleChanger"
+        android:icon="@drawable/ic_change_role"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_login"/>
-    <item
-        android:id="@+id/reviewMaker"
-        android:title="@string/reviewMaker"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add"
-        android:visible="false"/>
-    <item
-        android:id="@+id/profile"
-        android:title="@string/profile"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_person"
         android:visible="false"/>
     <item
         android:id="@+id/reviewBlockView"
@@ -30,5 +19,17 @@
         android:title="@string/userBanRequestView"
         android:icon="@drawable/ic_user_block"
         app:showAsAction="ifRoom"
+        android:visible="false"/>
+    <item
+        android:id="@+id/reviewMaker"
+        android:title="@string/reviewMaker"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add"
+        android:visible="false"/>
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_person"
         android:visible="false"/>
 </menu>

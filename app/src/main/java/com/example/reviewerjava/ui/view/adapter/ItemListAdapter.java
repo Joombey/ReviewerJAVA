@@ -50,7 +50,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemAr
             File file =  new File(context.getCacheDir().getPath(), items.get(holder.getAdapterPosition()).getProductId() + ".png");
             if(file.exists()) {
                 holder.binding.itemImage.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-                items.get(holder.getAdapterPosition()).setItemImage(Uri.fromFile(file).toString());
+                items.get(holder.getBindingAdapterPosition()).setItemImage(Uri.fromFile(file).toString());
             }
         }).run();
         holder.binding.getRoot().setOnClickListener(view -> {

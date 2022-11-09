@@ -19,45 +19,36 @@ import android.widget.Toast;
 
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
+import com.example.reviewerjava.ui.view.ProfileFragment;
 import com.example.reviewerjava.ui.view.RegisterFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
+import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
 import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private RegisterViewModel mViewModel;
-    private boolean loggedIn;
+    private NavigationViewModel mViewModel;
+    private UserAndPermission user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        mViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
+        mViewModel.getCurrentUser().observe(this, user -> {
+            this.user = user;
+            changeUI();
+        });
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
-        initLoginLogic();
         checkForDeppLink();
 
-        CurrentUser.getInstance().setUserAndPermission(CurrentUser.UNAUTHORIZED_USER);
         binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
-        CurrentUser.getInstance().getUserAndPermission().observe(this, user->{
-            changeUI(user);
-        });
-    }
-
-    private void initLoginLogic(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-        mViewModel.getRepository().observe(this, aBoolean -> {
-            loggedIn = mViewModel.getRepository().getValue();
-            if (aBoolean) getSupportActionBar().setTitle("Admin");
-            else getSupportActionBar().setTitle("ReviewerJAVA");
-        });
-
-        //TODO: change login logic
     }
 
     private void checkForDeppLink(){
@@ -71,29 +62,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
+            case R.id.reviewBlockView:
+                setFragment(null);
+            case R.id.userBanView:
+                setFragment(null);
             case R.id.reviewMaker:
-                if(loggedIn){
-                    setFragment(new AddReviewFragment());
-                } else Toast.makeText(this, "Log In first", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.signIn:
-                if(!loggedIn) setFragment(new RegisterFragment());
-                else mViewModel.logOut();
-                break;
+                setFragment(new AddReviewFragment());
+            case R.id.profile:
+                setFragment(new ProfileFragment(user));
+            case R.id.roleChanger:
+                setFragment(null);
             case android.R.id.home:
                 popBackStack();
-                break;
-            default:
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -111,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("reviewId", reviewId);
         fragment.setArguments(bundle);
+
         setFragment(fragment);
     }
 
@@ -119,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putInt("position", position);
         bundle.putInt("reviewId", reviewId);
         fragment.setArguments(bundle);
+
         setFragment(fragment);
     }
 
@@ -127,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         else finish();
     }
 
-    public void changeUI(UserAndPermission user){
+    public void changeUI(){
         binding.bottomNavigationView.getMenu()
                 .findItem(R.id.reviewMaker)
                 .setVisible(user.permission.reviewMakerAccess);

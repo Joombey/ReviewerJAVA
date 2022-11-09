@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
@@ -25,7 +26,7 @@ public interface ReviewDAO {
     @Query("SELECT * FROM reviews WHERE id == :id")
     ReviewEntity getReviewById(int id);
 
-    @Transaction()
+    @Transaction
     @Query("SELECT * FROM users WHERE role == :role")
     UserAndPermission getUser(String role);
 
@@ -33,11 +34,14 @@ public interface ReviewDAO {
     void insertUser(UserEntity user);
 
     @Query("SELECT * FROM reviews WHERE authorId = :userId")
-    LiveData<List<ReviewEntity>> getReviewByUserId(int userId);
+    LiveData<List<ReviewEntity>> getReviewsByUserId(int userId);
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     void updateUserState(UserEntity user);
 
     @Query("SELECT * FROM users WHERE id = :userId")
     UserEntity getUserById(int userId);
+
+    @Query("SELECT * FROM permissions WHERE role = :role")
+    PermissionEntity getPermission(String role);
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import com.example.reviewerjava.databinding.ReviewFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ParagraphListAdapter;
 import com.example.reviewerjava.ui.viewmodel.ReviewListViewModel;
@@ -25,22 +26,24 @@ import com.example.reviewerjava.utils.Scroller;
 public class ReviewFragment extends Fragment implements Scroller {
     private ReviewFragmentBinding mBinding;
     private ReviewViewModel mViewModel;
-    private ReviewEntity reviewEntity;
+    private ReviewAndUser review;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = ReviewFragmentBinding.inflate(inflater, container, false);
         mViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
-        reviewEntity = mViewModel.getReviewById(getArguments().getInt("reviewId"));
+        review.review = mViewModel.getReviewById(getArguments().getInt("reviewId"));
+        review.user = mViewModel.getUserById(review.review.authorId);
 
-        mBinding.reviewTitle.setText(reviewEntity.getReviewTitle());
-        mBinding.authorCity.setText(reviewEntity.getAuthor().getCity());
-        mBinding.authorName.setText(reviewEntity.getAuthor().getName());
-        mBinding.itemName.setText(reviewEntity.getItem().getItemName());
-        mBinding.reviewDate.setText(reviewEntity.getCreationTime());
-        Log.i("CONTENT", reviewEntity.getItem().getItemImage().toString());
-        mBinding.itemImage.setImageBitmap(BitmapFactory.decodeFile(Uri.parse(reviewEntity.getItem().getItemImage()).getPath()));
+        mBinding.reviewTitle.setText(review.review.getReviewTitle());
+        mBinding.authorCity.setText(review.user.getCity());
+        mBinding.authorName.setText(review.user.getName());
+        mBinding.itemName.setText(review.review.getItem().getItemName());
+        mBinding.reviewDate.setText(review.review.getCreationTime());
+        mBinding.itemImage.setImageBitmap(
+                BitmapFactory.decodeFile(Uri.parse(review.review.getItem().getItemImage()).getPath())
+        );
 
         return mBinding.getRoot();
     }
@@ -50,7 +53,7 @@ public class ReviewFragment extends Fragment implements Scroller {
         mBinding.paragraphList.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.paragraphList.setAdapter(
                 new ParagraphListAdapter(
-                        reviewEntity.getRoomParagraphList(),
+                        review.review.getRoomParagraphList(),
                         (MainActivity) getActivity(),
                         false
                 )

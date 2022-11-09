@@ -1,18 +1,17 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
-import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.room.ReviewListRoomDataBase;
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
+import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
 
@@ -31,9 +30,9 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
     }
 
     @Override
-    public <T extends Review> void addReview(T review) {
+    public void addReview(ReviewEntity review) {
         ReviewListRoomDataBase.databaseWriteExecutor.execute(() ->{
-            mReviewDAO.insertReview(ReviewEntity.getInstance(review));
+            mReviewDAO.insertReview(review);
         });
     }
 
@@ -66,16 +65,22 @@ public class RoomRepository implements ReviewListRepository, AddReviewRepository
 
     @Override
     public LiveData<List<ReviewEntity>> getReviewsByUserId(int userId) {
-        return mReviewDAO.getReviewByUserId(userId);
+        return mReviewDAO.getReviewsByUserId(userId);
     }
 
     @Override
     public void updateUser(UserEntity user) {
-        mReviewDAO.updateUserState(user);
+        ReviewListRoomDataBase.databaseWriteExecutor.execute(()->mReviewDAO.updateUserState(user));
     }
 
     @Override
     public UserEntity getUserById(int userId) {
         return mReviewDAO.getUserById(userId);
     }
+
+    @Override
+    public PermissionEntity getPermission(String role) {
+        return mReviewDAO.getPermission(role);
+    }
+
 }

@@ -8,7 +8,7 @@ import com.example.reviewerjava.data.room.models.ReviewEntity;
 import java.util.List;
 
 public interface ReviewListRepository {
-    <T extends Review> LiveData<List<T>> getReviewList();
+    LiveData<List<ReviewEntity>> getReviewList();
     ReviewEntity getReviewById(int id);
     LiveData<List<ReviewEntity>> getReviewsByUserId(int userId);
 }

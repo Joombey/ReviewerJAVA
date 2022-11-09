@@ -8,12 +8,12 @@ import com.example.reviewerjava.data.room.models.UserEntity;
 
 public class ReviewAndUser {
     @Embedded
-    ReviewEntity review;
+    public ReviewEntity review;
     @Relation(
             parentColumn = "authorId",
             entityColumn = "id"
     )
-    UserEntity user;
+    public UserEntity user;
 
     public ReviewAndUser(ReviewEntity review, UserEntity user){
         this.review = review;

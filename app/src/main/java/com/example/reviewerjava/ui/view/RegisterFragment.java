@@ -31,13 +31,19 @@ public class RegisterFragment extends Fragment {
             else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
             ((MainActivity) getActivity()).popBackStack();
         });
+
+        mBinding.signIn.setOnClickListener(view->{
+            mViewModel.signIn(
+                    mBinding.editTextLogin.getText().toString(),
+                    mBinding.editTextPassword.getText().toString()
+            );
+        });
         return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-        mViewModel.getRepository().observe(getViewLifecycleOwner(), aBoolean -> {});
         super.onViewCreated(view, savedInstanceState);
     }
 }
