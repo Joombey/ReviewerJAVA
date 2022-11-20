@@ -5,17 +5,20 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import com.example.reviewerjava.data.room.daos.ReviewDAO;
 import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
+import com.example.reviewerjava.data.room.typeconverters.PermissionTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ReviewEntity.class, UserEntity.class, PermissionEntity.class}, version = 7, exportSchema = false)
-
+@Database(entities = {ReviewEntity.class, UserEntity.class, PermissionEntity.class}, version = 14, exportSchema = false)
+@TypeConverters(value = {PermissionTypeConverter.class})
 public abstract class ReviewListRoomDataBase extends RoomDatabase{
     public abstract ReviewDAO reviewDAO();
     private static volatile ReviewListRoomDataBase INSTANCE;

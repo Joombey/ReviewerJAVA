@@ -27,9 +27,11 @@ public class RegisterFragment extends Fragment {
             if(mViewModel.logIn(
                     mBinding.editTextLogin.getText().toString(),
                     mBinding.editTextPassword.getText().toString()
-            )) Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+            )) {
+                Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+                ((MainActivity) getActivity()).popBackStack();
+            }
             else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
-            ((MainActivity) getActivity()).popBackStack();
         });
 
         mBinding.signIn.setOnClickListener(view->{

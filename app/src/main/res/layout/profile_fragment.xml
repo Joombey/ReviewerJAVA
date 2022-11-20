@@ -4,50 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ImageView
         android:id="@+id/profileImage"
-        android:layout_width="220dp"
-        android:layout_height="150dp"
+        android:layout_width="146dp"
+        android:layout_height="82dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_person" />
 
-    <TextView
-        android:background="@color/material_dynamic_neutral80"
-        android:id="@+id/makeModeratorButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/makeModer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.271"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage"
-        android:visibility="gone"/>
-
-    <TextView
-        android:background="@color/material_dynamic_neutral80"
-        android:id="@+id/makeUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/makeRegular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.217"
-        app:layout_constraintStart_toEndOf="@+id/makeModeratorButton"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage"
-        android:visibility="gone"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reviewList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="220dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="170dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/logOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="106dp"
+        android:text="@string/logOut"
+        app:layout_constraintBottom_toTopOf="@+id/reviewList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="126dp"
+        android:layout_height="21dp"
+        app:layout_constraintBottom_toTopOf="@+id/reviewList"
+        app:layout_constraintEnd_toStartOf="@+id/logOut"
+        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.107" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

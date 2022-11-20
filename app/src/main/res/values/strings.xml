@@ -26,4 +26,5 @@
     <string name="reject">Отклонить</string>
     <string name="signIn">Регистрация</string>
     <string name="RoleChanger">Назначить роли</string>
+    <string name="logOut">Выйти</string>
 </resources>

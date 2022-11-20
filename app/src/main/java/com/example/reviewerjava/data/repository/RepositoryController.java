@@ -4,10 +4,8 @@ import android.app.Application;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
-import com.example.reviewerjava.data.mock.MockBase;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
@@ -39,7 +37,7 @@ public class RepositoryController extends Thread{
         repo = new RoomRepository(application);
         shoppingQuery = new ShoppingQuery();
         reviewListRepository = repo;
-        //registerRepository = new RoomRepository(application);
+        registerRepository = new RoomRepository(application);
         addReviewRepository = repo;
         userRepository = repo;
     }
@@ -48,29 +46,8 @@ public class RepositoryController extends Thread{
         return reviewListRepository.getReviewList();
     }
 
-    public static ReviewListRepository getReviewListRepository() {
-        if (reviewListRepository == null){
-            reviewListRepository = new MockBase();
-        }
-        return reviewListRepository;
-    }
-
-    public static RegisterRepository getRegisterRepository(){
-        if(registerRepository == null){
-            registerRepository = new MockBase();
-        }
-        return registerRepository;
-    }
-
     public static void addReview(ReviewEntity review){
         addReviewRepository.addReview(review);
-    }
-
-    public static ShoppingQuery getShoppingQuery() {
-        if (shoppingQuery == null){
-            shoppingQuery = new ShoppingQuery();
-        }
-        return shoppingQuery;
     }
 
     public static UserEntity getUserById(int userId){
@@ -101,10 +78,6 @@ public class RepositoryController extends Thread{
         return shoppingQuery.getItemsByRequest(query, cacheDir);
     }
 
-    public static UserRepository getUserRepository(){
-        return userRepository;
-    }
-
     public static Item moveToMedia(File parent, Item item) {
         new Thread(()->{
             Uri imageUri = Uri.parse(item.getItemImage());
@@ -128,6 +101,7 @@ public class RepositoryController extends Thread{
             int bytesRead = 0;
             while(true){
                 try {
+                    assert inputStream != null;
                     if (!((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0)) {
                         break;
                     }
@@ -135,6 +109,7 @@ public class RepositoryController extends Thread{
                     e.printStackTrace();
                 }
                 try {
+                    assert outputStream != null;
                     outputStream.write(buffer, 0, bytesRead);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -148,6 +123,7 @@ public class RepositoryController extends Thread{
                 e.printStackTrace();
             }
             try {
+                assert outputStream != null;
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -159,33 +135,22 @@ public class RepositoryController extends Thread{
 
     public static boolean login(String login, String password) {
         UserEntity user;
-        if (login == "admin" && password == "admin"){
-            user = new UserEntity(UserEntity.ADMIN, "NT", "");
-        } else if(login == "moder" && password == "moder"){
-            user = new UserEntity(UserEntity.MODERATOR, "NT", "");
-        } else if(login == "user" && password == "user"){
-            user = new UserEntity(UserEntity.USER, "NT", "");
+        if (repo.login(login, password)){
+            user = new UserEntity(login, "NT", "");
+            user.setRole(login);
         } else return false;
 
         UserAndPermission userAndPermission = new UserAndPermission(
                 user,
-                repo.getPermission(
-                        user.getRole()
-                )
+                repo.getPermission(user.getRole())
         );
         CurrentUser.getInstance().setUserAndPermission(userAndPermission);
         return true;
-    }
-
-    public static LiveData<Boolean> isLogged() {
-        return new MutableLiveData<>(
-                CurrentUser.UNAUTHORIZED_USER == CurrentUser.getInstance().getUserAndPermission().getValue()
-        );
     }
 
     public static void logOut() {
         CurrentUser.getInstance().setUserAndPermission(
                 CurrentUser.UNAUTHORIZED_USER
         );
-    };
+    }
 }

@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
         checkForDeppLink();
-
         binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
     }
 
@@ -66,16 +65,24 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.reviewBlockView:
                 setFragment(null);
+                break;
             case R.id.userBanView:
                 setFragment(null);
+                break;
             case R.id.reviewMaker:
                 setFragment(new AddReviewFragment());
+                break;
             case R.id.profile:
-                setFragment(new ProfileFragment(user));
+                if(user.user != null)  setFragment(new ProfileFragment(user));
+                else setFragment(new RegisterFragment());
+                break;
             case R.id.roleChanger:
                 setFragment(null);
+                break;
             case android.R.id.home:
                 popBackStack();
+                break;
+            default: break;
         }
         return super.onOptionsItemSelected(item);
     }

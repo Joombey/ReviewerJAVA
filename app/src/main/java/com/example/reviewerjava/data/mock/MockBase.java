@@ -77,7 +77,7 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
         data.setValue(list);
     }
 
-    @Override
+
     public MutableLiveData<Boolean> isLoggedIn() {
         return loggedIn;
     }
@@ -90,7 +90,6 @@ public class MockBase implements ReviewListRepository, RegisterRepository, AddRe
         } else return false;
     }
 
-    @Override
     public void logOut() {
         loggedIn.setValue(false);
     }

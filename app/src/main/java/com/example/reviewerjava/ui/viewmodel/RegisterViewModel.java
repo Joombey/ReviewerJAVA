@@ -10,14 +10,8 @@ import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 public class RegisterViewModel extends ViewModel {
-    public MutableLiveData<Boolean> isLoggedIn(){
-        return RepositoryController.getRegisterRepository().isLoggedIn();
-    }
     public boolean logIn(String login, String password){
-        return RepositoryController.getRegisterRepository().login(login, password);
-    }
-    public void logOut(){
-        RepositoryController.getRegisterRepository().logOut();
+        return RepositoryController.login(login, password);
     }
 
     public LiveData<UserAndPermission> getUser(){

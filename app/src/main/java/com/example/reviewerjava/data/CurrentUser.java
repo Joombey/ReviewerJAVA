@@ -13,7 +13,7 @@ public class CurrentUser {
             null,
             new Permission.Builder().build().getPermissionEntityInstance()
     );
-    private UserAndPermission userAndPermission;
+    private final MutableLiveData<UserAndPermission> userAndPermission = new MutableLiveData<>(UNAUTHORIZED_USER);
 
     CurrentUser(){}
 
@@ -25,11 +25,10 @@ public class CurrentUser {
     }
 
     public LiveData<UserAndPermission> getUserAndPermission(){
-        if(userAndPermission == null) return new MutableLiveData<>(UNAUTHORIZED_USER);
-        return new MutableLiveData<>(userAndPermission);
+        return this.userAndPermission;
     }
 
     public void setUserAndPermission(UserAndPermission userAndPermission) {
-        this.userAndPermission = userAndPermission;
+        this.userAndPermission.setValue(userAndPermission);
     }
 }

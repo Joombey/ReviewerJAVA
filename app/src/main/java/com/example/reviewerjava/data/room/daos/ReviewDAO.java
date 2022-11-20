@@ -2,6 +2,7 @@ package com.example.reviewerjava.data.room.daos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Entity;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -44,4 +45,7 @@ public interface ReviewDAO {
 
     @Query("SELECT * FROM permissions WHERE role = :role")
     PermissionEntity getPermission(String role);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertPermission(PermissionEntity permission);
 }

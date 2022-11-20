@@ -34,14 +34,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mBinding = ProfileFragmentBinding.inflate(getLayoutInflater(), container, false);
-        mBinding.makeModeratorButton.setOnClickListener(view->{
-            userAndPermission.user.setRole(UserEntity.MODERATOR);
-            mViewModel.updateUser(userAndPermission.user);
-        });
-        mBinding.makeUserButton.setOnClickListener(view->{
-            userAndPermission.user.setRole(UserEntity.USER);
-            mViewModel.updateUser(userAndPermission.user);
-        });
         return mBinding.getRoot();
     }
 
@@ -49,13 +41,19 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        if(userAndPermission.user.getRole().equals(UserEntity.ADMIN) && mViewModel.getCurrentUserId() != userAndPermission.user.getId()) {
-            mBinding.makeModeratorButton.setVisibility(userAndPermission.permission.roleChangerAccess);
-            mBinding.makeModeratorButton.setVisibility(userAndPermission.permission.roleChangerAccess);
-        }
         mBinding.reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mViewModel.getUserReviews(userAndPermission.user.getId()).observe(getViewLifecycleOwner(), list->{
-            mBinding.reviewList.setAdapter(new ReviewListAdapter(list, (MainActivity) getActivity(), mViewModel::getUserById));
-        });
+        mViewModel.getUserReviews(userAndPermission.user.getId()).observe(
+                getViewLifecycleOwner(), list->{
+                    mBinding.reviewList.setAdapter(
+                            new ReviewListAdapter(
+                                    list,
+                                    (MainActivity) getActivity(),
+                                    mViewModel::getUserById
+                            )
+                    );
+                });
+        if (userAndPermission.user.getId() == mViewModel.getCurrentUserId()){
+            mBinding.logOut.setVisibility(View.GONE);
+        }
     }
 }
