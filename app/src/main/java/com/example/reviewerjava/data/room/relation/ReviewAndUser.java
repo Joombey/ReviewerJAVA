@@ -10,8 +10,8 @@ public class ReviewAndUser {
     @Embedded
     public ReviewEntity review;
     @Relation(
-            parentColumn = "authorId",
-            entityColumn = "id"
+            parentColumn = "author",
+            entityColumn = "name"
     )
     public UserEntity user;
 

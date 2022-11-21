@@ -60,7 +60,7 @@ public class AddReviewFragment extends Fragment implements ItemSetter {
                                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                                 Calendar.getInstance().get(Calendar.MONTH),
                                 Calendar.getInstance().get(Calendar.YEAR)).toString(),
-                        new User("Admin", "Moscow", ""),
+                        mAddReviewViewModel.getUser(),
                         item
                 ));
             } catch (IOException e) {

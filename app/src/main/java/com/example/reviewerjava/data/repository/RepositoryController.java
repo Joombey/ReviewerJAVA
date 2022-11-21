@@ -9,11 +9,15 @@ import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
+import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.ShoppingQuery;
+import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
+import com.example.reviewerjava.data.room.relation.ReportAndReview;
+import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.io.File;
@@ -25,21 +29,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-public class RepositoryController extends Thread{
+public class RepositoryController{
     static RoomRepository repo;
     static ReviewListRepository reviewListRepository;
     static RegisterRepository registerRepository;
     static AddReviewRepository addReviewRepository;
     static UserRepository userRepository;
     static ShoppingQuery shoppingQuery;
+    static ReportRepository reportRepository;
 
     public static void init(Application application){
         repo = new RoomRepository(application);
         shoppingQuery = new ShoppingQuery();
         reviewListRepository = repo;
-        registerRepository = new RoomRepository(application);
+        registerRepository = repo;
         addReviewRepository = repo;
         userRepository = repo;
+        reportRepository = repo;
     }
 
     public static LiveData<List<ReviewEntity>> getReviewList(){
@@ -50,16 +56,16 @@ public class RepositoryController extends Thread{
         addReviewRepository.addReview(review);
     }
 
-    public static UserEntity getUserById(int userId){
-        return userRepository.getUserById(userId);
+    public static UserEntity getUserByName(String userName){
+        return userRepository.getUserByName(userName);
     }
 
     public static LiveData<UserAndPermission> getCurrentUserData() {
         return CurrentUser.getInstance().getUserAndPermission();
     }
 
-    public static int getCurrentUserId(){
-        return CurrentUser.getInstance().getUserAndPermission().getValue().user.getId();
+    public static String getCurrentUserName(){
+        return CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
     }
 
     public static void updateUser(UserEntity user){
@@ -70,8 +76,8 @@ public class RepositoryController extends Thread{
         return reviewListRepository.getReviewById(id);
     }
 
-    public static LiveData<List<ReviewEntity>> getReviewsByUserId(int userId){
-        return reviewListRepository.getReviewsByUserId(userId);
+    public static LiveData<List<ReviewEntity>> getReviewsName(String userName){
+        return reviewListRepository.getReviewsByName(userName);
     }
 
     public static LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
@@ -133,24 +139,45 @@ public class RepositoryController extends Thread{
         return item;
     }
 
-    public static boolean login(String login, String password) {
-        UserEntity user;
-        if (repo.login(login, password)){
-            user = new UserEntity(login, "NT", "");
-            user.setRole(login);
-        } else return false;
-
-        UserAndPermission userAndPermission = new UserAndPermission(
-                user,
-                repo.getPermission(user.getRole())
-        );
-        CurrentUser.getInstance().setUserAndPermission(userAndPermission);
-        return true;
+    public static boolean signIn(String login, String password) {
+        if (registerRepository.signIn(login, password)){
+            CurrentUser.getInstance().setUserAndPermission(registerRepository.getUserAndPermission(login));
+            return true;
+        }
+        return false;
     }
 
     public static void logOut() {
         CurrentUser.getInstance().setUserAndPermission(
                 CurrentUser.UNAUTHORIZED_USER
         );
+    }
+
+    public static void signUp(String login, String password) {
+        repo.signUp(login, password);
+    }
+
+    public static UserEntity getCurrentUser() {
+        return CurrentUser.getInstance().getUserAndPermission().getValue().user;
+    }
+
+    public static ReviewAndUser getReviewAndUser(int reviewId) {
+        return reviewListRepository.getReviewAndUserByReviewId(reviewId);
+    }
+
+    public static void ban(ReviewEntity review){
+        reportRepository.ban(review);
+    }
+
+    public static void deny(ReportEntity report){
+        reportRepository.deny(report);
+    }
+
+    public static void report(int id) {
+        reportRepository.report(id);
+    }
+
+    public static LiveData<List<ReportAndReview>> getReportList() {
+        return reportRepository.getReports();
     }
 }

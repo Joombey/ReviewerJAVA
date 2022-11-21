@@ -4,7 +4,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
@@ -19,24 +18,24 @@ import java.util.List;
         tableName = "reviews",
         foreignKeys = @ForeignKey(
                 entity = UserEntity.class,
-                parentColumns = "id",
-                childColumns = "authorId"
+                parentColumns = "name",
+                childColumns = "author"
         )
 )
 public class ReviewEntity extends Review {
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public int authorId;
+    public String author;
     public String item;
     public String paragraphs;
 
-    public int getAuthor() {
-        return authorId;
+    public String getAuthor() {
+        return author;
     }
 
 
-    public void setAuthor(int authorId) {
-        this.authorId = authorId;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override

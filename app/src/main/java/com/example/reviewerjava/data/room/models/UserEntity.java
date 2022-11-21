@@ -1,6 +1,7 @@
 package com.example.reviewerjava.data.room.models;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -24,8 +25,8 @@ public class UserEntity extends User {
     public static final String MODERATOR = "moder";
     public static final String USER = "user";
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @NonNull
+    @PrimaryKey
     private String name;
     @ColumnInfo(defaultValue = "NT")
     private String city;
@@ -37,6 +38,8 @@ public class UserEntity extends User {
     public UserEntity(String name, String city, String avatar) {
         super(name, city, avatar);
         this.name = name;
+        this.city = city;
+        this.role = name;
         this.avatar = avatar;
     }
 

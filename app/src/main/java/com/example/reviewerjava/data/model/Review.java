@@ -49,8 +49,8 @@ public class Review {
         this.creationTime = creationTime;
     }
 
-    public int getAuthor() {
-        return user.getId();
+    public String getAuthor() {
+        return user.getName();
     }
 
     public void setAuthor(User user) {

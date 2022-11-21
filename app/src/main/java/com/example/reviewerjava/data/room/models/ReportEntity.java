@@ -2,6 +2,7 @@ package com.example.reviewerjava.data.room.models;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
 import com.example.reviewerjava.data.model.Report;
 
@@ -10,23 +11,16 @@ import com.example.reviewerjava.data.model.Report;
         foreignKeys = @ForeignKey(
                 entity = ReviewEntity.class,
                 parentColumns = "id",
-                childColumns = "reviewId"
+                childColumns = "id",
+                onDelete = ForeignKey.CASCADE
         )
 )
 public class ReportEntity extends Report {
-    private int id;
-    private int reviewId;
-    private int reportAmt;
-
-    @Override
-    public void setReviewId(int reviewId) {
-        super.setReviewId(reviewId);
-        this.reviewId = reviewId;
+    public ReportEntity(int id){
+        this.id = id;
+        reportAmt = 1;
     }
-
-    @Override
-    public void setReportAmt(int reportAmt) {
-        super.setReportAmt(reportAmt);
-        this.reportAmt = reportAmt;
-    }
+    @PrimaryKey
+    public int id;
+    public int reportAmt;
 }

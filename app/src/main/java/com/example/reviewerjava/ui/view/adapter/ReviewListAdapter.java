@@ -51,7 +51,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Re
             mActivity.startActivity(shareIntent);
         });
 
-        holder.binding.userName.setText(userCaller.getUserById(review.authorId).getName());
+        holder.binding.userName.setText(userCaller.getUserByName(review.author).getName());
         holder.binding.creationTime.setText(review.getCreationTime());
         holder.binding.itemTitle.setText(review.getItem().getItemName());
         holder.binding.reviewListElementTitle.setText(review.getReviewTitle());

@@ -13,12 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.reviewerjava.R;
+import com.example.reviewerjava.data.room.models.ReportEntity;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.relation.ReportAndReview;
 import com.example.reviewerjava.databinding.FragmentReviewBlockBinding;
 import com.example.reviewerjava.ui.view.adapter.ReportListAdapter;
 import com.example.reviewerjava.ui.viewmodel.ReviewBlockViewModel;
+import com.example.reviewerjava.utils.Reporter;
 
-public class ReviewBlockFragment extends Fragment {
+public class ReviewBanFragment extends Fragment implements Reporter {
 
     private FragmentReviewBlockBinding mBinding;
     private ReviewBlockViewModel mViewModel;
@@ -37,7 +40,17 @@ public class ReviewBlockFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ReviewBlockViewModel.class);
         mBinding.moderatorList.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewModel.getReportList().observe(getViewLifecycleOwner(), list->{
-            mBinding.moderatorList.setAdapter(new ReportListAdapter(list));
+            mBinding.moderatorList.setAdapter(new ReportListAdapter(list, this));
         });
+    }
+
+    @Override
+    public void ban(ReviewEntity review) {
+        mViewModel.ban(review);
+    }
+
+    @Override
+    public void deny(ReportEntity report) {
+        mViewModel.deny(report);
     }
 }

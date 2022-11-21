@@ -47,7 +47,10 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemAr
     @Override
     public void onBindViewHolder(@NonNull ItemArrayViewHolder holder, int position) {
         new Thread(()->{
-            File file =  new File(context.getCacheDir().getPath(), items.get(holder.getAdapterPosition()).getProductId() + ".png");
+            File file =  new File(
+                    context.getCacheDir().getPath(),
+                    items.get(holder.getBindingAdapterPosition()).getProductId() + ".png"
+            );
             if(file.exists()) {
                 holder.binding.itemImage.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                 items.get(holder.getBindingAdapterPosition()).setItemImage(Uri.fromFile(file).toString());

@@ -3,7 +3,6 @@ package com.example.reviewerjava.ui.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -16,19 +15,22 @@ public class ProfileViewModel extends ViewModel {
         return RepositoryController.getCurrentUserData();
     }
 
-    public LiveData<List<ReviewEntity>> getUserReviews(int userId){
-        return RepositoryController.getReviewsByUserId(userId);
+    public LiveData<List<ReviewEntity>> getUserReviews(String userName){
+        return RepositoryController.getReviewsName(userName);
     }
 
     public void updateUser(UserEntity user){
         RepositoryController.updateUser(user);
     }
 
-    public UserEntity getUserById(int id){
-        return RepositoryController.getUserById(id);
+    public UserEntity getUserByName(String userName){
+        return RepositoryController.getUserByName(userName);
     }
 
-    public int getCurrentUserId() {
-        return RepositoryController.getCurrentUserId();
+    public String getCurrentUserName() {
+        return RepositoryController.getCurrentUserName();
+    }
+    public void logOut(){
+        RepositoryController.logOut();
     }
 }

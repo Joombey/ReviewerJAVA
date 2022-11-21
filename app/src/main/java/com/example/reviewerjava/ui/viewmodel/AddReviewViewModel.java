@@ -7,6 +7,7 @@ import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,5 +23,9 @@ public class AddReviewViewModel extends ViewModel {
 
     public Item moveImageToMedia(File parent, Item item) throws IOException {
         return RepositoryController.moveToMedia(parent, item);
+    }
+
+    public UserEntity getUser(){
+        return RepositoryController.getCurrentUser();
     }
 }

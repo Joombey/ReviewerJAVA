@@ -12,19 +12,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.databinding.RegisterFragmentBinding;
-import com.example.reviewerjava.ui.viewmodel.RegisterViewModel;
+import com.example.reviewerjava.databinding.SignInFragmentBinding;
+import com.example.reviewerjava.ui.viewmodel.SignInViewModel;
 
 
-public class RegisterFragment extends Fragment {
-    private RegisterFragmentBinding mBinding;
-    private RegisterViewModel mViewModel;
+public class SignInFragment extends Fragment {
+    private SignInFragmentBinding mBinding;
+    private SignInViewModel mViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = RegisterFragmentBinding.inflate(inflater, container, false);
-        mBinding.login.setOnClickListener(view -> {
-            if(mViewModel.logIn(
+        mBinding = SignInFragmentBinding.inflate(inflater, container, false);
+        mBinding.signIn.setOnClickListener(view -> {
+            if(mViewModel.signIn(
                     mBinding.editTextLogin.getText().toString(),
                     mBinding.editTextPassword.getText().toString()
             )) {
@@ -34,18 +34,15 @@ public class RegisterFragment extends Fragment {
             else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
         });
 
-        mBinding.signIn.setOnClickListener(view->{
-            mViewModel.signIn(
-                    mBinding.editTextLogin.getText().toString(),
-                    mBinding.editTextPassword.getText().toString()
-            );
+        mBinding.signUp.setOnClickListener(view->{
+            ((MainActivity) getActivity()).setFragment(new SignUpFragment());
         });
         return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
         super.onViewCreated(view, savedInstanceState);
     }
 }

@@ -10,8 +10,7 @@ public class ReportAndReview {
     @Embedded
     public ReportEntity report;
     @Relation(
-            entity = ReviewEntity.class,
-            parentColumn = "reviewId",
+            parentColumn = "id",
             entityColumn = "id"
     )
     public ReviewEntity review;

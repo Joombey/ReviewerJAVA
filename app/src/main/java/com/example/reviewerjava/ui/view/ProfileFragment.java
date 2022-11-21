@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ProfileFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
@@ -42,18 +41,22 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         mBinding.reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mViewModel.getUserReviews(userAndPermission.user.getId()).observe(
+        mViewModel.getUserReviews(userAndPermission.user.getName()).observe(
                 getViewLifecycleOwner(), list->{
                     mBinding.reviewList.setAdapter(
                             new ReviewListAdapter(
                                     list,
                                     (MainActivity) getActivity(),
-                                    mViewModel::getUserById
+                                    (userName) -> mViewModel.getUserByName(userName)
                             )
                     );
                 });
-        if (userAndPermission.user.getId() == mViewModel.getCurrentUserId()){
+        if (userAndPermission.user.getName() != mViewModel.getCurrentUserName()){
             mBinding.logOut.setVisibility(View.GONE);
         }
+        mBinding.logOut.setOnClickListener(v->{
+            mViewModel.logOut();
+            ((MainActivity) getActivity()).popBackStack();
+        });
     }
 }

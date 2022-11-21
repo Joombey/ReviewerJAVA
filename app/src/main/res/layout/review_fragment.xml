@@ -107,6 +107,12 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/reportBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/paragraphList"
             android:layout_width="match_parent"

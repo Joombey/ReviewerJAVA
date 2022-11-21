@@ -13,7 +13,7 @@ public class ReviewListViewModel extends ViewModel {
     public LiveData<List<ReviewEntity>> getReviews(){
         return RepositoryController.getReviewList();
     }
-    public UserEntity getUserById(int id){
-        return RepositoryController.getUserById(id);
+    public UserEntity getUserByName(String userName){
+        return RepositoryController.getUserByName(userName);
     }
 }

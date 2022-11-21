@@ -1,10 +1,9 @@
 package com.example.reviewerjava.data.repository.repos;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.reviewerjava.data.room.models.PermissionEntity;
+import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 public interface RegisterRepository {
-    boolean login(String login, String password);
-    PermissionEntity getPermission(String role);
+    boolean signIn(String login, String password);
+    boolean signUp(String login, String password);
+    UserAndPermission getUserAndPermission(String login);
 }

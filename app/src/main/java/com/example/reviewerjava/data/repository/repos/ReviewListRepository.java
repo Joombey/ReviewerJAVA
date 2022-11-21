@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData;
 
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 
 import java.util.List;
 
 public interface ReviewListRepository {
     LiveData<List<ReviewEntity>> getReviewList();
     ReviewEntity getReviewById(int id);
-    LiveData<List<ReviewEntity>> getReviewsByUserId(int userId);
+    LiveData<List<ReviewEntity>> getReviewsByName(String userName);
+    ReviewAndUser getReviewAndUserByReviewId(int reviewId);
 }
