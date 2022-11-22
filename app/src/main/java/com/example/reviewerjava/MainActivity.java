@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.ProfileFragment;
 import com.example.reviewerjava.ui.view.ReviewBanFragment;
+import com.example.reviewerjava.ui.view.RoleChangerFragment;
 import com.example.reviewerjava.ui.view.SignInFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
@@ -56,18 +58,19 @@ public class MainActivity extends AppCompatActivity {
             case R.id.reviewBlockView:
                 setFragment(new ReviewBanFragment());
                 break;
-            case R.id.userBanView:
-                setFragment(null);
+            case R.id.home:
+                setFragment(new ReviewListFragment());
                 break;
             case R.id.reviewMaker:
                 setFragment(new AddReviewFragment());
                 break;
             case R.id.profile:
-                if(user.user != null)  setFragment(new ProfileFragment(user));
-                else setFragment(new SignInFragment());
+                if(user.user.getName() != UserEntity.UNAUTHORIZED){
+                    setFragment(new ProfileFragment(user.user));
+                } else setFragment(new SignInFragment());
                 break;
             case R.id.roleChanger:
-                setFragment(null);
+                setFragment(new RoleChangerFragment());
                 break;
             case android.R.id.home:
                 popBackStack();
@@ -108,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
         else finish();
     }
 
+    public void gotFirstScreen(){
+        while(getSupportFragmentManager().getBackStackEntryCount() != 1){
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
+
     public void changeUI(){
         binding.bottomNavigationView.getMenu()
                 .findItem(R.id.reviewMaker)
@@ -119,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 .findItem(R.id.reviewBlockView)
                 .setVisible(user.permission.reviewBlockAccess);
         binding.bottomNavigationView.getMenu()
-                .findItem(R.id.userBanView)
-                .setVisible(user.permission.userBanAccess);
+                .findItem(R.id.roleChanger)
+                .setVisible(user.permission.roleChangerAccess);
     }
 }

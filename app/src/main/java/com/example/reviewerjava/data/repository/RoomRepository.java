@@ -49,7 +49,6 @@ public class RoomRepository implements
                     .profileAccess(Permission.ACCESS)
                     .reviewMakerAccess(Permission.ACCESS)
                     .roleChangerAccess(Permission.ACCESS)
-                    .userBanAccess(Permission.ACCESS)
                     .build()
                     .getPermissionEntityInstance());
             dao.insertPermission(new Permission.Builder()
@@ -110,9 +109,6 @@ public class RoomRepository implements
     @Override
     public void ban(ReviewEntity review) {
         dao.deleteReview(review);
-//        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
-//            dao.deleteReview(review.id);
-//        });
     }
 
     @Override
@@ -141,6 +137,16 @@ public class RoomRepository implements
     @Override
     public UserEntity getUserByName(String userName) {
         return dao.getUserByName(userName);
+    }
+
+    @Override
+    public LiveData<List<UserEntity>> getUsers(String name) {
+        return dao.getUsers(name);
+    }
+
+    @Override
+    public void ban(UserEntity user) {
+        dao.deleteUser(user);
     }
 
     @Override

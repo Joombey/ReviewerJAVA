@@ -32,4 +32,7 @@
     <string name="password">Пароль</string>
     <string name="city">Город</string>
     <string name="report">Пожаловаться</string>
+    <string name="ban">Бан</string>
+    <string name="user">юзер</string>
+    <string name="moder">модер</string>
 </resources>

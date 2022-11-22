@@ -40,7 +40,7 @@ public interface ReviewDAO {
     @Query("SELECT * FROM reviews WHERE author = :userName")
     LiveData<List<ReviewEntity>> getReviewsByName(String userName);
 
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateUserState(UserEntity user);
 
     @Query("SELECT * FROM users WHERE name = :userName")
@@ -77,4 +77,10 @@ public interface ReviewDAO {
 
     @Update
     void updateReport(ReportEntity report);
+
+    @Query("SELECT * FROM users WHERE name !=:name")
+    LiveData<List<UserEntity>> getUsers(String name);
+
+    @Delete
+    void deleteUser(UserEntity user);
 }

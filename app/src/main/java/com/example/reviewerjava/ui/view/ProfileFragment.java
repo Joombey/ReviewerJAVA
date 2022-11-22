@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.reviewerjava.MainActivity;
+import com.example.reviewerjava.data.model.Permission;
+import com.example.reviewerjava.data.room.models.PermissionEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ProfileFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
@@ -23,10 +26,10 @@ public class ProfileFragment extends Fragment {
 
     private ProfileFragmentBinding mBinding;
     private ProfileViewModel mViewModel;
-    private UserAndPermission userAndPermission;
+    private UserEntity user;
 
-    public ProfileFragment(UserAndPermission user){
-        this.userAndPermission = user;
+    public ProfileFragment(UserEntity user){
+        this.user = user;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         mBinding.reviewList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mViewModel.getUserReviews(userAndPermission.user.getName()).observe(
+        mViewModel.getUserReviews(user.getName()).observe(
                 getViewLifecycleOwner(), list->{
                     mBinding.reviewList.setAdapter(
                             new ReviewListAdapter(
@@ -51,12 +54,12 @@ public class ProfileFragment extends Fragment {
                             )
                     );
                 });
-        if (userAndPermission.user.getName() != mViewModel.getCurrentUserName()){
+        if (user.getName() != mViewModel.getCurrentUserName()){
             mBinding.logOut.setVisibility(View.GONE);
         }
         mBinding.logOut.setOnClickListener(v->{
             mViewModel.logOut();
-            ((MainActivity) getActivity()).popBackStack();
+            ((MainActivity) getActivity()).gotFirstScreen();
         });
     }
 }

@@ -68,10 +68,6 @@ public class RepositoryController{
         return CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
     }
 
-    public static void updateUser(UserEntity user){
-        userRepository.updateUser(user);
-    }
-
     public static ReviewEntity getReviewById(int id){
         return reviewListRepository.getReviewById(id);
     }
@@ -169,6 +165,10 @@ public class RepositoryController{
         reportRepository.ban(review);
     }
 
+    public static void ban(UserEntity user){
+        userRepository.ban(user);
+    }
+
     public static void deny(ReportEntity report){
         reportRepository.deny(report);
     }
@@ -179,5 +179,19 @@ public class RepositoryController{
 
     public static LiveData<List<ReportAndReview>> getReportList() {
         return reportRepository.getReports();
+    }
+
+    public static LiveData<List<UserEntity>> getUsers() {
+        return userRepository.getUsers(
+                CurrentUser.getInstance()
+                .getUserAndPermission()
+                .getValue()
+                .user.getName()
+        );
+    }
+
+    public static void updateUser(UserEntity user, String newRole) {
+        user.setRole(newRole);
+        userRepository.updateUser(user);
     }
 }

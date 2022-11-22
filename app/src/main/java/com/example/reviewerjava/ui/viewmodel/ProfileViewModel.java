@@ -19,10 +19,6 @@ public class ProfileViewModel extends ViewModel {
         return RepositoryController.getReviewsName(userName);
     }
 
-    public void updateUser(UserEntity user){
-        RepositoryController.updateUser(user);
-    }
-
     public UserEntity getUserByName(String userName){
         return RepositoryController.getUserByName(userName);
     }
@@ -30,6 +26,8 @@ public class ProfileViewModel extends ViewModel {
     public String getCurrentUserName() {
         return RepositoryController.getCurrentUserName();
     }
+
+
     public void logOut(){
         RepositoryController.logOut();
     }

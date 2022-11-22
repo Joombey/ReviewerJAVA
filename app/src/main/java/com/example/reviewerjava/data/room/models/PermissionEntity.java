@@ -15,14 +15,20 @@ public class PermissionEntity extends Permission {
     @NonNull
     @PrimaryKey
     public String role;
-//    @ColumnInfo(defaultValue = "0", name = "review_maker")
     public Boolean reviewMakerAccess;
-//    @ColumnInfo(defaultValue = "0", name = "profile")
     public Boolean profileAccess;
-//    @ColumnInfo(defaultValue = "0", name = "review_block")
     public Boolean reviewBlockAccess;
-//    @ColumnInfo(defaultValue = "0", name = "user_ban")
-    public Boolean userBanAccess;
-//    @ColumnInfo(defaultValue = "0", name = "role_change")
     public Boolean roleChangerAccess;
+
+    public PermissionEntity(@NonNull String role,
+                            Boolean reviewMakerAccess,
+                            Boolean profileAccess,
+                            Boolean reviewBlockAccess,
+                            Boolean roleChangerAccess) {
+        this.role = role;
+        this.reviewMakerAccess = reviewMakerAccess;
+        this.profileAccess = profileAccess;
+        this.reviewBlockAccess = reviewBlockAccess;
+        this.roleChangerAccess = roleChangerAccess;
+    }
 }

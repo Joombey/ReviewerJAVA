@@ -15,11 +15,10 @@
         app:showAsAction="ifRoom"
         android:visible="false"/>
     <item
-        android:id="@+id/userBanView"
+        android:id="@+id/home"
         android:title="@string/userBanRequestView"
-        android:icon="@drawable/ic_user_block"
-        app:showAsAction="ifRoom"
-        android:visible="false"/>
+        android:icon="@drawable/ic_home"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/reviewMaker"
         android:title="@string/reviewMaker"
@@ -30,6 +29,5 @@
         android:id="@+id/profile"
         android:title="@string/profile"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_person"
-        android:visible="true"/>
+        android:icon="@drawable/ic_person" />
 </menu>

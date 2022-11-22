@@ -10,7 +10,6 @@ public class Permission {
     Permission(Builder builder){
         role = builder.role;
         reviewBlockAccess = builder.reviewBlockAccess;
-        userBanAccess = builder.userBanAccess;
         roleChangerAccess = builder.roleChangerAccess;
         reviewMakerAccess = builder.reviewMakerAccess;
         profileAccess = builder.profileAccess;
@@ -26,7 +25,6 @@ public class Permission {
     public boolean reviewMakerAccess;
     public boolean profileAccess;
     public boolean reviewBlockAccess;
-    public boolean userBanAccess;
     public boolean roleChangerAccess;
 
     public boolean isReviewMakerAccess() {
@@ -41,10 +39,6 @@ public class Permission {
         return reviewBlockAccess;
     }
 
-    public boolean isUserBanAccess() {
-        return userBanAccess;
-    }
-
     public boolean getRoleChangerAccess() {
         return roleChangerAccess;
     }
@@ -54,12 +48,10 @@ public class Permission {
         boolean reviewMakerAccess;
         boolean profileAccess;
         boolean reviewBlockAccess;
-        boolean userBanAccess;
         boolean roleChangerAccess;
         public Builder(){
             role = "unauthorized";
             reviewBlockAccess = Permission.DENY;
-            userBanAccess = Permission.DENY;
             reviewMakerAccess = Permission.DENY;
             profileAccess = Permission.ACCESS;
             roleChangerAccess = Permission.DENY;
@@ -71,11 +63,6 @@ public class Permission {
         }
         public Builder reviewBlockAccess(boolean access){
             this.reviewBlockAccess = access;
-            return this;
-        }
-
-        public Builder userBanAccess(boolean access){
-            this.userBanAccess = access;
             return this;
         }
 
@@ -100,13 +87,12 @@ public class Permission {
     }
 
     public PermissionEntity getPermissionEntityInstance(){
-        PermissionEntity permission = new PermissionEntity();
-        permission.role = role;
-        permission.profileAccess = profileAccess;
-        permission.reviewBlockAccess = reviewBlockAccess;
-        permission.reviewMakerAccess = reviewMakerAccess;
-        permission.roleChangerAccess = roleChangerAccess;
-        permission.userBanAccess = userBanAccess;
-        return permission;
+        return new PermissionEntity(
+                role,
+                reviewMakerAccess,
+                profileAccess,
+                reviewBlockAccess,
+                roleChangerAccess
+        );
     }
 }
