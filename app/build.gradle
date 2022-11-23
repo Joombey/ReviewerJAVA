@@ -14,6 +14,8 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         buildConfigField "String", "API_KEY", "\"${properties.getProperty("API_KEY")}\""
+        buildConfigField "String", "VK_API_VERSION", "\"${properties.getProperty("VK_API_VERSION")}\""
+        buildConfigField "String", "CLIENT_ID", "\"${properties.getProperty("CLIENT_ID")}\""
 
         applicationId "com.example.reviewerjava"
         minSdk 29

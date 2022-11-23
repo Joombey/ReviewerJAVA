@@ -12,7 +12,7 @@ import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
-import com.example.reviewerjava.data.retrofit.ShoppingQuery;
+import com.example.reviewerjava.data.retrofit.base.ShoppingQuery;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -192,6 +192,14 @@ public class RepositoryController{
 
     public static void updateUser(UserEntity user, String newRole) {
         user.setRole(newRole);
+        userRepository.updateUser(user);
+    }
+
+    public static void addNewUser(UserEntity newUser) {
+        userRepository.addNewUser(newUser);
+    }
+
+    public static void updateUser(UserEntity user) {
         userRepository.updateUser(user);
     }
 }

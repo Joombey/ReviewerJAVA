@@ -150,6 +150,13 @@ public class RoomRepository implements
     }
 
     @Override
+    public void addNewUser(UserEntity newUser) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.addNewUser(newUser);
+        });
+    }
+
+    @Override
     public boolean signUp(String login, String password) {
         if(dao.getReviewsByName(login) == null){
             return false;

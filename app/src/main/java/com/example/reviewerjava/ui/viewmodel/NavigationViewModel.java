@@ -10,6 +10,10 @@ import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 public class NavigationViewModel extends ViewModel {
     public LiveData<UserAndPermission> getCurrentUser() {
-        return RepositoryController.getCurrentUserData();
+        return CurrentUser.getInstance().getUserAndPermission();
+    }
+
+    public void setCurrentUser(UserAndPermission userAndPermission) {
+        CurrentUser.getInstance().setUserAndPermission(userAndPermission);
     }
 }

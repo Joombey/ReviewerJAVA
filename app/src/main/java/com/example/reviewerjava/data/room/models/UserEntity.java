@@ -40,8 +40,9 @@ public class UserEntity extends User {
         super(name, city, avatar);
         this.name = name;
         this.city = city;
-        this.role = name;
         this.avatar = avatar;
+
+        this.role = "user";
     }
 
     @Override

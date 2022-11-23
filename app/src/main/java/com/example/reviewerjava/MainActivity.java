@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.reviewerjava.ui.view.SignInFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -32,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         mViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
+        UserAndPermission userAndPermission = new Gson().fromJson(getPreferences(MODE_PRIVATE).getString("savedUserState", null), UserAndPermission.class);
+        if (userAndPermission!=null){
+            mViewModel.setCurrentUser(userAndPermission);
+        }
         mViewModel.getCurrentUser().observe(this, user -> {
             this.user = user;
             changeUI();
@@ -48,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             String[] parts = content.toString().split("/");
             Integer i = Integer.valueOf(parts[parts.length - 1]);
             setFragment(new ReviewFragment(), i);
-
         } else setFragment(new ReviewListFragment());
     }
 
@@ -130,5 +135,13 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.getMenu()
                 .findItem(R.id.roleChanger)
                 .setVisible(user.permission.roleChangerAccess);
+    }
+
+    @Override
+    protected void onDestroy() {
+        getPreferences(MODE_PRIVATE).edit().putString(
+                "savedUserState", new Gson().toJson(mViewModel.getCurrentUser().getValue())
+        ).apply();
+        super.onDestroy();
     }
 }

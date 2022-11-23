@@ -15,6 +15,8 @@ public class CurrentUser {
             new Permission.Builder().build().getPermissionEntityInstance()
     );
     private final MutableLiveData<UserAndPermission> userAndPermission = new MutableLiveData<>(UNAUTHORIZED_USER);
+    public String access_token;
+    public String getUserId;
 
     CurrentUser(){}
 
