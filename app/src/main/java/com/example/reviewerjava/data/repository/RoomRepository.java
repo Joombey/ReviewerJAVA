@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
@@ -62,9 +63,9 @@ public class RoomRepository implements
                     .build()
                     .getPermissionEntityInstance());
 
-            dao.insertUser(new UserEntity(UserEntity.USER, "MOSCOW", "123"));
-            dao.insertUser(new UserEntity(UserEntity.MODERATOR, "MOSCOW", "123"));
-            dao.insertUser(new UserEntity(UserEntity.ADMIN, "MOSCOW", "123"));
+            dao.insertUser(new UserEntity(UserEntity.USER, "MOSCOW", "123", UserEntity.USER));
+            dao.insertUser(new UserEntity(UserEntity.MODERATOR, "MOSCOW", "123", UserEntity.MODERATOR));
+            dao.insertUser(new UserEntity(UserEntity.ADMIN, "MOSCOW", "123", UserEntity.ADMIN));
         });
     }
 
@@ -131,7 +132,9 @@ public class RoomRepository implements
 
     @Override
     public void updateUser(UserEntity user) {
-        ReviewerRoomDb.databaseWriteExecutor.execute(()-> dao.updateUserState(user));
+        ReviewerRoomDb.databaseWriteExecutor.execute(()-> {
+            dao.updateUserState(user);
+        });
     }
 
     @Override
@@ -150,11 +153,22 @@ public class RoomRepository implements
     }
 
     @Override
+    public void addNewUser(UserEntity newUser) {
+        dao.insertUser(newUser);
+    }
+
+    @Override
+    public boolean userExists(String name) {
+        if(dao.getUser(name) == null) return false;
+        else return true;
+    }
+
+    @Override
     public boolean signUp(String login, String password) {
         if(dao.getReviewsByName(login) == null){
             return false;
         } else{
-            ReviewerRoomDb.databaseWriteExecutor.execute(()-> dao.insertUser(new UserEntity(login, "Moscow", "Sadasd")));
+            ReviewerRoomDb.databaseWriteExecutor.execute(()-> dao.insertUser(new UserEntity(login, "Moscow", "", UserEntity.USER)));
             return true;
         }
     }

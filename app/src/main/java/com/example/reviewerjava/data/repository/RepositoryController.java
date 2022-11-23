@@ -2,17 +2,22 @@ package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
 import android.net.Uri;
+import android.util.Log;
+import android.webkit.WebViewClient;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
-import com.example.reviewerjava.data.retrofit.ShoppingQuery;
+import com.example.reviewerjava.data.retrofit.OAuth2;
+import com.example.reviewerjava.data.retrofit.base.ShoppingQuery;
+import com.example.reviewerjava.data.retrofit.base.VkApiBase;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -36,11 +41,13 @@ public class RepositoryController{
     static AddReviewRepository addReviewRepository;
     static UserRepository userRepository;
     static ShoppingQuery shoppingQuery;
+    static VkApiBase vkApiBase;
     static ReportRepository reportRepository;
 
     public static void init(Application application){
         repo = new RoomRepository(application);
         shoppingQuery = new ShoppingQuery();
+        vkApiBase = new VkApiBase();
         reviewListRepository = repo;
         registerRepository = repo;
         addReviewRepository = repo;
@@ -58,10 +65,6 @@ public class RepositoryController{
 
     public static UserEntity getUserByName(String userName){
         return userRepository.getUserByName(userName);
-    }
-
-    public static LiveData<UserAndPermission> getCurrentUserData() {
-        return CurrentUser.getInstance().getUserAndPermission();
     }
 
     public static String getCurrentUserName(){
@@ -147,6 +150,8 @@ public class RepositoryController{
         CurrentUser.getInstance().setUserAndPermission(
                 CurrentUser.UNAUTHORIZED_USER
         );
+        CurrentUser.getInstance().userId = null;
+        CurrentUser.getInstance().access_token = null;
     }
 
     public static void signUp(String login, String password) {
@@ -193,5 +198,33 @@ public class RepositoryController{
     public static void updateUser(UserEntity user, String newRole) {
         user.setRole(newRole);
         userRepository.updateUser(user);
+    }
+
+    public static void signUpIfRequired(UserEntity user) {
+        if(userRepository.userExists(user.getName())){
+            UserEntity aUser = userRepository.getUserByName(user.getName());
+            user.setRole(aUser.getRole());
+            updateUser(user);
+        }else {
+            user.setRole(UserEntity.USER);
+            userRepository.addNewUser(user);
+        }
+        CurrentUser.getInstance().setUserAndPermission(user.getName());
+    }
+
+    public static void updateUser(UserEntity user) {
+        userRepository.updateUser(user);
+    }
+
+    public static void getUserInfo(File parentPath) {
+        vkApiBase.getUserInfo(parentPath);
+    }
+
+    public static WebViewClient getClient(File parentPath) {
+        return OAuth2.getWebViewClient(parentPath);
+    }
+
+    public static UserAndPermission getUserAndPermission(String name) {
+        return registerRepository.getUserAndPermission(name);
     }
 }

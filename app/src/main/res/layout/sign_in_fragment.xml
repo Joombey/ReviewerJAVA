@@ -43,13 +43,25 @@
 
     <Button
         android:id="@+id/signUp"
-        android:layout_width="236dp"
+        android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginTop="36dp"
         android:text="@string/signIn"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/signIn"
         app:layout_constraintStart_toStartOf="@+id/signIn"
-        app:layout_constraintTop_toBottomOf="@+id/signIn"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@+id/signIn" />
+
+    <Button
+        android:id="@+id/vkAuth"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/vkAuth"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/signIn"
+        app:layout_constraintStart_toStartOf="@+id/signIn"
+        app:layout_constraintTop_toBottomOf="@+id/signUp"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

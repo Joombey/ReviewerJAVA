@@ -6,10 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.reviewerjava.data.CurrentUser;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
@@ -22,6 +26,7 @@ import com.example.reviewerjava.ui.view.SignInFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -39,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
         checkForDeppLink();
+        String userName = getPreferences(MODE_PRIVATE).getString("user", null);
+        if(userName != null && !userName.equals(UserEntity.UNAUTHORIZED)){
+            mViewModel.setCurrentUser(userName);
+        }
         binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
     }
 
@@ -48,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
             String[] parts = content.toString().split("/");
             Integer i = Integer.valueOf(parts[parts.length - 1]);
             setFragment(new ReviewFragment(), i);
-
         } else setFragment(new ReviewListFragment());
     }
 
@@ -66,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.profile:
                 if(user.user.getName() != UserEntity.UNAUTHORIZED){
-                    setFragment(new ProfileFragment(user.user));
+                    setFragment(new ProfileFragment(mViewModel.getUserByName(user.user.getName())));
                 } else setFragment(new SignInFragment());
                 break;
             case R.id.roleChanger:
@@ -130,5 +138,11 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.getMenu()
                 .findItem(R.id.roleChanger)
                 .setVisible(user.permission.roleChangerAccess);
+    }
+
+    @Override
+    protected void onStop() {
+        getPreferences(MODE_PRIVATE).edit().putString("user", mViewModel.getCurrentUser().getValue().user.getName()).apply();
+        super.onStop();
     }
 }

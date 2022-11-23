@@ -35,13 +35,18 @@ public class UserEntity extends User {
     @ColumnInfo(defaultValue = "user")
     private String role;
 
+    @Ignore
+    public UserEntity(String name, String avatar) {
+        this.name = name;
+        this.avatar = avatar;
+        this.city = "";
+    }
 
-    public UserEntity(String name, String city, String avatar) {
-        super(name, city, avatar);
+    public UserEntity(@NonNull String name, String city, String avatar, String role) {
         this.name = name;
         this.city = city;
-        this.role = name;
         this.avatar = avatar;
+        this.role = role;
     }
 
     @Override

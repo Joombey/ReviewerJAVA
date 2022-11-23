@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.model.Permission;
+import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
@@ -11,10 +12,13 @@ public class CurrentUser {
     private static CurrentUser instance;
 
     public static final UserAndPermission UNAUTHORIZED_USER = new UserAndPermission(
-            new UserEntity(UserEntity.UNAUTHORIZED, null, null),
+            new UserEntity(UserEntity.UNAUTHORIZED,  null),
             new Permission.Builder().build().getPermissionEntityInstance()
     );
     private final MutableLiveData<UserAndPermission> userAndPermission = new MutableLiveData<>(UNAUTHORIZED_USER);
+    public String access_token;
+    public String userId;
+
 
     CurrentUser(){}
 
@@ -33,5 +37,9 @@ public class CurrentUser {
         if(userAndPermission == null){
             this.userAndPermission.setValue(UNAUTHORIZED_USER);
         }else this.userAndPermission.setValue(userAndPermission);
+    }
+
+    public void setUserAndPermission(String name) {
+        this.userAndPermission.setValue(RepositoryController.getUserAndPermission(name));
     }
 }
