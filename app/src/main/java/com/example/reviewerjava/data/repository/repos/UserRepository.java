@@ -11,6 +11,6 @@ public interface UserRepository {
     UserEntity getUserByName(String userName);
     LiveData<List<UserEntity>> getUsers(String name);
     void ban(UserEntity user);
-
     void addNewUser(UserEntity newUser);
+    boolean userExists(String name);
 }

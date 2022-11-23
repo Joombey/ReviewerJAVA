@@ -35,4 +35,5 @@
     <string name="ban">Бан</string>
     <string name="user">юзер</string>
     <string name="moder">модер</string>
+    <string name="vkAuth">Через VK</string>
 </resources>

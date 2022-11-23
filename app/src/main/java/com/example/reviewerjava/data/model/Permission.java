@@ -21,27 +21,11 @@ public class Permission {
     public static final boolean ACCESS = true;
     public static final boolean DENY = false;
 
-    public String role;
-    public boolean reviewMakerAccess;
-    public boolean profileAccess;
-    public boolean reviewBlockAccess;
-    public boolean roleChangerAccess;
-
-    public boolean isReviewMakerAccess() {
-        return reviewMakerAccess;
-    }
-
-    public boolean isProfileAccess() {
-        return profileAccess;
-    }
-
-    public boolean isReviewBlockAccess() {
-        return reviewBlockAccess;
-    }
-
-    public boolean getRoleChangerAccess() {
-        return roleChangerAccess;
-    }
+    public transient String role;
+    public transient boolean reviewMakerAccess;
+    public transient boolean profileAccess;
+    public transient boolean reviewBlockAccess;
+    public transient boolean roleChangerAccess;
 
     public static class Builder{
         String role;

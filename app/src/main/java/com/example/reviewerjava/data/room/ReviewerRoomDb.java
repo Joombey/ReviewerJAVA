@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
                 PermissionEntity.class,
                 ReportEntity.class
         },
-        version = 22,
+        version = 23,
         exportSchema = false
 )
 @TypeConverters(value = {PermissionTypeConverter.class})

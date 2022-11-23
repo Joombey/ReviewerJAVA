@@ -26,6 +26,6 @@ public class AddReviewViewModel extends ViewModel {
     }
 
     public UserEntity getUser(){
-        return RepositoryController.getCurrentUser();
+        return RepositoryController.getUserByName(RepositoryController.getCurrentUser().getName());
     }
 }

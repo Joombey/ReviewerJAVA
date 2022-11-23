@@ -1,9 +1,13 @@
 package com.example.reviewerjava.data.retrofit.response;
 
 import android.net.Uri;
+import android.util.Log;
 
+import com.example.reviewerjava.data.CurrentUser;
+import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
+import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
@@ -18,6 +22,7 @@ public class VkResponse {
     public class User{
         @SerializedName("screen_name")
         public String name;
+        @SerializedName("photo_200")
         public String imageUri;
         @SerializedName("city")
         public City userCity;
@@ -39,6 +44,7 @@ public class VkResponse {
     public void loadUserImage(File parent, String url){
         new Thread(()->{
             try {
+                Log.i("URL", url);
                 InputStream inputStream = new URL(url).openStream();
                 if(!parent.exists()) parent.mkdir();
                 File outFile = new File(parent, response.get(0).name);
@@ -53,9 +59,10 @@ public class VkResponse {
                 response.get(0).imageUri = Uri.fromFile(outFile).toString();
                 inputStream.close();
                 outputStream.close();
-                UserEntity user = getUserEntityInstance();
+                UserEntity user = RepositoryController.getUserByName(getUserEntityInstance().getName());
                 user.setAvatar(response.get(0).imageUri);
                 RepositoryController.updateUser(user);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -65,7 +72,6 @@ public class VkResponse {
     public UserEntity getUserEntityInstance() {
         return new UserEntity(
                 response.get(0).name,
-                response.get(0).userCity.title,
                 ""
         );
     }

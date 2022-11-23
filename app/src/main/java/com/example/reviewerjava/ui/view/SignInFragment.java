@@ -37,6 +37,10 @@ public class SignInFragment extends Fragment {
         mBinding.signUp.setOnClickListener(view->{
             ((MainActivity) getActivity()).setFragment(new SignUpFragment());
         });
+
+        mBinding.vkAuth.setOnClickListener(view -> {
+            ((MainActivity) getActivity()).setFragment(new OAuthVkFragment());
+        });
         return mBinding.getRoot();
     }
 

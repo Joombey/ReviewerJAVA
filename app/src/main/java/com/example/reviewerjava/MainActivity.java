@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.reviewerjava.data.CurrentUser;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
@@ -34,10 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         mViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
-        UserAndPermission userAndPermission = new Gson().fromJson(getPreferences(MODE_PRIVATE).getString("savedUserState", null), UserAndPermission.class);
-        if (userAndPermission!=null){
-            mViewModel.setCurrentUser(userAndPermission);
-        }
         mViewModel.getCurrentUser().observe(this, user -> {
             this.user = user;
             changeUI();
@@ -45,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
         checkForDeppLink();
+        String userName = getPreferences(MODE_PRIVATE).getString("user", null);
+        if(userName != null && !userName.equals(UserEntity.UNAUTHORIZED)){
+            mViewModel.setCurrentUser(userName);
+        }
         binding.bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
     }
 
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.profile:
                 if(user.user.getName() != UserEntity.UNAUTHORIZED){
-                    setFragment(new ProfileFragment(user.user));
+                    setFragment(new ProfileFragment(mViewModel.getUserByName(user.user.getName())));
                 } else setFragment(new SignInFragment());
                 break;
             case R.id.roleChanger:
@@ -138,10 +141,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        getPreferences(MODE_PRIVATE).edit().putString(
-                "savedUserState", new Gson().toJson(mViewModel.getCurrentUser().getValue())
-        ).apply();
-        super.onDestroy();
+    protected void onStop() {
+        getPreferences(MODE_PRIVATE).edit().putString("user", mViewModel.getCurrentUser().getValue().user.getName()).apply();
+        super.onStop();
     }
 }

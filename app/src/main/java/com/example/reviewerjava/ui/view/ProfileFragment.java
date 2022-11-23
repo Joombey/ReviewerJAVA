@@ -2,6 +2,8 @@ package com.example.reviewerjava.ui.view;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,12 +57,19 @@ public class ProfileFragment extends Fragment {
                             )
                     );
                 });
-        if (user.getName() != mViewModel.getCurrentUserName()){
+        if (!user.getName().equals(mViewModel.getCurrentUserName())){
             mBinding.logOut.setVisibility(View.GONE);
         }
         mBinding.logOut.setOnClickListener(v->{
             mViewModel.logOut();
             ((MainActivity) getActivity()).gotFirstScreen();
         });
+
+        mBinding.profileImage.setImageBitmap(
+                BitmapFactory.decodeFile(
+                        Uri.parse(user.getAvatar()).getPath()
+                )
+        );
+        mBinding.userName.setText(user.getName());
     }
 }

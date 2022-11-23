@@ -83,7 +83,4 @@ public interface ReviewDAO {
 
     @Delete
     void deleteUser(UserEntity user);
-
-    @Insert
-    void addNewUser(UserEntity newUser);
 }
