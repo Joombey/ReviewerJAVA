@@ -2,7 +2,6 @@ package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
 import android.net.Uri;
-import android.util.Log;
 import android.webkit.WebViewClient;
 
 import androidx.lifecycle.LiveData;
@@ -16,14 +15,19 @@ import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.OAuth2;
-import com.example.reviewerjava.data.retrofit.base.ShoppingQuery;
+import com.example.reviewerjava.data.retrofit.base.ReviewerApiBase;
+import com.example.reviewerjava.data.retrofit.base.ShoppingApiBase;
 import com.example.reviewerjava.data.retrofit.base.VkApiBase;
+import com.example.reviewerjava.data.retrofit.request.UserRequest;
+import com.example.reviewerjava.data.retrofit.request.pks.UserId;
+import com.example.reviewerjava.data.retrofit.response.VkResponse;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.ReportAndReview;
 import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
+import com.example.reviewerjava.di.ServiceLocator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +36,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 public class RepositoryController{
@@ -40,16 +46,17 @@ public class RepositoryController{
     static RegisterRepository registerRepository;
     static AddReviewRepository addReviewRepository;
     static UserRepository userRepository;
-    static ShoppingQuery shoppingQuery;
+    static ShoppingApiBase shoppingApiBase;
     static VkApiBase vkApiBase;
     static ReportRepository reportRepository;
+    static ReviewerApiBase reviewerApi;
 
     public static void init(Application application){
         repo = new RoomRepository(application);
-        shoppingQuery = new ShoppingQuery();
+        shoppingApiBase = new ShoppingApiBase();
         vkApiBase = new VkApiBase();
+        reviewerApi = new ReviewerApiBase();
         reviewListRepository = repo;
-        registerRepository = repo;
         addReviewRepository = repo;
         userRepository = repo;
         reportRepository = repo;
@@ -80,7 +87,7 @@ public class RepositoryController{
     }
 
     public static LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
-        return shoppingQuery.getItemsByRequest(query, cacheDir);
+        return shoppingApiBase.getItemsByRequest(query, cacheDir);
     }
 
     public static Item moveToMedia(File parent, Item item) {
@@ -88,6 +95,7 @@ public class RepositoryController{
             Uri imageUri = Uri.parse(item.getItemImage());
             String imageFileName = imageUri.getLastPathSegment();
             File imageFile = new File(imageUri.getPath());
+
             InputStream inputStream = null;
             try {
                 inputStream = new FileInputStream(imageFile);
@@ -102,24 +110,7 @@ public class RepositoryController{
                 e.printStackTrace();
             }
 
-            byte[] buffer = new byte[1024*50];
-            int bytesRead = 0;
-            while(true){
-                try {
-                    assert inputStream != null;
-                    if (!((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0)) {
-                        break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    assert outputStream != null;
-                    outputStream.write(buffer, 0, bytesRead);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            save(inputStream, outputStream);
 
             item.setItemImage(Uri.fromFile(new File(parent, imageFileName)).toString());
             try {
@@ -139,11 +130,12 @@ public class RepositoryController{
     }
 
     public static boolean signIn(String login, String password) {
-        if (registerRepository.signIn(login, password)){
-            CurrentUser.getInstance().setUserAndPermission(registerRepository.getUserAndPermission(login));
-            return true;
-        }
-        return false;
+//        if (registerRepository.signIn(login, password)){
+//            CurrentUser.getInstance().setUserAndPermission(registerRepository.getUserAndPermission(login));
+//            return true;
+//        }
+//        return false;
+        return reviewerApi.signIn(login, password);
     }
 
     public static void logOut() {
@@ -154,8 +146,19 @@ public class RepositoryController{
         CurrentUser.getInstance().access_token = null;
     }
 
-    public static void signUp(String login, String password) {
-        repo.signUp(login, password);
+    public static boolean signUp(String login, String password, String city, String avatar) {
+        UserEntity userEntity = new UserEntity(login, city, avatar, UserEntity.USER);
+        UserRequest userRequest = new UserRequest(new UserId(login, password), city, UserEntity.USER);
+
+        if(reviewerApi.signUp(userRequest)){
+            userRepository.addNewUser(userEntity);
+            reviewerApi.uploadFileToServer(
+                    new File(avatar),
+                    userRequest.id
+            );
+            return true;
+        }
+        return false;
     }
 
     public static UserEntity getCurrentUser() {
@@ -200,13 +203,12 @@ public class RepositoryController{
         userRepository.updateUser(user);
     }
 
-    public static void signUpIfRequired(UserEntity user) {
+    public static void addToLocalIfRequired(UserEntity user) {
         if(userRepository.userExists(user.getName())){
             UserEntity aUser = userRepository.getUserByName(user.getName());
             user.setRole(aUser.getRole());
             updateUser(user);
         }else {
-            user.setRole(UserEntity.USER);
             userRepository.addNewUser(user);
         }
         CurrentUser.getInstance().setUserAndPermission(user.getName());
@@ -220,11 +222,57 @@ public class RepositoryController{
         vkApiBase.getUserInfo(parentPath);
     }
 
-    public static WebViewClient getClient(File parentPath) {
-        return OAuth2.getWebViewClient(parentPath);
+    public static WebViewClient getClient(File parentPath, OAuth2.Back back) {
+        return OAuth2.getWebViewClient(parentPath, back);
     }
 
     public static UserAndPermission getUserAndPermission(String name) {
         return registerRepository.getUserAndPermission(name);
+    }
+
+    public static void save(InputStream inputStream, OutputStream outputStream) {
+        try {
+            byte[] buffer = new byte[1024 * 50];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void downloadFromInternet(String resource, File newFile){
+        new Thread(() ->{
+            try {
+                save(new URL(resource).openStream(), new FileOutputStream(newFile));
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public static void addToLocalIfRequired(VkResponse.User user) {
+
+        if(!userRepository.userExists(user.name)){
+            File file = new File(ServiceLocator.getInstance().getMediaDir().getPath(), user.name);
+            downloadFromInternet(user.imageUri, file);
+
+            user.imageUri = Uri.fromFile(file).toString();
+            userRepository.addNewUser(VkResponse.convertToUserEntity(user));
+        }
+
+    }
+
+    public static void addToLocalIfRequired(UserAndPermission userAndPermission) {
+        if (!repo.userExists(userAndPermission.user.getName())){
+            File file = new File(ServiceLocator.getInstance().getCacheDir().getPath(), userAndPermission.user.getAvatar());
+
+            downloadFromInternet(userAndPermission.user.getAvatar(), file);
+            userAndPermission.user.setAvatar(Uri.fromFile(file).toString());
+
+            repo.addUserAndPermission(userAndPermission);
+            CurrentUser.getInstance().setUserAndPermission(userAndPermission);
+        }
     }
 }

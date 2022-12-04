@@ -23,7 +23,7 @@ import java.util.List;
         )
 )
 public class ReviewEntity extends Review {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     public int id;
     public String author;
     public String item;

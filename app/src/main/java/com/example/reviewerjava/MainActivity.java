@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.profile:
                 if(user.user.getName() != UserEntity.UNAUTHORIZED){
                     setFragment(new ProfileFragment(mViewModel.getUserByName(user.user.getName())));
-                } else setFragment(new SignInFragment());
+                } else setLogin();
                 break;
             case R.id.roleChanger:
                 setFragment(new RoleChangerFragment());
@@ -97,11 +97,18 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public void setLogin(){
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        fragmentManager
+                .setReorderingAllowed(true)
+                .replace(binding.fragmentContainerView.getId(), new SignInFragment())
+                .commit();
+    }
+
     public <T extends Fragment> void setFragment(T fragment, int reviewId){
         Bundle bundle = new Bundle();
         bundle.putInt("reviewId", reviewId);
         fragment.setArguments(bundle);
-
         setFragment(fragment);
     }
 
@@ -142,7 +149,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        getPreferences(MODE_PRIVATE).edit().putString("user", mViewModel.getCurrentUser().getValue().user.getName()).apply();
+        getPreferences(MODE_PRIVATE).edit().putString(
+                "user", mViewModel.getCurrentUser().getValue().user.getName()
+        ).apply();
         super.onStop();
     }
 }

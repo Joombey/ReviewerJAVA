@@ -4,15 +4,18 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Permission;
+import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
+import com.example.reviewerjava.data.retrofit.request.UserRequest;
+import com.example.reviewerjava.data.retrofit.request.pks.UserId;
 import com.example.reviewerjava.data.room.ReviewerRoomDb;
-import com.example.reviewerjava.data.room.daos.ReviewDAO;
+import com.example.reviewerjava.data.room.daos.ReviewDao;
+import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -25,12 +28,11 @@ import java.util.List;
 public class RoomRepository implements
         ReviewListRepository,
         AddReviewRepository,
-        RegisterRepository,
         UserRepository,
         ReportRepository
 {
     private LiveData<List<ReviewEntity>> mReviewList;
-    private ReviewDAO dao;
+    private ReviewDao dao;
 
     public RoomRepository(Application application){
         ReviewerRoomDb db = ReviewerRoomDb.getDatabase(application);
@@ -80,12 +82,7 @@ public class RoomRepository implements
         return mReviewList;
     }
 
-    @Override
-    public boolean signIn(String login, String password) {
-        return login.equals("admin") && password.equals("admin")
-                || login.equals("moder") && password.equals("moder")
-                || login.equals("user") && password.equals("user");
-    }
+
 
     @Override
     public ReviewEntity getReviewById(int id) {
@@ -122,7 +119,7 @@ public class RoomRepository implements
         ReviewerRoomDb.databaseWriteExecutor.execute(() ->{
             ReportEntity report = dao.getReport(id);
             if (report == null){
-                dao.addReport(new ReportEntity(id));
+                dao.createReport(new ReportEntity(id));
             } else{
                 report.reportAmt += 1;
                 dao.updateReport(report);
@@ -163,18 +160,11 @@ public class RoomRepository implements
         else return true;
     }
 
-    @Override
-    public boolean signUp(String login, String password) {
-        if(dao.getReviewsByName(login) == null){
-            return false;
-        } else{
-            ReviewerRoomDb.databaseWriteExecutor.execute(()-> dao.insertUser(new UserEntity(login, "Moscow", "", UserEntity.USER)));
-            return true;
-        }
-    }
 
-    @Override
-    public UserAndPermission getUserAndPermission(String name) {
-        return dao.getUser(name);
+    public void addUserAndPermission(UserAndPermission userAndPermission) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertUser(userAndPermission.user);
+            dao.insertPermission(userAndPermission.permission);
+        });
     }
 }

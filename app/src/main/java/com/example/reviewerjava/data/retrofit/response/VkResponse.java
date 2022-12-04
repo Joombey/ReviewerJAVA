@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.data.repository.RoomRepository;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.google.gson.annotations.SerializedName;
@@ -41,38 +42,30 @@ public class VkResponse {
     }
     public List<User> response;
 
-    public void loadUserImage(File parent, String url){
-        new Thread(()->{
-            try {
-                Log.i("URL", url);
-                InputStream inputStream = new URL(url).openStream();
-                if(!parent.exists()) parent.mkdir();
-                File outFile = new File(parent, response.get(0).name);
-                OutputStream outputStream = new FileOutputStream(new File(parent, response.get(0).name));
-
-                byte[] buffer = new byte[1024*50];
-                int bytesRead;
-                while((bytesRead = inputStream.read(buffer, 0, buffer.length)) >= 0){
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-
-                response.get(0).imageUri = Uri.fromFile(outFile).toString();
-                inputStream.close();
-                outputStream.close();
-                UserEntity user = RepositoryController.getUserByName(getUserEntityInstance().getName());
-                user.setAvatar(response.get(0).imageUri);
-                RepositoryController.updateUser(user);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
     public UserEntity getUserEntityInstance() {
+        if(response.get(0).userCity.title == null){
+            response.get(0).userCity.title = "";
+        }
+
         return new UserEntity(
                 response.get(0).name,
-                ""
+                "",
+                response.get(0).userCity.title,
+                UserEntity.USER
         );
     }
+
+    public static UserEntity convertToUserEntity(User vkUser){
+        if(vkUser.userCity.title == null){
+            vkUser.userCity.title = "";
+        }
+
+        return new UserEntity(
+                vkUser.name,
+                "",
+                vkUser.imageUri,
+                UserEntity.USER
+        );
+    }
+
 }

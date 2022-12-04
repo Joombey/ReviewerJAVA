@@ -23,7 +23,7 @@ public class OAuth2 {
 
     public static final String RESPONSE_URL_PATTERN = "https://oauth.vk.com/blank.html";
 
-    public static WebViewClient getWebViewClient(File parentPath){
+    public static WebViewClient getWebViewClient(File parentPath, Back back){
         return new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -32,11 +32,16 @@ public class OAuth2 {
                     CurrentUser.getInstance().access_token = Uri.parse(urlString.replace("#", "?")).getQueryParameter("access_token");
                     CurrentUser.getInstance().userId = Uri.parse(urlString.replace("#", "?")).getQueryParameter("user_id");
                     RepositoryController.getUserInfo(parentPath);
+                    back.popBackStack();
                     return false;
                 }
                 view.loadUrl(urlString);
                 return true;
             }
         };
+    }
+
+    public interface Back{
+        void popBackStack();
     }
 }

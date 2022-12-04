@@ -20,7 +20,7 @@ import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import java.util.List;
 
 @Dao
-public interface ReviewDAO {
+public interface ReviewDao {
     @Query("SELECT * FROM reviews")
     LiveData<List<ReviewEntity>> getAllReviews();
 
@@ -69,11 +69,11 @@ public interface ReviewDAO {
     @Delete
     void deleteReport(ReportEntity report);
 
-    @Query("SELECT * from reports WHERE id = :id")
+    @Query("SELECT * FROM reports WHERE id = :id")
     ReportEntity getReport(int id);
 
     @Insert
-    void addReport(ReportEntity reportEntity);
+    void createReport(ReportEntity report);
 
     @Update
     void updateReport(ReportEntity report);
