@@ -147,18 +147,8 @@ public class RepositoryController{
     }
 
     public static boolean signUp(String login, String password, String city, String avatar) {
-        UserEntity userEntity = new UserEntity(login, city, avatar, UserEntity.USER);
-        UserRequest userRequest = new UserRequest(new UserId(login, password), city, UserEntity.USER);
-
-        if(reviewerApi.signUp(userRequest)){
-            userRepository.addNewUser(userEntity);
-            reviewerApi.uploadFileToServer(
-                    new File(avatar),
-                    userRequest.id
-            );
-            return true;
-        }
-        return false;
+        UserRequest userRequest = new UserRequest(new UserId(login, password), city, avatar);
+        return (reviewerApi.signUp(userRequest));
     }
 
     public static UserEntity getCurrentUser() {

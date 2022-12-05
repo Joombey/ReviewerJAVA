@@ -1,9 +1,12 @@
 package com.example.reviewerjava.data.retrofit.base;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.BuildConfig;
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.RepositoryController;
 
@@ -12,9 +15,12 @@ import com.example.reviewerjava.data.retrofit.request.UserRequest;
 
 import com.example.reviewerjava.data.retrofit.request.pks.UserId;
 import com.example.reviewerjava.data.retrofit.response.ReviewerReviewResponse;
+import com.example.reviewerjava.data.retrofit.response.UserAndPermissionResponse;
+import com.example.reviewerjava.data.retrofit.response.VkResponse;
 import com.example.reviewerjava.data.retrofit.service.ReviewerService;
 
 import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.di.ServiceLocator;
 
@@ -44,14 +50,15 @@ public class ReviewerApiBase {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain ->  {
                     Request request = chain.request().newBuilder()
-                            .addHeader("Host", "Mobile-Tester")
+                            .addHeader("Host", "192.168.0.173:8080")
+                            .addHeader("Content-Type","application/json")
                             .build();
                     return chain.proceed(request);
                 }).build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://127.0.0.1:8080")
+                .baseUrl("http://192.168.0.173:8080")
                 .client(client)
                 .build();
 
@@ -64,7 +71,7 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()) {
-                    RepositoryController.addToLocalIfRequired(response.body());
+                    RepositoryController.addToLocalIfRequired(((UserEntity) new Object()));
                     result = true;
                 }
             }
@@ -85,7 +92,13 @@ public class ReviewerApiBase {
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()){
                     result.setValue(true);
-                    ServiceLocator.getInstance().getLocalBase().addUserAndPermission(response.body());
+                    try {
+                        Log.i("REPSPONSE", response.body().getPermission().role);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+//                    ServiceLocator.getInstance().getLocalBase().addUserAndPermission(response.body());
+//                    CurrentUser.getInstance().setUserAndPermission(response.body().string());
                 }
             }
 

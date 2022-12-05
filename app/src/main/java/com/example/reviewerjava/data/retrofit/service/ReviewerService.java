@@ -5,6 +5,7 @@ import com.example.reviewerjava.data.retrofit.request.ReviewRequest;
 import com.example.reviewerjava.data.retrofit.request.UserRequest;
 import com.example.reviewerjava.data.retrofit.request.pks.UserId;
 import com.example.reviewerjava.data.retrofit.response.ReviewerReviewResponse;
+import com.example.reviewerjava.data.retrofit.response.UserAndPermissionResponse;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 

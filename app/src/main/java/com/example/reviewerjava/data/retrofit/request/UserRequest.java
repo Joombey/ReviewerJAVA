@@ -7,10 +7,11 @@ public class UserRequest {
 
     public String city;
     public String role;
+    public String avatar;
 
-    public UserRequest(UserId id, String city, String role) {
+    public UserRequest(UserId id, String city, String avatar) {
         this.id = id;
         this.city = city;
-        this.role = role;
+        this.avatar = avatar;
     }
 }
