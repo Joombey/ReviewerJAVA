@@ -42,7 +42,7 @@ public class ServiceLocator {
     public void init(Application app){
         cacheDir = app.getCacheDir();
         mediaDir = app.getExternalMediaDirs()[0];
-        RoomRepository roomRepo = new RoomRepository(app);
+        roomRepo = new RoomRepository(app);
     }
 
     public File getCacheDir() {

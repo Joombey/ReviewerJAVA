@@ -16,4 +16,8 @@ public class ReviewListViewModel extends ViewModel {
     public UserEntity getUserByName(String userName){
         return RepositoryController.getUserByName(userName);
     }
+
+    public void getReviewsForUser() {
+        RepositoryController.getReviewsByName();
+    }
 }

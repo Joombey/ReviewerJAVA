@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
@@ -100,6 +101,21 @@ public class RoomRepository implements
     }
 
     @Override
+    public void saveAllReviews(List<ReviewEntity> reviewList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.saveReviews(reviewList);
+        });
+    }
+
+    @Override
+    public void addReportsWithReviews(List<ReportEntity> reportList, List<ReviewEntity> reviewList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertReviewList(reviewList);
+            dao.insertReportList(reportList);
+        });
+    }
+
+    @Override
     public LiveData<List<ReportAndReview>> getReports() {
         return dao.getAllReports();
     }
@@ -124,6 +140,13 @@ public class RoomRepository implements
                 report.reportAmt += 1;
                 dao.updateReport(report);
             }
+        });
+    }
+
+    @Override
+    public void addReportList(List<ReportEntity> reportList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(() ->{
+            dao.insertReportList(reportList);
         });
     }
 
@@ -160,11 +183,27 @@ public class RoomRepository implements
         else return true;
     }
 
-
+    @Override
     public void addUserAndPermission(UserAndPermission userAndPermission) {
         ReviewerRoomDb.databaseWriteExecutor.execute(()->{
             dao.insertUser(userAndPermission.user);
             dao.insertPermission(userAndPermission.permission);
+        });
+    }
+
+    @Override
+    public UserAndPermission getUserAndPermission(String name){
+        UserAndPermission user = dao.getUser(name);
+        if(user == null){
+            return CurrentUser.getInstance().UNAUTHORIZED_USER;
+        }
+        return user;
+    }
+
+    @Override
+    public void addUserList(List<UserEntity> newUserList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertUserList(newUserList);
         });
     }
 }

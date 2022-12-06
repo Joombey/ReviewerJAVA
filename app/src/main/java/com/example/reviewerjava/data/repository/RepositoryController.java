@@ -1,11 +1,14 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
+import android.app.Service;
 import android.net.Uri;
 import android.webkit.WebViewClient;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Room;
 
+import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.User;
@@ -52,6 +55,7 @@ public class RepositoryController{
     static ReviewerApiBase reviewerApi;
 
     public static void init(Application application){
+        ServiceLocator.getInstance().init(application);
         repo = new RoomRepository(application);
         shoppingApiBase = new ShoppingApiBase();
         vkApiBase = new VkApiBase();
@@ -67,7 +71,7 @@ public class RepositoryController{
     }
 
     public static void addReview(ReviewEntity review){
-        addReviewRepository.addReview(review);
+        reviewerApi.createNewReview(review);
     }
 
     public static UserEntity getUserByName(String userName){
@@ -92,6 +96,7 @@ public class RepositoryController{
 
     public static Item moveToMedia(File parent, Item item) {
         new Thread(()->{
+
             Uri imageUri = Uri.parse(item.getItemImage());
             String imageFileName = imageUri.getLastPathSegment();
             File imageFile = new File(imageUri.getPath());
@@ -217,7 +222,7 @@ public class RepositoryController{
     }
 
     public static UserAndPermission getUserAndPermission(String name) {
-        return registerRepository.getUserAndPermission(name);
+        return userRepository.getUserAndPermission(name);
     }
 
     public static void save(InputStream inputStream, OutputStream outputStream) {
@@ -243,7 +248,6 @@ public class RepositoryController{
     }
 
     public static void addToLocalIfRequired(VkResponse.User user) {
-
         if(!userRepository.userExists(user.name)){
             File file = new File(ServiceLocator.getInstance().getMediaDir().getPath(), user.name);
             downloadFromInternet(user.imageUri, file);
@@ -251,7 +255,7 @@ public class RepositoryController{
             user.imageUri = Uri.fromFile(file).toString();
             userRepository.addNewUser(VkResponse.convertToUserEntity(user));
         }
-
+        CurrentUser.getInstance().setUserAndPermission(user.name);
     }
 
     public static void addToLocalIfRequired(UserAndPermission userAndPermission) {
@@ -262,7 +266,16 @@ public class RepositoryController{
             userAndPermission.user.setAvatar(Uri.fromFile(file).toString());
 
             repo.addUserAndPermission(userAndPermission);
-            CurrentUser.getInstance().setUserAndPermission(userAndPermission);
         }
+        CurrentUser.getInstance().setUserAndPermission(userAndPermission);
+    }
+
+    public static void addUserAndPermission(UserAndPermission body) {
+        userRepository.addUserAndPermission(body);
+        CurrentUser.getInstance().setUserAndPermission(body);
+    }
+
+    public static void getReviewsByName() {
+        reviewerApi.fetchAllReview();
     }
 }

@@ -24,7 +24,7 @@ public interface ReviewDao {
     @Query("SELECT * FROM reviews")
     LiveData<List<ReviewEntity>> getAllReviews();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReview(ReviewEntity review);
 
     @Query("SELECT * FROM reviews WHERE id == :id")
@@ -83,4 +83,16 @@ public interface ReviewDao {
 
     @Delete
     void deleteUser(UserEntity user);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void saveReviews(List<ReviewEntity> reviewList);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertUserList(List<UserEntity> newUserList);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertReportList(List<ReportEntity> reportList);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertReviewList(List<ReviewEntity> reviewList);
 }

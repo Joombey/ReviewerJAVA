@@ -37,7 +37,7 @@ public class OAuthVkFragment extends Fragment {
         binding.webView.setWebViewClient(
                 viewModel.getClient(
                         getActivity().getExternalMediaDirs()[0],
-                        ((MainActivity) getActivity())::popBackStack
+                        ((MainActivity) getActivity())::replaceCurrentFragment
                 )
         );
         super.onViewCreated(view, savedInstanceState);

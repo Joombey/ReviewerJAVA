@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
+import com.example.reviewerjava.data.model.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,6 +29,15 @@ public class ReviewEntity extends Review {
     public String author;
     public String item;
     public String paragraphs;
+
+    public ReviewEntity(int id, String author, String item, String paragraphs) {
+        this.id = id;
+        this.author = author;
+        this.item = item;
+        this.paragraphs = paragraphs;
+    }
+
+    public ReviewEntity(){};
 
     public String getAuthor() {
         return author;

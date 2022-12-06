@@ -43,4 +43,7 @@ public interface UserDao extends UserSourceOfTruth {
     @Query("SELECT * FROM users WHERE name == :name")
     UserAndPermission getUser(String name);
 
+    @Insert
+    void insertUserList(List<UserEntity> newUserList);
+
 }

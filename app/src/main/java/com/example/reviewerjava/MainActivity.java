@@ -6,14 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.reviewerjava.data.CurrentUser;
-import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
@@ -26,7 +22,6 @@ import com.example.reviewerjava.ui.view.SignInFragment;
 import com.example.reviewerjava.ui.view.ReviewFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
-import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -126,10 +121,14 @@ public class MainActivity extends AppCompatActivity {
         else finish();
     }
 
-    public void gotFirstScreen(){
+    public void goToFirstScreen(){
         while(getSupportFragmentManager().getBackStackEntryCount() != 1){
             getSupportFragmentManager().popBackStackImmediate();
         }
+    }
+
+    public <T extends Fragment> void replaceCurrentFragment(T fragment){
+        getSupportFragmentManager().beginTransaction().replace(binding.fragmentContainerView.getId(), fragment).commit();
     }
 
     public void changeUI(){

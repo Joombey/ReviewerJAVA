@@ -39,7 +39,7 @@ public class SignInFragment extends Fragment {
         });
 
         mBinding.vkAuth.setOnClickListener(view -> {
-            ((MainActivity) getActivity()).setFragment(new OAuthVkFragment());
+            ((MainActivity) getActivity()).replaceCurrentFragment(new OAuthVkFragment());
         });
         return mBinding.getRoot();
     }

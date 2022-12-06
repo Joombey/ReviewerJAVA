@@ -6,9 +6,13 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.reviewerjava.BuildConfig;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.ui.view.ProfileFragment;
+import com.example.reviewerjava.ui.view.ReviewListFragment;
 
 import java.io.File;
 
@@ -19,7 +23,7 @@ public class OAuth2 {
             "?client_id=" + BuildConfig.CLIENT_ID +
             "&display=mobile"+
             "&scope=photos,offline" +
-            "&redirect_uri=https://oauth.vk.com/blank.html&display=mobile&response_type=token";
+            "&redirect_uri=https://oauth.vk.com/blank.html?display=mobile&response_type=token";
 
     public static final String RESPONSE_URL_PATTERN = "https://oauth.vk.com/blank.html";
 
@@ -32,7 +36,7 @@ public class OAuth2 {
                     CurrentUser.getInstance().access_token = Uri.parse(urlString.replace("#", "?")).getQueryParameter("access_token");
                     CurrentUser.getInstance().userId = Uri.parse(urlString.replace("#", "?")).getQueryParameter("user_id");
                     RepositoryController.getUserInfo(parentPath);
-                    back.popBackStack();
+                    back.replace(new ReviewListFragment());
                     return false;
                 }
                 view.loadUrl(urlString);
@@ -42,6 +46,6 @@ public class OAuth2 {
     }
 
     public interface Back{
-        void popBackStack();
+        <T extends Fragment> void replace(T fragment);
     }
 }

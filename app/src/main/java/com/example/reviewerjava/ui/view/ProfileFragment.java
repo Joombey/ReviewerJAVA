@@ -11,16 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.reviewerjava.MainActivity;
-import com.example.reviewerjava.data.model.Permission;
-import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
-import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ProfileFragmentBinding;
 import com.example.reviewerjava.ui.view.adapter.ReviewListAdapter;
 import com.example.reviewerjava.ui.viewmodel.ProfileViewModel;
@@ -62,14 +58,16 @@ public class ProfileFragment extends Fragment {
         }
         mBinding.logOut.setOnClickListener(v->{
             mViewModel.logOut();
-            ((MainActivity) getActivity()).gotFirstScreen();
+            ((MainActivity) getActivity()).goToFirstScreen();
         });
 
-        mBinding.profileImage.setImageBitmap(
-                BitmapFactory.decodeFile(
-                        Uri.parse(user.getAvatar()).getPath()
-                )
-        );
+        if(user.getAvatar()!=null) {
+            mBinding.profileImage.setImageBitmap(
+                    BitmapFactory.decodeFile(
+                            Uri.parse(user.getAvatar()).getPath()
+                    )
+            );
+        }
         mBinding.userName.setText(user.getName());
     }
 }

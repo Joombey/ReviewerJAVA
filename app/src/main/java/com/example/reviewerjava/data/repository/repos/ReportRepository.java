@@ -13,4 +13,6 @@ public interface ReportRepository {
     void ban(ReviewEntity review);
     void deny(ReportEntity report);
     void report(int id);
+
+    void addReportList(List<ReportEntity> reportList);
 }
