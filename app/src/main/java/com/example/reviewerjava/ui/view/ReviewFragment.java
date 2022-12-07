@@ -33,7 +33,7 @@ public class ReviewFragment extends Fragment implements Scroller {
         mViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
 
         reviewAndUser = mViewModel.getReviewAndUser(getArguments().getInt("reviewId"));
-        if (reviewAndUser == null){
+        if (reviewAndUser.review == null || reviewAndUser.user == null){
             ((MainActivity) getActivity()).popBackStack();
         }
         mBinding.reviewTitle.setText(reviewAndUser.review.getReviewTitle());

@@ -13,11 +13,13 @@ public class RoleChangerViewModel extends ViewModel {
         return RepositoryController.getUsers();
     }
 
-    public void updateUser(UserEntity user, String newRole){
-        RepositoryController.updateUser(user, newRole);
+    public void changeUserRole(UserEntity user, String newRole){
+        RepositoryController.changeUserRole(user, newRole);
     }
 
-
+    public void updateUserList(){
+        RepositoryController.updateUserList();
+    }
     public void ban(UserEntity user) {
         RepositoryController.ban(user);
     }

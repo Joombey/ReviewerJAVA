@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
+import com.example.reviewerjava.data.model.Report;
 import com.example.reviewerjava.data.repository.RepositoryController;
 
 import com.example.reviewerjava.data.retrofit.request.ReviewDto;
@@ -130,8 +131,8 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<ReviewId> call, Response<ReviewId> response) {
                 if (response.isSuccessful()){
-                    review.id = response.body().getId();
-                    ServiceLocator.getInstance().getLocalBase().addReview(review);
+                    request.setId(response.body());
+                    ServiceLocator.getInstance().getLocalBase().addReview(new ReviewEntity(request));
                 }
             }
 
@@ -151,14 +152,9 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<List<ReviewDto>> call, Response<List<ReviewDto>> response) {
                 if (response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().saveAllReviews(
-                            response.body().stream().map(reviewDto ->
-                                new ReviewEntity(
-                                reviewDto.getId().getId(),
-                                reviewDto.getId().getAuthor(),
-                                reviewDto.getItem(),
-                                reviewDto.getParagraphs()
-                            )).collect(Collectors.toList()));
+                    List<ReviewEntity> reviewList = response.body().stream().map(reviewDto ->
+                            new ReviewEntity(reviewDto)).collect(Collectors.toList());
+                    ServiceLocator.getInstance().getLocalBase().saveAllReviews(reviewList);
                 }
             }
 
@@ -236,16 +232,16 @@ public class ReviewerApiBase {
 
     public void getReportList(){
         String currentUserName = CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
-        api.getReportList(currentUserName).enqueue(new Callback<List<ReportEntity>>() {
+        api.getReportList(currentUserName).enqueue(new Callback<List<Report>>() {
             @Override
-            public void onResponse(Call<List<ReportEntity>> call, Response<List<ReportEntity>> response) {
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().addReportList(response.body());
+                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ReportEntity>> call, Throwable t) {
+            public void onFailure(Call<List<Report>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -253,32 +249,32 @@ public class ReviewerApiBase {
 
     public void denyReport(int reportId){
         String currentUserName = CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
-        api.denyReport(reportId, currentUserName).enqueue(new Callback<List<ReportEntity>>() {
+        api.denyReport(reportId, currentUserName).enqueue(new Callback<List<Report>>() {
             @Override
-            public void onResponse(Call<List<ReportEntity>> call, Response<List<ReportEntity>> response) {
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().addReportList(response.body());
+                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ReportEntity>> call, Throwable t) {
+            public void onFailure(Call<List<Report>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
     }
 
     public void report(int reviewId){
-        api.report(reviewId).enqueue(new Callback<List<ReportEntity>>() {
+        api.report(reviewId).enqueue(new Callback<List<Report>>() {
             @Override
-            public void onResponse(Call<List<ReportEntity>> call, Response<List<ReportEntity>> response) {
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if (response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().addReportList(response.body());
+                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ReportEntity>> call, Throwable t) {
+            public void onFailure(Call<List<Report>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -290,7 +286,7 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<ReportsWithReviewsResponse> call, Response<ReportsWithReviewsResponse> response) {
                 if (response.isSuccessful()){
-                    List<ReportEntity> reportList = response.body().getReports();
+                    List<ReportEntity> reportList = Report.convertToEntity(response.body().getReports());
                     List<ReviewEntity> reviewList = response.body()
                             .getReviews()
                             .stream()

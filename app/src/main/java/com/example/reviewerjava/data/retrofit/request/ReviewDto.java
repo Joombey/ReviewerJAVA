@@ -5,11 +5,15 @@ import com.example.reviewerjava.data.room.models.ReviewEntity;
 
 public class ReviewDto {
     private ReviewId id;
+    private String reviewTitle;
+    private String creationTime;
     private String item;
     private String paragraphs;
 
     public ReviewDto(ReviewEntity review) {
         this.id = new ReviewId(review.id, review.author);
+        this.reviewTitle = review.reviewTitle;
+        this.creationTime = review.getCreationTime();
         this.item = review.item;
         this.paragraphs = review.paragraphs;
     }
@@ -38,13 +42,24 @@ public class ReviewDto {
         this.paragraphs = paragraphs;
     }
 
+    public String getReviewTitle() {
+        return reviewTitle;
+    }
+
+    public void setReviewTitle(String reviewTitle) {
+        this.reviewTitle = reviewTitle;
+    }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
     public static ReviewEntity convertToEntity(ReviewDto review){
-        return new ReviewEntity(
-                review.getId().getId(),
-                review.getId().getAuthor(),
-                review.getItem(),
-                review.getParagraphs()
-        );
+        return new ReviewEntity(review);
     }
 }
 

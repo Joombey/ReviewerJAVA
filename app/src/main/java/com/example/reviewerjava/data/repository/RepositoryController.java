@@ -1,17 +1,13 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
-import android.app.Service;
 import android.net.Uri;
 import android.webkit.WebViewClient;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
 
-import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
 import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
@@ -39,7 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -166,14 +161,17 @@ public class RepositoryController{
 
     public static void ban(ReviewEntity review){
         reportRepository.ban(review);
+        reviewerApi.blockReview(review.id);
     }
 
     public static void ban(UserEntity user){
         userRepository.ban(user);
+        reviewerApi.banUser(user.getName());
     }
 
     public static void deny(ReportEntity report){
         reportRepository.deny(report);
+        reviewerApi.denyReport(report.id);
     }
 
     public static void report(int id) {
@@ -193,23 +191,24 @@ public class RepositoryController{
         );
     }
 
-    public static void updateUser(UserEntity user, String newRole) {
-        user.setRole(newRole);
-        userRepository.updateUser(user);
+    public static void changeUserRole(UserEntity user, String newRole) {
+//        user.setRole(newRole);
+//        userRepository.updateUser(user);
+        reviewerApi.changeRole(user.getName(), newRole);
     }
 
     public static void addToLocalIfRequired(UserEntity user) {
         if(userRepository.userExists(user.getName())){
             UserEntity aUser = userRepository.getUserByName(user.getName());
             user.setRole(aUser.getRole());
-            updateUser(user);
+            changeUserRole(user);
         }else {
             userRepository.addNewUser(user);
         }
         CurrentUser.getInstance().setUserAndPermission(user.getName());
     }
 
-    public static void updateUser(UserEntity user) {
+    public static void changeUserRole(UserEntity user) {
         userRepository.updateUser(user);
     }
 
@@ -277,5 +276,13 @@ public class RepositoryController{
 
     public static void getReviewsByName() {
         reviewerApi.fetchAllReview();
+    }
+
+    public static void updateReportList() {
+        reviewerApi.getReportList();
+    }
+
+    public static void updateUserList() {
+        reviewerApi.getUserList();
     }
 }

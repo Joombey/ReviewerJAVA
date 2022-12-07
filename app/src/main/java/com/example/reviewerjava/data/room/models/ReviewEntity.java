@@ -2,12 +2,14 @@ package com.example.reviewerjava.data.room.models;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.data.model.User;
+import com.example.reviewerjava.data.retrofit.request.ReviewDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -29,15 +31,50 @@ public class ReviewEntity extends Review {
     public String author;
     public String item;
     public String paragraphs;
+    public String creationTime;
+    public String reviewTitle;
 
-    public ReviewEntity(int id, String author, String item, String paragraphs) {
+    public ReviewEntity(int id, String author, String item, String paragraphs, String creationTime, String reviewTitle) {
         this.id = id;
         this.author = author;
         this.item = item;
         this.paragraphs = paragraphs;
+        this.creationTime = creationTime;
+        this.reviewTitle = reviewTitle;
     }
 
+    @Ignore
+    public ReviewEntity(ReviewDto reviewDto){
+        this.id = reviewDto.getId().getId();
+        this.author = reviewDto.getId().getAuthor();
+        this.item = reviewDto.getItem();
+        this.paragraphs = reviewDto.getParagraphs();
+        this.creationTime = reviewDto.getCreationTime();
+        this.reviewTitle = reviewDto.getReviewTitle();
+    }
+
+    @Ignore
     public ReviewEntity(){};
+
+    @Override
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    @Override
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    @Override
+    public String getReviewTitle() {
+        return reviewTitle;
+    }
+
+    @Override
+    public void setReviewTitle(String reviewTitle) {
+        this.reviewTitle = reviewTitle;
+    }
 
     public String getAuthor() {
         return author;
@@ -75,7 +112,6 @@ public class ReviewEntity extends Review {
         ReviewEntity reviewEntity = new ReviewEntity();
 
         reviewEntity.setAuthor(review.getAuthor());
-        reviewEntity.setItem(review.getItem());
         reviewEntity.setItem(review.getItem());
         reviewEntity.setParagraphList(review.getParagraphList());
         reviewEntity.setReviewTitle(review.getReviewTitle());

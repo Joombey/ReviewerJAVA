@@ -20,4 +20,8 @@ public class ReviewBlockViewModel extends ViewModel {
     public void deny(ReportEntity report){
         RepositoryController.deny(report);
     }
+
+    public void updateReportList(){
+        RepositoryController.updateReportList();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -25,6 +26,7 @@ import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomRepository implements
         ReviewListRepository,
@@ -102,7 +104,15 @@ public class RoomRepository implements
 
     @Override
     public void saveAllReviews(List<ReviewEntity> reviewList) {
+        reviewList.stream().map(review ->{
+            Log.i("DATA1423", review.getReviewTitle() +  "" + review.getCreationTime());
+            return review;
+        }).collect(Collectors.toList());
         ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            reviewList.stream().map(review ->{
+                Log.i("DATA1423", review.getReviewTitle() +  "" + review.getCreationTime());
+                return review;
+            }).collect(Collectors.toList());
             dao.saveReviews(reviewList);
         });
     }

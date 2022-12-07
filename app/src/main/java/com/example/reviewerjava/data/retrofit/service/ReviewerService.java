@@ -1,6 +1,7 @@
 package com.example.reviewerjava.data.retrofit.service;
 
 
+import com.example.reviewerjava.data.model.Report;
 import com.example.reviewerjava.data.retrofit.request.ReviewDto;
 import com.example.reviewerjava.data.retrofit.request.UserRequest;
 import com.example.reviewerjava.data.retrofit.request.pks.ReviewId;
@@ -55,20 +56,20 @@ public interface ReviewerService {
     Call<ReportsWithReviewsResponse> blockReview(@Query("report_id") int report_id, @Query("moder") String moderatorName);
 
     @POST("/moderator/report-deny/{reportId}")
-    Call<List<ReportEntity>> denyReport(@Path("reportId") int reportId, @Path("moder") String moder);
+    Call<List<Report>> denyReport(@Path("reportId") int reportId, @Query("moder") String moder);
 
     @POST("admin/change-role/{userLogin}")
     Call<UserAndPermission> changeRole(@Path("userLogin") String userLogin, @Query("role") String role, @Query("admin") String admin);
 
     @POST("admin/ban/{userLogin}")
-    Call<List<UserEntity>> banUser(@Path("userLogin") String bannedUser, String admin);
+    Call<List<UserEntity>> banUser(@Path("userLogin") String bannedUser, @Query("admin") String admin);
 
     @GET("admin/user-list")
     Call<List<UserEntity>> getUserList(@Query("admin") String admin);
 
     @POST("/report")
-    Call<List<ReportEntity>> report(@Query("review_id") int reviewId);
+    Call<List<Report>> report(@Query("review_id") int reviewId);
 
     @GET("/report-list")
-    Call<List<ReportEntity>> getReportList(@Query("moder") String moderName);
+    Call<List<Report>> getReportList(@Query("moder") String moderName);
 }

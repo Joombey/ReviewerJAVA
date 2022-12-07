@@ -44,7 +44,7 @@ public class RoleChangerFragment extends Fragment implements Adminer {
 
     @Override
     public void updateUser(UserEntity user, String newRole) {
-        viewModel.updateUser(user, newRole);
+        viewModel.changeUserRole(user, newRole);
     }
 
 
