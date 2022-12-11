@@ -49,9 +49,6 @@ public interface ReviewerService {
     @GET("/get-reviews-for/{user}")
     Call<List<ReviewDto>> fetchAllReviews(@Path("user") String login);
 
-    @GET("/get-all")
-    Call<List<ReviewDto>> fetchAll();
-
     @POST("/moderator/review-block")
     Call<ReportsWithReviewsResponse> blockReview(@Query("report_id") int report_id, @Query("moder") String moderatorName);
 
@@ -70,6 +67,6 @@ public interface ReviewerService {
     @POST("/report")
     Call<List<Report>> report(@Query("review_id") int reviewId);
 
-    @GET("/report-list")
+    @GET("/moderator/report-list")
     Call<List<Report>> getReportList(@Query("moder") String moderName);
 }

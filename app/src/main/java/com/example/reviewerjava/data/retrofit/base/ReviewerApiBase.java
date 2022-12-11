@@ -55,7 +55,6 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()) {
-//                    RepositoryController.addToLocalIfRequired(((UserEntity) new Object()));
                     RepositoryController.addUserAndPermission(response.body());
                     result = true;
                 }
@@ -76,11 +75,6 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()){
-                    try {
-                        Log.i("REPSPONSE", response.body().getPermission().role);
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
                     RepositoryController.addUserAndPermission(response.body());
                 }
             }
@@ -88,38 +82,6 @@ public class ReviewerApiBase {
             @Override
             public void onFailure(Call<UserAndPermission> call, Throwable t) {
                 t.printStackTrace();
-            }
-        });
-        return result.getValue();
-    }
-
-
-
-
-    public boolean uploadFileToServer(File file, UserId user){
-
-        MutableLiveData<Boolean> result = new MutableLiveData<>(false);
-
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData(
-                "file",
-                file.getName(),
-                RequestBody.create(MediaType.parse("image/*"), file)
-        );
-
-        api.uploadToServer(
-                filePart,
-                user
-        ).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                     result.setValue(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    t.printStackTrace();
             }
         });
         return result.getValue();
@@ -161,20 +123,6 @@ public class ReviewerApiBase {
             @Override
             public void onFailure(Call<List<ReviewDto>> call, Throwable t) {
                 t.printStackTrace();
-            }
-        });
-    }
-
-    public void fetchAll(){
-        api.fetchAll().enqueue(new Callback<List<ReviewDto>>() {
-            @Override
-            public void onResponse(Call<List<ReviewDto>> call, Response<List<ReviewDto>> response) {
-                response.body().stream();
-            }
-
-            @Override
-            public void onFailure(Call<List<ReviewDto>> call, Throwable t) {
-
             }
         });
     }
@@ -236,8 +184,12 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
+                    response.body().stream().map(report-> {
+                        Log.i("DATA321", report.getReviewId() + "");
+                        return report;
+                    }).collect(Collectors.toList());
                     ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
-                }
+                }Log.i("DATA321", "FAILED");
             }
 
             @Override
@@ -269,6 +221,10 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if (response.isSuccessful()){
+                    response.body().stream().map(report-> {
+                        Log.i("DATA321", report.getReviewId() + "");
+                        return report;
+                    }).collect(Collectors.toList());
                     ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
                 }
             }

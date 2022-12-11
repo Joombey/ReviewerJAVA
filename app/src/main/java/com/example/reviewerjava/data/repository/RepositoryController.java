@@ -176,6 +176,7 @@ public class RepositoryController{
 
     public static void report(int id) {
         reportRepository.report(id);
+        reviewerApi.report(id);
     }
 
     public static LiveData<List<ReportAndReview>> getReportList() {
