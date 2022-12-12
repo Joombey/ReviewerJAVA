@@ -43,7 +43,7 @@ public class ReviewerApiBase {
     public ReviewerApiBase(){
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://192.168.0.173:8080")
+                .baseUrl("https://d888-195-211-193-137.eu.ngrok.io")
                 .build();
 
         api = retrofit.create(ReviewerService.class);
