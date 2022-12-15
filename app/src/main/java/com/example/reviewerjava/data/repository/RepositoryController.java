@@ -184,6 +184,7 @@ public class RepositoryController{
     }
 
     public static LiveData<List<UserEntity>> getUsers() {
+        reviewerApi.getUserList();
         return userRepository.getUsers(
                 CurrentUser.getInstance()
                 .getUserAndPermission()
