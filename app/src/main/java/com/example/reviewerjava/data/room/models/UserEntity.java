@@ -11,6 +11,8 @@ import androidx.room.PrimaryKey;
 import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.model.User;
 
+import okhttp3.MediaType;
+
 @Entity(
         tableName = "users",
         foreignKeys = @ForeignKey(
@@ -21,9 +23,13 @@ import com.example.reviewerjava.data.model.User;
 )
 public class UserEntity extends User {
 
+    @Ignore
     public static final String ADMIN = "admin";
+    @Ignore
     public static final String MODERATOR = "moder";
+    @Ignore
     public static final String USER = "user";
+    @Ignore
     public static final String UNAUTHORIZED = "unauthorized";
 
     @NonNull
@@ -34,6 +40,7 @@ public class UserEntity extends User {
     private String avatar;
     @ColumnInfo(defaultValue = "user")
     private String role;
+
 
     @Ignore
     public UserEntity(String name, String avatar) {

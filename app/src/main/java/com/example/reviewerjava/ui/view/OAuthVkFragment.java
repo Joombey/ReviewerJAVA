@@ -9,9 +9,11 @@ import android.webkit.CookieManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.reviewerjava.MainActivity;
 import com.example.reviewerjava.data.retrofit.OAuth2;
 import com.example.reviewerjava.databinding.OAuthVkFragmentBinding;
 import com.example.reviewerjava.ui.viewmodel.OAuthVkViewModel;
@@ -32,7 +34,12 @@ public class OAuthVkFragment extends Fragment {
         CookieManager.getInstance().removeAllCookies(null);
         binding.webView.clearCache(true);
         binding.webView.loadUrl(OAuth2.AUTH_URL);
-        binding.webView.setWebViewClient(viewModel.getClient(getActivity().getExternalMediaDirs()[0]));
+        binding.webView.setWebViewClient(
+                viewModel.getClient(
+                        getActivity().getExternalMediaDirs()[0],
+                        ((MainActivity) getActivity())::replaceCurrentFragment
+                )
+        );
         super.onViewCreated(view, savedInstanceState);
     }
 }

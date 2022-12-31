@@ -32,6 +32,7 @@ public class RoleChangerFragment extends Fragment implements Adminer {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(RoleChangerViewModel.class);
+        viewModel.getUsers();
         viewModel.getUsers().observe(getViewLifecycleOwner(), list->{
             binding.list.setAdapter(new RoleChangerAdapter(list, this));
         });
@@ -44,7 +45,7 @@ public class RoleChangerFragment extends Fragment implements Adminer {
 
     @Override
     public void updateUser(UserEntity user, String newRole) {
-        viewModel.updateUser(user, newRole);
+        viewModel.changeUserRole(user.getName(), newRole);
     }
 
 

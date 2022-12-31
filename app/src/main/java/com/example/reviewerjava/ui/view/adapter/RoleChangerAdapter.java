@@ -53,11 +53,13 @@ public class RoleChangerAdapter extends RecyclerView.Adapter<RoleChangerAdapter.
 
         holder.binding.userName.setText(data.get(position).getName());
         holder.binding.userCity.setText(data.get(position).getCity());
-        holder.binding.userImage.setImageBitmap(
-                BitmapFactory.decodeFile(
-                        Uri.parse(data.get(position).getAvatar()).getPath()
-                )
-        );
+        if(data.get(position).getAvatar() != null) {
+            holder.binding.userImage.setImageBitmap(
+                    BitmapFactory.decodeFile(
+                            Uri.parse(data.get(position).getAvatar()).getPath()
+                    )
+            );
+        }
     }
 
     @Override

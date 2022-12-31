@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface ReportRepository {
     LiveData<List<ReportAndReview>> getReports();
-    void ban(ReviewEntity review);
+//    void ban(ReviewEntity review);
     void deny(ReportEntity report);
     void report(int id);
+    void addReportList(List<ReportEntity> reportList);
+
+//    void updateReportList();
 }

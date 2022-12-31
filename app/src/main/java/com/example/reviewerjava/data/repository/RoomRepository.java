@@ -1,18 +1,16 @@
 package com.example.reviewerjava.data.repository;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
-import com.example.reviewerjava.data.model.Permission;
-import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
-import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
-import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.repository.repos.ReviewRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.room.ReviewerRoomDb;
-import com.example.reviewerjava.data.room.daos.ReviewDAO;
+import com.example.reviewerjava.data.room.daos.ReviewDao;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.models.UserEntity;
@@ -23,50 +21,48 @@ import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import java.util.List;
 
 public class RoomRepository implements
-        ReviewListRepository,
-        AddReviewRepository,
-        RegisterRepository,
         UserRepository,
-        ReportRepository
+        ReportRepository,
+        ReviewRepository
 {
     private LiveData<List<ReviewEntity>> mReviewList;
-    private ReviewDAO dao;
+    private ReviewDao dao;
 
     public RoomRepository(Application application){
         ReviewerRoomDb db = ReviewerRoomDb.getDatabase(application);
         dao = db.reviewDAO();
         mReviewList = dao.getAllReviews();
 
-        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
-            dao.insertPermission(new Permission.Builder()
-                    .role("moder")
-                    .profileAccess(Permission.ACCESS)
-                    .reviewMakerAccess(Permission.ACCESS)
-                    .reviewBlockAccess(Permission.ACCESS)
-                    .build()
-                    .getPermissionEntityInstance());
-            dao.insertPermission(new Permission.Builder()
-                    .role("admin")
-                    .profileAccess(Permission.ACCESS)
-                    .reviewMakerAccess(Permission.ACCESS)
-                    .roleChangerAccess(Permission.ACCESS)
-                    .build()
-                    .getPermissionEntityInstance());
-            dao.insertPermission(new Permission.Builder()
-                    .role("user")
-                    .profileAccess(Permission.ACCESS)
-                    .reviewMakerAccess(Permission.ACCESS)
-                    .build()
-                    .getPermissionEntityInstance());
-            dao.insertPermission(new Permission.Builder()
-                    .role("unauthorized")
-                    .build()
-                    .getPermissionEntityInstance());
-
-            dao.insertUser(new UserEntity(UserEntity.USER, "MOSCOW", "123", UserEntity.USER));
-            dao.insertUser(new UserEntity(UserEntity.MODERATOR, "MOSCOW", "123", UserEntity.MODERATOR));
-            dao.insertUser(new UserEntity(UserEntity.ADMIN, "MOSCOW", "123", UserEntity.ADMIN));
-        });
+//        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+//            dao.insertPermission(new Permission.Builder()
+//                    .role("moder")
+//                    .profileAccess(Permission.ACCESS)
+//                    .reviewMakerAccess(Permission.ACCESS)
+//                    .reviewBlockAccess(Permission.ACCESS)
+//                    .build()
+//                    .getPermissionEntityInstance());
+//            dao.insertPermission(new Permission.Builder()
+//                    .role("admin")
+//                    .profileAccess(Permission.ACCESS)
+//                    .reviewMakerAccess(Permission.ACCESS)
+//                    .roleChangerAccess(Permission.ACCESS)
+//                    .build()
+//                    .getPermissionEntityInstance());
+//            dao.insertPermission(new Permission.Builder()
+//                    .role("user")
+//                    .profileAccess(Permission.ACCESS)
+//                    .reviewMakerAccess(Permission.ACCESS)
+//                    .build()
+//                    .getPermissionEntityInstance());
+//            dao.insertPermission(new Permission.Builder()
+//                    .role("unauthorized")
+//                    .build()
+//                    .getPermissionEntityInstance());
+//
+//            dao.insertUser(new UserEntity(UserEntity.USER, "MOSCOW", "123", UserEntity.USER));
+//            dao.insertUser(new UserEntity(UserEntity.MODERATOR, "MOSCOW", "123", UserEntity.MODERATOR));
+//            dao.insertUser(new UserEntity(UserEntity.ADMIN, "MOSCOW", "123", UserEntity.ADMIN));
+//        });
     }
 
     @Override
@@ -80,12 +76,7 @@ public class RoomRepository implements
         return mReviewList;
     }
 
-    @Override
-    public boolean signIn(String login, String password) {
-        return login.equals("admin") && password.equals("admin")
-                || login.equals("moder") && password.equals("moder")
-                || login.equals("user") && password.equals("user");
-    }
+
 
     @Override
     public ReviewEntity getReviewById(int id) {
@@ -93,8 +84,8 @@ public class RoomRepository implements
     }
 
     @Override
-    public LiveData<List<ReviewEntity>> getReviewsByName(String userName) {
-        return dao.getReviewsByName(userName);
+    public LiveData<List<ReviewEntity>> getReviewsByAuthor(String userName) {
+        return null;
     }
 
     @Override
@@ -103,11 +94,24 @@ public class RoomRepository implements
     }
 
     @Override
+    public void saveAllReviews(List<ReviewEntity> reviewList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertReviewList(reviewList);
+        });
+    }
+
+    public void addReportsWithReviews(List<ReportEntity> reportList, List<ReviewEntity> reviewList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertReviewList(reviewList);
+            dao.insertReportList(reportList);
+        });
+    }
+
+    @Override
     public LiveData<List<ReportAndReview>> getReports() {
         return dao.getAllReports();
     }
 
-    @Override
     public void ban(ReviewEntity review) {
         dao.deleteReview(review);
     }
@@ -122,13 +126,21 @@ public class RoomRepository implements
         ReviewerRoomDb.databaseWriteExecutor.execute(() ->{
             ReportEntity report = dao.getReport(id);
             if (report == null){
-                dao.addReport(new ReportEntity(id));
+                dao.createReport(new ReportEntity(id));
             } else{
                 report.reportAmt += 1;
                 dao.updateReport(report);
             }
         });
     }
+
+    @Override
+    public void addReportList(List<ReportEntity> reportList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(() ->{
+            dao.insertReportList(reportList);
+        });
+    }
+
 
     @Override
     public void updateUser(UserEntity user) {
@@ -143,8 +155,8 @@ public class RoomRepository implements
     }
 
     @Override
-    public LiveData<List<UserEntity>> getUsers(String name) {
-        return dao.getUsers(name);
+    public LiveData<List<UserEntity>> getUsersExcept(String userName) {
+        return dao.getUsers(userName);
     }
 
     @Override
@@ -164,17 +176,26 @@ public class RoomRepository implements
     }
 
     @Override
-    public boolean signUp(String login, String password) {
-        if(dao.getReviewsByName(login) == null){
-            return false;
-        } else{
-            ReviewerRoomDb.databaseWriteExecutor.execute(()-> dao.insertUser(new UserEntity(login, "Moscow", "", UserEntity.USER)));
-            return true;
-        }
+    public void addUserAndPermission(UserAndPermission userAndPermission) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertUser(userAndPermission.user);
+            dao.insertPermission(userAndPermission.permission);
+        });
     }
 
     @Override
-    public UserAndPermission getUserAndPermission(String name) {
-        return dao.getUser(name);
+    public UserAndPermission getUserAndPermission(String name){
+        UserAndPermission user = dao.getUser(name);
+        if(user == null){
+            return CurrentUser.getInstance().UNAUTHORIZED_USER;
+        }
+        return user;
+    }
+
+    @Override
+    public void addUserList(List<UserAndPermission> newUserList) {
+        ReviewerRoomDb.databaseWriteExecutor.execute(()->{
+            dao.insertUserList(null);
+        });
     }
 }

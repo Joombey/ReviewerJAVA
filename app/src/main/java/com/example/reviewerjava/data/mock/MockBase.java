@@ -1,19 +1,8 @@
 package com.example.reviewerjava.data.mock;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.reviewerjava.data.model.Review;
-import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
-import com.example.reviewerjava.data.repository.repos.RegisterRepository;
-import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
-import com.example.reviewerjava.data.room.models.PermissionEntity;
-import com.example.reviewerjava.data.room.models.ReviewEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-//public class MockBase implements ReviewListRepository, RegisterRepository, AddReviewRepository {
+//public class MockBase implements ReviewListRepository, AuthRepository, AddReviewRepository {
 //
 //    private MutableLiveData<Boolean> loggedIn;
 //    private MutableLiveData<List<Review>> data;

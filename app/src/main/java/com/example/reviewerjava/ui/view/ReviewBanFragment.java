@@ -38,6 +38,7 @@ public class ReviewBanFragment extends Fragment implements Reporter {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ReviewBlockViewModel.class);
+        mViewModel.updateReportList();
         mBinding.moderatorList.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewModel.getReportList().observe(getViewLifecycleOwner(), list->{
             mBinding.moderatorList.setAdapter(new ReportListAdapter(list, this));

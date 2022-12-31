@@ -1,12 +1,15 @@
 package com.example.reviewerjava.data.retrofit.base;
 
-import android.util.Log;
+import android.app.Service;
+import android.net.Uri;
 
 import com.example.reviewerjava.BuildConfig;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.response.VkResponse;
 import com.example.reviewerjava.data.retrofit.service.VkService;
+import com.example.reviewerjava.di.ServiceLocator;
 
 import java.io.File;
 
@@ -37,12 +40,8 @@ public class VkApiBase {
                     @Override
                     public void onResponse(Call<VkResponse> call, Response<VkResponse> response) {
                         if(response.isSuccessful()){
-                            response.body().loadUserImage(
-                                    parentFilePath,
-                                    response.body().response.get(0).imageUri
-                            );
-                            RepositoryController.signUpIfRequired(
-                                    response.body().getUserEntityInstance()
+                            ServiceLocator.getInstance().getResourceRepository().addToLocalIfRequired(
+                                    response.body().response.get(0)
                             );
                         }
                     }

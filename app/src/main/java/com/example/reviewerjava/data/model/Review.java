@@ -3,9 +3,9 @@ package com.example.reviewerjava.data.model;
 import java.util.List;
 
 public class Review {
-    public String reviewTitle;
+    public transient String reviewTitle;
+    public transient String creationTime;
     private transient List<Paragraph> paragraphList;
-    public String creationTime;
     private transient User user;
     private transient Item item;
 
