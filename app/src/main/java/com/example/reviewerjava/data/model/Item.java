@@ -17,7 +17,7 @@ public class Item {
         this.productId = productId;
     }
 
-    public Item(){};
+    public Item(){}
 
     public String getItemName() {
         return itemName;

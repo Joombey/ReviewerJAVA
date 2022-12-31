@@ -3,8 +3,6 @@ package com.example.reviewerjava.data.retrofit.response;
 import android.net.Uri;
 
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.repository.RepositoryController;
-import com.example.reviewerjava.data.repository.RoomRepository;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;

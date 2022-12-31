@@ -7,15 +7,10 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
-import androidx.room.Update;
 
-import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
-import com.example.reviewerjava.data.room.models.UserEntity;
-import com.example.reviewerjava.data.room.relation.ReportAndReview;
 import com.example.reviewerjava.data.room.relation.ReviewAndUser;
-import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.util.List;
 
@@ -28,11 +23,15 @@ public interface ReviewDao {
     ReviewEntity getReviewById(int id);
 
     @Query("SELECT * FROM reviews WHERE author = :userName")
-    LiveData<List<ReviewEntity>> getReviewsByName(String userName);
+    LiveData<List<ReviewEntity>> getReviewsByAuthor(String userName);
 
     @Transaction
-    @Query("SELECT * FROM users WHERE name == :name")
-    UserAndPermission getUser(String name);
+    @Query("SELECT * FROM reviews WHERE author == :userName")
+    LiveData<List<ReviewAndUser>> getReviewAndUserListByAuthor(String userName);
+
+    @Transaction
+    @Query("SELECT * FROM reviews")
+    LiveData<List<ReviewAndUser>> getReviewAndUserList();
 
     @Transaction
     @Query("SELECT * FROM reviews WHERE id =:reviewId")
@@ -42,7 +41,7 @@ public interface ReviewDao {
     void insertReview(ReviewEntity review);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertUser(UserEntity user);
+    void insertReviewList(List<ReviewEntity> reviewList);
 
     @Transaction
     @Insert
@@ -52,48 +51,8 @@ public interface ReviewDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveReviews(List<ReviewEntity> reviewList);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReviewList(List<ReviewEntity> reviewList);
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateUserState(UserEntity user);
+    void insertReportList(List<ReportEntity> reportList);
 
     @Delete
     void deleteReview(ReviewEntity review);
-
-    @Query("SELECT * FROM users WHERE name = :userName")
-    UserEntity getUserByName(String userName);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPermission(PermissionEntity permission);
-
-    @Transaction
-    @Query("SELECT * FROM reports")
-    LiveData<List<ReportAndReview>> getAllReports();
-
-    @Delete
-    void deleteReport(ReportEntity report);
-
-    @Query("SELECT * FROM reports WHERE id = :id")
-    ReportEntity getReport(int id);
-
-    @Insert
-    void createReport(ReportEntity report);
-
-    @Update
-    void updateReport(ReportEntity report);
-
-    @Query("SELECT * FROM users WHERE name !=:name")
-    LiveData<List<UserEntity>> getUsers(String name);
-
-    @Delete
-    void deleteUser(UserEntity user);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertUserList(List<UserEntity> newUserList);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReportList(List<ReportEntity> reportList);
 }

@@ -3,12 +3,10 @@ package com.example.reviewerjava.di;
 import android.app.Application;
 
 import com.example.reviewerjava.data.repository.NetworkRepository;
-import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.repository.ResourceRepository;
-import com.example.reviewerjava.data.repository.RoomRepository;
-import com.example.reviewerjava.data.repository.repoimpl.ReportRepositoryImpl;
-import com.example.reviewerjava.data.repository.repoimpl.ReviewRepositoryImpl;
-import com.example.reviewerjava.data.repository.repoimpl.UserRepositoryImpl;
+import com.example.reviewerjava.data.repository.repos_impl.ReportRepositoryImpl;
+import com.example.reviewerjava.data.repository.repos_impl.ReviewRepositoryImpl;
+import com.example.reviewerjava.data.repository.repos_impl.UserRepositoryImpl;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
 import com.example.reviewerjava.data.repository.repos.ReviewRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
@@ -34,7 +32,6 @@ public class ServiceLocator {
     private ReviewerApiBase reviewerApi;
     private ShoppingApiBase shoppingApi;
 
-    private RoomRepository roomRepo;
     private NetworkRepository networkRepo;
 
     private ReviewRepository reviewRepository;
@@ -44,7 +41,7 @@ public class ServiceLocator {
     private ResourceRepository resourceRepository;
     private VkApiBase vkApiBase;
 
-    ServiceLocator(){};
+    ServiceLocator(){}
 
     public static ServiceLocator getInstance() {
         if (instance == null){
@@ -65,7 +62,6 @@ public class ServiceLocator {
                 .baseUrl("https://reviwer-api.onrender.com")
                 .build();
 
-        roomRepo = new RoomRepository(app);
 
         reviewerApi = new ReviewerApiBase();
         vkApiBase = new VkApiBase();
@@ -86,14 +82,6 @@ public class ServiceLocator {
             resourceRepository = new ResourceRepository();
         }
         return resourceRepository;
-    }
-
-    public RepositoryController getRepository(){
-        return new RepositoryController();
-    }
-
-    public RoomRepository getRoomRepo() {
-        return roomRepo;
     }
 
     public ReportRepository getReportRepository(){

@@ -8,23 +8,19 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.BuildConfig;
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.repository.sources.ItemSourceOfTruth;
 import com.example.reviewerjava.data.retrofit.response.ShoppingResponse;
 import com.example.reviewerjava.data.retrofit.service.ProductSearchService;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,8 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ShoppingApiBase {
 
-    private ProductSearchService api;
-    private MutableLiveData<List<Item>> shoppingList = new MutableLiveData<>();
+    private final ProductSearchService api;
+    private final MutableLiveData<List<Item>> shoppingList = new MutableLiveData<>();
 
     public ShoppingApiBase(){
         OkHttpClient client = new OkHttpClient.Builder()

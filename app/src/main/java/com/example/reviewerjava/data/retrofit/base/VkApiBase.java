@@ -5,7 +5,6 @@ import android.net.Uri;
 
 import com.example.reviewerjava.BuildConfig;
 import com.example.reviewerjava.data.CurrentUser;
-import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.response.VkResponse;
 import com.example.reviewerjava.data.retrofit.service.VkService;
@@ -20,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class VkApiBase {
-    private VkService vkService;
+    private final VkService vkService;
     public VkApiBase(){
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

@@ -9,12 +9,17 @@ import com.example.reviewerjava.data.room.relation.ReviewAndUser;
 import java.util.List;
 
 public interface ReviewRepository {
-    LiveData<List<ReviewEntity>> getReviewList();
-    ReviewEntity getReviewById(int id);
     LiveData<List<ReviewEntity>> getReviewsByAuthor(String userName);
+    LiveData<List<ReviewEntity>> getReviewList();
+
+    LiveData<List<ReviewAndUser>> getReviewAndUserList();
+    LiveData<List<ReviewAndUser>> getReviewAndUserListByAuthor(String userName);
+
+    ReviewEntity getReviewById(int id);
     ReviewAndUser getReviewAndUserByReviewId(int reviewId);
+
     void ban(ReviewEntity review);
-    void saveAllReviews(List<ReviewEntity> reviewList);
+    void addReviewList(List<ReviewEntity> reviewList);
     void addReview(ReviewEntity review);
     void addReportsWithReviews(List<ReportEntity> reportList, List<ReviewEntity> reviewList);
 }

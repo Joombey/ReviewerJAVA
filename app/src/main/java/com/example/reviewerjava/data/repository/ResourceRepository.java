@@ -26,7 +26,7 @@ public class ResourceRepository {
             data.setValue(null);
         }).start();
         return new MutableLiveData();
-    };
+    }
 
     public Item moveToMedia(File parent, Item item){
         new Thread(()->{

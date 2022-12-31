@@ -7,9 +7,7 @@ import com.example.reviewerjava.data.retrofit.request.UserRequest;
 import com.example.reviewerjava.data.retrofit.request.pks.ReviewId;
 import com.example.reviewerjava.data.retrofit.request.pks.UserId;
 import com.example.reviewerjava.data.retrofit.response.ReportsWithReviewsResponse;
-import com.example.reviewerjava.data.room.models.ReportEntity;
-import com.example.reviewerjava.data.room.models.ReviewEntity;
-import com.example.reviewerjava.data.room.models.UserEntity;
+import com.example.reviewerjava.data.retrofit.response.ReviewAndUserResponse;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.util.List;
@@ -47,7 +45,10 @@ public interface ReviewerService {
     );
 
     @GET("/get-reviews-for/{user}")
-    Call<List<ReviewDto>> fetchAllReviews(@Path("user") String login);
+    Call<List<ReviewDto>> fetchAllReviewsFor(@Path("user") String login);
+
+    @GET("/get-all")
+    Call<List<ReviewAndUserResponse>> fetchReviewAndUserList();
 
     @POST("/moderator/review-block")
     Call<ReportsWithReviewsResponse> blockReview(@Query("report_id") int report_id, @Query("moder") String moderatorName);

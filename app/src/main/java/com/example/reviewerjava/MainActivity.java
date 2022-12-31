@@ -10,19 +10,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
 import com.example.reviewerjava.di.ServiceLocator;
-import com.example.reviewerjava.ui.view.AddReviewFragment;
-import com.example.reviewerjava.ui.view.ProfileFragment;
-import com.example.reviewerjava.ui.view.ReviewBanFragment;
-import com.example.reviewerjava.ui.view.RoleChangerFragment;
-import com.example.reviewerjava.ui.view.SignInFragment;
-import com.example.reviewerjava.ui.view.ReviewFragment;
-import com.example.reviewerjava.ui.view.ReviewListFragment;
-import com.example.reviewerjava.ui.viewmodel.NavigationViewModel;
+import com.example.reviewerjava.presentation.view.AddReviewFragment;
+import com.example.reviewerjava.presentation.view.ProfileFragment;
+import com.example.reviewerjava.presentation.view.ReviewBanFragment;
+import com.example.reviewerjava.presentation.view.RoleChangerFragment;
+import com.example.reviewerjava.presentation.view.SignInFragment;
+import com.example.reviewerjava.presentation.view.ReviewFragment;
+import com.example.reviewerjava.presentation.view.ReviewListFragment;
+import com.example.reviewerjava.presentation.viewmodel.NavigationViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
             changeUI();
         });
         setContentView(binding.getRoot());
-        RepositoryController.init(getApplication());
         ServiceLocator.getInstance().init(getApplication());
         checkForDeppLink();
         String userName = getPreferences(MODE_PRIVATE).getString("user", null);

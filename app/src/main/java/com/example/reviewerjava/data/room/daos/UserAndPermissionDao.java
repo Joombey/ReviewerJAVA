@@ -46,8 +46,6 @@ public interface UserAndPermissionDao {
         insertUser(userAndPermission.user);
     }
 
-
-
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateUserState(UserEntity user);
 

@@ -9,7 +9,7 @@ public class Review {
     private transient User user;
     private transient Item item;
 
-    public Review(){};
+    public Review(){}
 
     public Review(
             String reviewTitle,

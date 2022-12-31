@@ -54,7 +54,7 @@ public class ReviewEntity extends Review {
     }
 
     @Ignore
-    public ReviewEntity(){};
+    public ReviewEntity(){}
 
     @Override
     public String getCreationTime() {
