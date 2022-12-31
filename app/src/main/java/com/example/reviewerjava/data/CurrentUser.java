@@ -7,6 +7,7 @@ import com.example.reviewerjava.data.model.Permission;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
+import com.example.reviewerjava.di.ServiceLocator;
 
 public class CurrentUser {
     private static CurrentUser instance;
@@ -33,6 +34,10 @@ public class CurrentUser {
         return this.userAndPermission;
     }
 
+    public UserEntity getUser(){
+        return userAndPermission.getValue().getUser();
+    }
+
     public void setUserAndPermission(UserAndPermission userAndPermission) {
         if(userAndPermission == null){
             this.userAndPermission.setValue(UNAUTHORIZED_USER);
@@ -40,6 +45,6 @@ public class CurrentUser {
     }
 
     public void setUserAndPermission(String name) {
-        this.userAndPermission.setValue(RepositoryController.getUserAndPermission(name));
+        this.userAndPermission.setValue(ServiceLocator.getInstance().getUserRepository().getUserAndPermission(name));
     }
 }

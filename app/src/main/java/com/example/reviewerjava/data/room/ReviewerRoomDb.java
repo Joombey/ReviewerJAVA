@@ -7,7 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.reviewerjava.data.room.daos.ReportDao;
 import com.example.reviewerjava.data.room.daos.ReviewDao;
+import com.example.reviewerjava.data.room.daos.UserAndPermissionDao;
 import com.example.reviewerjava.data.room.models.PermissionEntity;
 import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
@@ -34,6 +36,8 @@ import java.util.concurrent.Executors;
 )
 public abstract class ReviewerRoomDb extends RoomDatabase{
     public abstract ReviewDao reviewDAO();
+    public abstract ReportDao reportDao();
+    public abstract UserAndPermissionDao userDao();
     private static volatile ReviewerRoomDb INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor =

@@ -14,6 +14,7 @@ import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.databinding.ActivityMainBinding;
+import com.example.reviewerjava.di.ServiceLocator;
 import com.example.reviewerjava.ui.view.AddReviewFragment;
 import com.example.reviewerjava.ui.view.ProfileFragment;
 import com.example.reviewerjava.ui.view.ReviewBanFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
         setContentView(binding.getRoot());
         RepositoryController.init(getApplication());
+        ServiceLocator.getInstance().init(getApplication());
         checkForDeppLink();
         String userName = getPreferences(MODE_PRIVATE).getString("user", null);
         if(userName != null && !userName.equals(UserEntity.UNAUTHORIZED)){

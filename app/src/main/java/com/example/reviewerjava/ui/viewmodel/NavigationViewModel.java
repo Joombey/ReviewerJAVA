@@ -1,5 +1,7 @@
 package com.example.reviewerjava.ui.viewmodel;
 
+import android.app.Service;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -8,6 +10,7 @@ import com.example.reviewerjava.data.model.User;
 import com.example.reviewerjava.data.repository.RepositoryController;
 import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
+import com.example.reviewerjava.di.ServiceLocator;
 
 public class NavigationViewModel extends ViewModel {
     public LiveData<UserAndPermission> getCurrentUser() {
@@ -23,7 +26,8 @@ public class NavigationViewModel extends ViewModel {
     }
 
     public UserEntity getUserByName(String name){
-        return RepositoryController.getUserByName(name);
+        return ServiceLocator.getInstance().getUserRepository().getUserByName(name);
+//        return RepositoryController.getUserByName(name);
     }
 
 }

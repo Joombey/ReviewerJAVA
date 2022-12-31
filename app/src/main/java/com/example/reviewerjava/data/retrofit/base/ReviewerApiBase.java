@@ -3,6 +3,7 @@ package com.example.reviewerjava.data.retrofit.base;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
@@ -23,14 +24,9 @@ import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.di.ServiceLocator;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,39 +39,44 @@ public class ReviewerApiBase {
     public ReviewerApiBase(){
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://reviwer-api.onrender.com")
+                .baseUrl("http://192.168.0.173:8080")
                 .build();
 
         api = retrofit.create(ReviewerService.class);
     }
 
-    public boolean signIn(String login, String password) {
-        result = false;
+    public LiveData<Boolean> signIn(String login, String password) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
         api.auth(new UserId(login, password)).enqueue(new Callback<UserAndPermission>() {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()) {
-                    RepositoryController.addUserAndPermission(response.body());
-                    result = true;
+                    ServiceLocator.getInstance().getUserRepository().addUserAndPermission(response.body());
+                    CurrentUser.getInstance().setUserAndPermission(response.body());
+//                    RepositoryController.addUserAndPermission(response.body());
+                    result.setValue(true);
                 }
             }
 
             @Override
             public void onFailure(Call<UserAndPermission> call, Throwable t) {
                 t.printStackTrace();
+                result.setValue(false);
             }
         });
         return result;
     }
 
 
-    public boolean signUp(UserRequest user) {
+    public boolean signUp(String login, String password, String city, String avatar) {
         MutableLiveData<Boolean> result = new MutableLiveData<>(false);
+        UserRequest user = new UserRequest(new UserId(login, password), city, avatar);
         api.signUp(user).enqueue(new Callback<UserAndPermission>() {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if(response.isSuccessful()){
-                    RepositoryController.addUserAndPermission(response.body());
+//                    RepositoryController.addUserAndPermission(response.body());
+                    ServiceLocator.getInstance().getUserRepository().addUserAndPermission(response.body());
                 }
             }
 
@@ -94,7 +95,7 @@ public class ReviewerApiBase {
             public void onResponse(Call<ReviewId> call, Response<ReviewId> response) {
                 if (response.isSuccessful()){
                     request.setId(response.body());
-                    ServiceLocator.getInstance().getLocalBase().addReview(new ReviewEntity(request));
+                    ServiceLocator.getInstance().getReviewRepository().addReview(new ReviewEntity(request));
                 }
             }
 
@@ -114,9 +115,13 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<List<ReviewDto>> call, Response<List<ReviewDto>> response) {
                 if (response.isSuccessful()){
-                    List<ReviewEntity> reviewList = response.body().stream().map(reviewDto ->
-                            new ReviewEntity(reviewDto)).collect(Collectors.toList());
-                    ServiceLocator.getInstance().getLocalBase().saveAllReviews(reviewList);
+                    List<ReviewEntity> reviewList = response.body().stream().map(reviewDto -> {
+                                Log.i("asd", reviewDto.getId().getAuthor());
+                                return new ReviewEntity(reviewDto);
+                            }
+                    ).collect(Collectors.toList());
+
+                    ServiceLocator.getInstance().getReviewRepository().saveAllReviews(reviewList);
                 }
             }
 
@@ -129,16 +134,16 @@ public class ReviewerApiBase {
 
     public void banUser(String userName){
         String currentUserName = CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
-        api.banUser(userName, currentUserName).enqueue(new Callback<List<UserEntity>>() {
+        api.banUser(userName, currentUserName).enqueue(new Callback<List<UserAndPermission>>() {
             @Override
-            public void onResponse(Call<List<UserEntity>> call, Response<List<UserEntity>> response) {
+            public void onResponse(Call<List<UserAndPermission>> call, Response<List<UserAndPermission>> response) {
                 if (response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().addUserList(response.body());
+                    ServiceLocator.getInstance().getUserRepository().addUserList(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserEntity>> call, Throwable t) {
+            public void onFailure(Call<List<UserAndPermission>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -150,7 +155,7 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<UserAndPermission> call, Response<UserAndPermission> response) {
                 if (response.isSuccessful()) {
-                    ServiceLocator.getInstance().getLocalBase().addUserAndPermission(response.body());
+                    ServiceLocator.getInstance().getUserRepository().addUserAndPermission(response.body());
                 }
             }
 
@@ -163,33 +168,30 @@ public class ReviewerApiBase {
 
     public void getUserList(){
         String currentUserName = CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
-        api.getUserList(currentUserName).enqueue(new Callback<List<UserEntity>>() {
+        api.getUserList(currentUserName).enqueue(new Callback<List<UserAndPermission>>() {
             @Override
-            public void onResponse(Call<List<UserEntity>> call, Response<List<UserEntity>> response) {
+            public void onResponse(Call<List<UserAndPermission>> call, Response<List<UserAndPermission>> response) {
                 if (response.isSuccessful()) {
-                    ServiceLocator.getInstance().getLocalBase().addUserList(response.body());
+                    response.body().stream().map(user -> Log.i("asd", user.user.getName()));
+                    ServiceLocator.getInstance().getUserRepository().addUserList(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserEntity>> call, Throwable t) {
+            public void onFailure(Call<List<UserAndPermission>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
     }
 
-    public void getReportList(){
+    public void updateReportList(){
         String currentUserName = CurrentUser.getInstance().getUserAndPermission().getValue().user.getName();
         api.getReportList(currentUserName).enqueue(new Callback<List<Report>>() {
             @Override
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
-                    response.body().stream().map(report-> {
-                        Log.i("DATA321", report.getReviewId() + "");
-                        return report;
-                    }).collect(Collectors.toList());
-                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
-                }Log.i("DATA321", "FAILED");
+                    ServiceLocator.getInstance().getReportRepository().addReportList(Report.convertToEntity(response.body()));
+                }
             }
 
             @Override
@@ -205,7 +207,7 @@ public class ReviewerApiBase {
             @Override
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
-                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
+                    ServiceLocator.getInstance().getReportRepository().addReportList(Report.convertToEntity(response.body()));
                 }
             }
 
@@ -225,7 +227,7 @@ public class ReviewerApiBase {
                         Log.i("DATA321", report.getReviewId() + "");
                         return report;
                     }).collect(Collectors.toList());
-                    ServiceLocator.getInstance().getLocalBase().addReportList(Report.convertToEntity(response.body()));
+                    ServiceLocator.getInstance().getReportRepository().addReportList(Report.convertToEntity(response.body()));
                 }
             }
 
@@ -248,7 +250,7 @@ public class ReviewerApiBase {
                             .stream()
                             .map(reviewDto -> ReviewDto.convertToEntity(reviewDto))
                             .collect(Collectors.toList());
-                    ServiceLocator.getInstance().getLocalBase().addReportsWithReviews(reportList, reviewList);
+                    ServiceLocator.getInstance().getReviewRepository().addReportsWithReviews(reportList, reviewList);
                 }
             }
 

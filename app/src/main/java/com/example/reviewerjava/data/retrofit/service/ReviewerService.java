@@ -59,10 +59,10 @@ public interface ReviewerService {
     Call<UserAndPermission> changeRole(@Path("userLogin") String userLogin, @Query("role") String role, @Query("admin") String admin);
 
     @POST("admin/ban/{userLogin}")
-    Call<List<UserEntity>> banUser(@Path("userLogin") String bannedUser, @Query("admin") String admin);
+    Call<List<UserAndPermission>> banUser(@Path("userLogin") String bannedUser, @Query("admin") String admin);
 
     @GET("admin/user-list")
-    Call<List<UserEntity>> getUserList(@Query("admin") String admin);
+    Call<List<UserAndPermission>> getUserList(@Query("admin") String admin);
 
     @POST("/report")
     Call<List<Report>> report(@Query("review_id") int reviewId);

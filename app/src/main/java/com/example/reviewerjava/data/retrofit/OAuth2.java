@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.example.reviewerjava.BuildConfig;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.repository.RepositoryController;
+import com.example.reviewerjava.di.ServiceLocator;
 import com.example.reviewerjava.ui.view.ProfileFragment;
 import com.example.reviewerjava.ui.view.ReviewListFragment;
 
@@ -35,7 +36,8 @@ public class OAuth2 {
                 if(urlString.contains(RESPONSE_URL_PATTERN)){
                     CurrentUser.getInstance().access_token = Uri.parse(urlString.replace("#", "?")).getQueryParameter("access_token");
                     CurrentUser.getInstance().userId = Uri.parse(urlString.replace("#", "?")).getQueryParameter("user_id");
-                    RepositoryController.getUserInfo(parentPath);
+                    ServiceLocator.getInstance().getVkApiBase().getUserInfo(parentPath);
+//                    RepositoryController.getUserInfo(parentPath);
                     back.replace(new ReviewListFragment());
                     return false;
                 }

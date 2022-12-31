@@ -8,10 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
-import com.example.reviewerjava.data.repository.repos.AddReviewRepository;
-import com.example.reviewerjava.data.repository.repos.RegisterRepository;
 import com.example.reviewerjava.data.repository.repos.ReportRepository;
-import com.example.reviewerjava.data.repository.repos.ReviewListRepository;
+import com.example.reviewerjava.data.repository.repos.ReviewRepository;
 import com.example.reviewerjava.data.repository.repos.UserRepository;
 import com.example.reviewerjava.data.retrofit.OAuth2;
 import com.example.reviewerjava.data.retrofit.base.ReviewerApiBase;
@@ -40,14 +38,12 @@ import java.util.List;
 
 public class RepositoryController{
     static RoomRepository repo;
-    static ReviewListRepository reviewListRepository;
-    static RegisterRepository registerRepository;
-    static AddReviewRepository addReviewRepository;
     static UserRepository userRepository;
     static ShoppingApiBase shoppingApiBase;
     static VkApiBase vkApiBase;
     static ReportRepository reportRepository;
     static ReviewerApiBase reviewerApi;
+    static ReviewRepository reviewRepository;
 
     public static void init(Application application){
         ServiceLocator.getInstance().init(application);
@@ -55,14 +51,14 @@ public class RepositoryController{
         shoppingApiBase = new ShoppingApiBase();
         vkApiBase = new VkApiBase();
         reviewerApi = new ReviewerApiBase();
-        reviewListRepository = repo;
-        addReviewRepository = repo;
+
+        reviewRepository = repo;
         userRepository = repo;
         reportRepository = repo;
     }
 
     public static LiveData<List<ReviewEntity>> getReviewList(){
-        return reviewListRepository.getReviewList();
+        return reviewRepository.getReviewList();
     }
 
     public static void addReview(ReviewEntity review){
@@ -78,11 +74,11 @@ public class RepositoryController{
     }
 
     public static ReviewEntity getReviewById(int id){
-        return reviewListRepository.getReviewById(id);
+        return reviewRepository.getReviewById(id);
     }
 
     public static LiveData<List<ReviewEntity>> getReviewsName(String userName){
-        return reviewListRepository.getReviewsByName(userName);
+        return reviewRepository.getReviewsByAuthor(userName);
     }
 
     public static LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
@@ -129,7 +125,7 @@ public class RepositoryController{
         return item;
     }
 
-    public static boolean signIn(String login, String password) {
+    public static LiveData<Boolean> signIn(String login, String password) {
 //        if (registerRepository.signIn(login, password)){
 //            CurrentUser.getInstance().setUserAndPermission(registerRepository.getUserAndPermission(login));
 //            return true;
@@ -148,7 +144,7 @@ public class RepositoryController{
 
     public static boolean signUp(String login, String password, String city, String avatar) {
         UserRequest userRequest = new UserRequest(new UserId(login, password), city, avatar);
-        return (reviewerApi.signUp(userRequest));
+        return (reviewerApi.signUp(login, password, city, avatar));
     }
 
     public static UserEntity getCurrentUser() {
@@ -156,11 +152,11 @@ public class RepositoryController{
     }
 
     public static ReviewAndUser getReviewAndUser(int reviewId) {
-        return reviewListRepository.getReviewAndUserByReviewId(reviewId);
+        return reviewRepository.getReviewAndUserByReviewId(reviewId);
     }
 
     public static void ban(ReviewEntity review){
-        reportRepository.ban(review);
+        reviewRepository.ban(review);
         reviewerApi.blockReview(review.id);
     }
 
@@ -185,7 +181,7 @@ public class RepositoryController{
 
     public static LiveData<List<UserEntity>> getUsers() {
         reviewerApi.getUserList();
-        return userRepository.getUsers(
+        return userRepository.getUsersExcept(
                 CurrentUser.getInstance()
                 .getUserAndPermission()
                 .getValue()
@@ -281,7 +277,7 @@ public class RepositoryController{
     }
 
     public static void updateReportList() {
-        reviewerApi.getReportList();
+        reviewerApi.updateReportList();
     }
 
     public static void updateUserList() {

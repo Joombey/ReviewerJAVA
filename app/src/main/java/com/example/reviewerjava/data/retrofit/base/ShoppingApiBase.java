@@ -32,7 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ShoppingApiBase implements ItemSourceOfTruth {
+public class ShoppingApiBase {
 
     private ProductSearchService api;
     private MutableLiveData<List<Item>> shoppingList = new MutableLiveData<>();
@@ -58,7 +58,6 @@ public class ShoppingApiBase implements ItemSourceOfTruth {
         api = retrofit.create(ProductSearchService.class);
     }
 
-    @Override
     public LiveData<List<Item>> getItemsByRequest(String q, File cacheDir){
         api.getShoppingList(q).enqueue(new Callback<ShoppingResponse>() {
             @Override

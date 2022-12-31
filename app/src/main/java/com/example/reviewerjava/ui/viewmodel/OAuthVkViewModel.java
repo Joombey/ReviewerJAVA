@@ -12,6 +12,7 @@ import java.io.File;
 public class OAuthVkViewModel extends ViewModel {
 
     public WebViewClient getClient(File parentPath, OAuth2.Back back) {
-        return RepositoryController.getClient(parentPath, back);
+//        return RepositoryController.getClient(parentPath, back);
+        return OAuth2.getWebViewClient(parentPath, back);
     }
 }

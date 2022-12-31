@@ -8,21 +8,21 @@ import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import java.util.List;
 
 public interface UserRepository {
-    void updateUser(UserEntity user);
-
     UserEntity getUserByName(String userName);
 
-    LiveData<List<UserEntity>> getUsers(String name);
-
-    void ban(UserEntity user);
-
-    void addNewUser(UserEntity newUser);
-
-    boolean userExists(String name);
-
-    void addUserAndPermission(UserAndPermission userAndPermission);
+    LiveData<List<UserEntity>> getUsersExcept(String userName);
 
     UserAndPermission getUserAndPermission(String name);
 
-    void addUserList(List<UserEntity> body);
+    void addNewUser(UserEntity newUser);
+
+    void addUserAndPermission(UserAndPermission userAndPermission);
+
+    void addUserList(List<UserAndPermission> body);
+
+    void ban(UserEntity user);
+
+    void updateUser(UserEntity user);
+
+    boolean userExists(String name);
 }

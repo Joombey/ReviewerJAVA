@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.reviewerjava.MainActivity;
+import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.databinding.SignInFragmentBinding;
 import com.example.reviewerjava.ui.viewmodel.SignInViewModel;
 
@@ -23,24 +24,23 @@ public class SignInFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = SignInFragmentBinding.inflate(inflater, container, false);
-        mBinding.signIn.setOnClickListener(view -> {
-            if(mViewModel.signIn(
-                    mBinding.editTextLogin.getText().toString(),
-                    mBinding.editTextPassword.getText().toString()
-            )) {
-                Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
-                ((MainActivity) getActivity()).popBackStack();
-            }
-            else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
-        });
+//            if(mViewModel.signIn(
+//                    mBinding.editTextLogin.getText().toString(),
+//                    mBinding.editTextPassword.getText().toString()
+//            )) {
+//                Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+//                ((MainActivity) getActivity()).popBackStack();
+//            }
+//            else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
+//        });
 
-        mBinding.signUp.setOnClickListener(view->{
-            ((MainActivity) getActivity()).setFragment(new SignUpFragment());
-        });
-
-        mBinding.vkAuth.setOnClickListener(view -> {
-            ((MainActivity) getActivity()).replaceCurrentFragment(new OAuthVkFragment());
-        });
+//        mBinding.signUp.setOnClickListener(view->{
+//            ((MainActivity) getActivity()).setFragment(new SignUpFragment());
+//        });
+//
+//        mBinding.vkAuth.setOnClickListener(view -> {
+//            ((MainActivity) getActivity()).replaceCurrentFragment(new OAuthVkFragment());
+//        });
         return mBinding.getRoot();
     }
 
@@ -48,5 +48,36 @@ public class SignInFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
         super.onViewCreated(view, savedInstanceState);
+
+        mBinding.signIn.setOnClickListener(v -> {
+            mViewModel.signIn(
+                    mBinding.editTextLogin.getText().toString(),
+                    mBinding.editTextPassword.getText().toString()
+            ).observe(getViewLifecycleOwner(), aBoolean -> {
+                if(aBoolean != null) {
+                    if (!aBoolean) {
+                        Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
+                    }
+                    else Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+                    ((MainActivity) getActivity()).replaceCurrentFragment(new ProfileFragment(CurrentUser.getInstance().getUser()));
+                }
+            });
+
+//            if(mViewModel.signIn(
+//                    mBinding.editTextLogin.getText().toString(),
+//                    mBinding.editTextPassword.getText().toString()
+//            )) {
+//                Toast.makeText(getContext(), "Logged in", Toast.LENGTH_SHORT).show();
+//                ((MainActivity) getActivity()).popBackStack();
+//            }
+//            else Toast.makeText(getContext(), "Wrong Log/Pass", Toast.LENGTH_SHORT).show();
+        });
+        mBinding.signUp.setOnClickListener(v->{
+            ((MainActivity) getActivity()).setFragment(new SignUpFragment());
+        });
+
+        mBinding.vkAuth.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).replaceCurrentFragment(new OAuthVkFragment());
+        });
     }
 }
