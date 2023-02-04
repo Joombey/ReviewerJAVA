@@ -8,11 +8,16 @@ import com.example.reviewerjava.data.retrofit.request.pks.ReviewId;
 import com.example.reviewerjava.data.retrofit.request.pks.UserId;
 import com.example.reviewerjava.data.retrofit.response.ReportsWithReviewsResponse;
 import com.example.reviewerjava.data.retrofit.response.ReviewAndUserResponse;
+import com.example.reviewerjava.data.room.models.ReviewEntity;
+import com.example.reviewerjava.data.room.models.UserEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,6 +25,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -36,7 +42,14 @@ public interface ReviewerService {
     @POST("/upload/{fileName}")
     Call<ResponseBody> uploadToServer(
             @Part MultipartBody.Part filePart,
-            @Part("id") UserId userInfo
+            @Part("id") UserEntity userInfo
+    );
+
+    @Multipart
+    @POST("/uploadTesting")
+    Call<ResponseBody> upload(
+//            @Part(value = "review") ReviewDto review,
+            @Part List<MultipartBody.Part> imagesFromParagraphs
     );
 
     @POST("/new-review")
@@ -70,4 +83,8 @@ public interface ReviewerService {
 
     @GET("/moderator/report-list")
     Call<List<Report>> getReportList(@Query("moder") String moderName);
+
+
+    @POST
+    Call<ResponseBody> testing(@Body MultipartBody part);
 }

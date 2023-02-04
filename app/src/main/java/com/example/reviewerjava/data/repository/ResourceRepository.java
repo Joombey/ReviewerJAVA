@@ -1,12 +1,15 @@
 package com.example.reviewerjava.data.repository;
 
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Item;
+import com.example.reviewerjava.data.retrofit.request.FileToSend;
 import com.example.reviewerjava.data.retrofit.response.VkResponse;
 import com.example.reviewerjava.di.ServiceLocator;
 
@@ -87,6 +90,41 @@ public class ResourceRepository {
             }
         }catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public FileToSend getFileToSendInst(Uri uri){
+        return new FileToSend(
+                getFileName(uri),
+                getFileContent(uri)
+        );
+    }
+
+    private byte[] getFileContent(Uri uri){
+        try{
+            InputStream inputStream = ServiceLocator.getInstance().getContext().getContentResolver().openInputStream(uri);
+            byte[] bytes = new byte[inputStream.available()];
+
+            int bytesRead = 0;
+            while(bytesRead >= 0){
+                bytesRead = inputStream.read(bytes);
+            }
+            return bytes;
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getFileName(Uri uri){
+        Cursor cur = ServiceLocator.getInstance().getContext().getContentResolver().query(uri, null, null, null, null);
+        if(cur.moveToFirst()){
+            int fileNameColumn = cur.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            return cur.getString(fileNameColumn);
+        } else{
+            return null;
         }
     }
 }

@@ -12,12 +12,14 @@ import com.example.reviewerjava.di.ServiceLocator;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class AddReviewViewModel extends ViewModel {
     public void addReview(Review review){
 //        RepositoryController.addReview(ReviewEntity.getInstance(review));
-        ServiceLocator.getInstance().getReviewerApi().createNewReview(ReviewEntity.getInstance(review));
+//        ServiceLocator.getInstance().getReviewerApi().createNewReview(ReviewEntity.getInstance(review));
+          ServiceLocator.getInstance().getReviewerApi().sendUserPhoto(ReviewEntity.getInstance(review));
     }
     public LiveData<List<Item>> getItemsByRequest(String query, File cacheDir){
         return ServiceLocator.getInstance().getShoppingApi().getItemsByRequest(query, cacheDir);

@@ -16,7 +16,6 @@ import com.example.reviewerjava.data.model.Item;
 import com.example.reviewerjava.data.model.Paragraph;
 import com.example.reviewerjava.data.model.Review;
 import com.example.reviewerjava.databinding.AddReviewFragmentBinding;
-import com.example.reviewerjava.di.ServiceLocator;
 import com.example.reviewerjava.presentation.view.adapter.ItemListAdapter;
 import com.example.reviewerjava.presentation.view.adapter.ParagraphListAdapter;
 import com.example.reviewerjava.presentation.viewmodel.AddReviewViewModel;

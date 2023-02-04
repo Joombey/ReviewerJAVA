@@ -1,6 +1,7 @@
 package com.example.reviewerjava.di;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.reviewerjava.data.repository.NetworkRepository;
 import com.example.reviewerjava.data.repository.ResourceRepository;
@@ -34,6 +35,7 @@ public class ServiceLocator {
 
     private NetworkRepository networkRepo;
 
+    private Context applicationContext;
     private ReviewRepository reviewRepository;
     private UserRepository userRepository;
     private ReportRepository reportRepository;
@@ -51,6 +53,7 @@ public class ServiceLocator {
     }
 
     public void init(Application app){
+        applicationContext = app.getApplicationContext();
         ReviewerRoomDb db = ReviewerRoomDb.getDatabase(app);
 
         reviewRepository = new ReviewRepositoryImpl(db.reviewDAO());
@@ -119,5 +122,9 @@ public class ServiceLocator {
 
     public VkApiBase getVkApiBase() {
         return vkApiBase;
+    }
+
+    public Context getContext() {
+        return applicationContext;
     }
 }

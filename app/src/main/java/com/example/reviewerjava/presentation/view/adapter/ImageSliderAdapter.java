@@ -55,6 +55,9 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
                                     .getApplicationContext()
                                     .getContentResolver()
                                     .takePersistableUriPermission(result, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            activity.getApplicationContext()
+                                    .getContentResolver()
+                                    .takePersistableUriPermission(result, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                             pictureList.add(pictureList.size() - 1, result.toString());
                             notifyDataSetChanged();
                         }

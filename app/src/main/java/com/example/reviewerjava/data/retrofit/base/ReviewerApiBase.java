@@ -1,7 +1,18 @@
 package com.example.reviewerjava.data.retrofit.base;
 
 
+import android.app.Service;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.DocumentsProvider;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
+import android.view.textclassifier.TextLinks;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.reviewerjava.data.CurrentUser;
 import com.example.reviewerjava.data.model.Report;
 
+import com.example.reviewerjava.data.retrofit.request.FileToSend;
 import com.example.reviewerjava.data.retrofit.request.ReviewDto;
 import com.example.reviewerjava.data.retrofit.request.UserRequest;
 
@@ -22,15 +34,33 @@ import com.example.reviewerjava.data.room.models.ReportEntity;
 import com.example.reviewerjava.data.room.models.ReviewEntity;
 import com.example.reviewerjava.data.room.relation.UserAndPermission;
 import com.example.reviewerjava.di.ServiceLocator;
+import com.google.gson.Gson;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Multipart;
 
 public class ReviewerApiBase {
     private final ReviewerService api;
@@ -140,12 +170,13 @@ public class ReviewerApiBase {
                         ).collect(Collectors.toList());
                         ServiceLocator.getInstance().getUserRepository().addUserList(userAndPermissionList);
                     }
+                    synchronized (response) {
+                        List<ReviewEntity> reviewList = response.body().stream().map(
+                                reviewAndUser -> new ReviewEntity(reviewAndUser.getReviewDto())
+                        ).collect(Collectors.toList());
 
-                    List<ReviewEntity> reviewList = response.body().stream().map(
-                            reviewAndUser -> new ReviewEntity(reviewAndUser.getReviewDto())
-                    ).collect(Collectors.toList());
-
-                    ServiceLocator.getInstance().getReviewRepository().addReviewList(reviewList);
+                        ServiceLocator.getInstance().getReviewRepository().addReviewList(reviewList);
+                    }
                 }
             }
 
@@ -281,6 +312,61 @@ public class ReviewerApiBase {
             @Override
             public void onFailure(Call<ReportsWithReviewsResponse> call, Throwable t) {
                 t.printStackTrace();
+            }
+        });
+    }
+
+    public void uploadFilesToServer(){
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData(
+                "file",
+                new File("FileName").getName(),
+                RequestBody.create(MediaType.parse("img/png"), new File("ASd"))
+        );
+        api.uploadToServer(filePart, CurrentUser.getInstance().getUser()).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void sendUserPhoto(ReviewEntity review) {
+        List<MultipartBody.Part> paragraphs = new ArrayList<>();
+        Uri fileUri;
+        FileToSend file;
+        for (int i = 0; i < review.getRoomParagraphList().size(); i++) {
+            for (int j = 0; j < review.getRoomParagraphList().get(i).getImages().size() - 1; j++) {
+                fileUri = Uri.parse(review.getRoomParagraphList().get(i).getImages().get(j));
+                file = ServiceLocator.getInstance().getResourceRepository().getFileToSendInst(fileUri);
+
+                RequestBody requestBody = RequestBody.create(
+                        MediaType.parse(fileUri.getScheme()),
+                        file.getBytes()
+                );
+
+                paragraphs.add(MultipartBody.Part.createFormData(
+                        "files",
+                        i + " " + j + " " + file.getName(),
+                        requestBody
+                ));
+            }
+        }
+
+        api.upload(paragraphs).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i("FILES", response.code() + "");
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i("FILES", "FAIL");
             }
         });
     }
